@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { parseStudy } from '../src/data/loader'
+import { siteSchema } from '../src/data/schema'
 import { readJson, setPath } from './helpers'
 
 const demo = () => readJson('public/data/study.json')
@@ -21,6 +22,13 @@ describe('study.json schema', () => {
     expect(parseStudy(d).ok).toBe(false)
     const e = demo(); setPath(e, 'story.0.speaker', 'phon')
     expect(parseStudy(e).ok).toBe(false)
+  })
+  it('ageLevel is limited to 0–2 and site ids to letters, digits and hyphens', () => {
+    const d = demo(); setPath(d, 'meta.ageLevel', 2); expect(parseStudy(d).ok).toBe(true)
+    setPath(d, 'meta.ageLevel', 2.5); expect(parseStudy(d).ok).toBe(false)
+    const e = demo(); setPath(e, 'sites.0.id', 'A_1'); expect(parseStudy(e).ok).toBe(false)
+    expect(siteSchema.shape.id.safeParse('A-1').success).toBe(true)
+    expect(siteSchema.shape.id.safeParse('A 1').success).toBe(false)
   })
   it('does not contain the 2H rule', () => {
     expect(JSON.stringify(demo())).not.toMatch(/2H|2h|สองเท่าของความกว้างถนน/)

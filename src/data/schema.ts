@@ -14,7 +14,7 @@ const score = z.number().int().min(0).max(5)
 const water = z.object({ name: text, setback_m: z.number().min(0), side })
 
 export const siteSchema = z.object({
-  id: z.string().regex(/^[A-Za-z0-9_-]+$/),
+  id: z.string().regex(/^[A-Za-z0-9-]+$/), // letters, digits and hyphens only: ids appear in deep links
   n: z.number().int().min(1).max(9),
   name: text, short: text, pos: xy, parcelPx: xy,
   desc: text, form: text, say: text,
@@ -43,7 +43,7 @@ const line = z.object({ speaker: z.enum(['khun', 'mor']), text })
 
 export const studySchema = z.object({
   meta: z.object({
-    title: text, era: z.object({ label: text, year: z.number().int().positive() }), ageLevel: z.number().min(0).max(3),
+    title: text, era: z.object({ label: text, year: z.number().int().positive() }), ageLevel: z.number().min(0).max(2),
     bedDivisor: z.number().positive(), planUnit_m: z.number().positive(), minPerBaht: z.number().positive(),
     /** regulation constants that prose and zones cite, in SI units */
     regs: z.object({

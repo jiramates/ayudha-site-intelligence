@@ -1,4 +1,5 @@
 import { f1, RM } from '../render/util'
+import { withSeed, seedFrom } from '../render/rng'
 import { pj, pathP, scaleAround, circleP, bb } from '../render/projection'
 import { map, ISL, boatsAmb, boatG } from './map'
 import { ARCHETYPE_DRAW } from './massing'
@@ -46,7 +47,7 @@ export function drawDynamic(){
   ground.innerHTML=gs;routes.innerHTML=rs;
   Object.entries(SITES).forEach(([k,s])=>{const on=k===st.site;if(st.mode==='site'&&on)return;
     items.push({x:s.pos[0],y:s.pos[1],top:true,k:1.15,h:`<g class="site" data-site="${k}" tabindex="0" role="button" aria-label="${S.map.siteAria(E(s.name))}"><circle cy="-48" r="34" fill="transparent"/><ellipse rx="12" ry="4" fill="#3a2819" opacity=".22"/><line x1="0" y1="0" x2="0" y2="-62" stroke="#4a2c1b" stroke-width="2.6"/><path class="flag" d="M1 -62 L40 -52 L1 -42Z" fill="${on?'#743524':'#a04a33'}" stroke="#5f2c1e"/><circle cy="-70" r="15" fill="${on?'#743524':'#a04a33'}" stroke="#c09246" stroke-width="2.2"/><circle cy="-70" r="11" fill="none" stroke="#e9d3a0" stroke-width=".7" stroke-dasharray="2 2"/><text y="-63" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:19px;fill:#f4e6c8">${th(s.n)}</text></g>`})});
-  if(st.mode==='site'&&st.site){const s=SITES[st.site];const parts=ARCHETYPE_DRAW[s.massing](s);
+  if(st.mode==='site'&&st.site){const s=SITES[st.site];const parts=withSeed(seedFrom(s.id),()=>ARCHETYPE_DRAW[s.massing](s)); // own stream per site: the model never depends on the paint or on what was drawn before
     items.push({x:s.pos[0],y:s.pos[1]+2,k:archetypeMeta(s.massing).scale??DEFAULT_MASS_SCALE,h:`<ellipse class="dust" rx="120" ry="16" fill="#c9b78c" opacity=".6"/><ellipse rx="110" ry="12" fill="#3a2819" opacity=".16"/><g filter="url(#lite)">`+parts.map((p:{h:string;drop?:number},i:number)=>`<g class="${p.drop?'drop':'pop'}" style="--i:${i}">${p.h}</g>`).join('')+`</g><g data-site="${st.site}" class="site" tabindex="0" role="button" aria-label="${S.map.hideModel}" transform="translate(-130 -30)"><circle r="13" fill="#743524" stroke="#c09246" stroke-width="2"/><text y="6" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:17px;fill:#f4e6c8">${th(s.n)}</text></g>`})}
   items.sort((a,b)=>(a.top?1:0)-(b.top?1:0)||a.y-b.y);
   (document.getElementById('bbs') as HTMLElement).innerHTML=items.map(it=>bb(it.x,it.y,it.h,it.k||1)).join('');
