@@ -1,6 +1,6 @@
 /* ===== Sections: never taller than the screen, often shorter =====
    A section takes its height from its content (max-height: one screen, in svh so phone browser bars are handled),
-   packed from the top with one even gap. Two exceptions: the hero painting and the map section fill the screen.
+   packed from the top with one even gap. Two exceptions: on wide screens the cover painting and, everywhere, the map section fill the screen.
    Sections snap into place (proximity: the reader is never trapped). Text sizes follow the smaller screen side. */
 
 :root{
@@ -18,7 +18,7 @@ body{margin:0;overflow-x:clip}
 .screen{box-sizing:border-box;height:auto;max-height:100vh;max-height:100svh;margin-bottom:var(--secGap);padding:var(--pad);display:flex;flex-direction:column;gap:var(--gap);scroll-snap-align:start;scroll-snap-stop:normal;position:relative}
 .screen{background-image:radial-gradient(ellipse 46vw 38vh at 14% 18%,rgba(140,100,52,.10),transparent 70%),radial-gradient(ellipse 40vw 34vh at 82% 72%,rgba(140,100,52,.09),transparent 70%),radial-gradient(ellipse 30vw 26vh at 60% 10%,rgba(255,246,222,.35),transparent 70%)}
 .screen:nth-child(even){background-image:radial-gradient(ellipse 44vw 36vh at 84% 22%,rgba(140,100,52,.10),transparent 70%),radial-gradient(ellipse 42vw 36vh at 18% 80%,rgba(140,100,52,.09),transparent 70%),radial-gradient(ellipse 32vw 26vh at 40% 50%,rgba(255,246,222,.3),transparent 70%)}
-.hero,.s2{height:100vh;height:100svh}
+.s2{height:100vh;height:100svh}
 .hero{margin-bottom:0}
 .s2{--gap:clamp(6px,1.2vmin,14px)}  /* the map section is tight: the whole map must fit */
 .top{flex:none;display:flex;align-items:center;justify-content:space-between;gap:var(--gap);min-height:var(--topH)}
@@ -50,19 +50,26 @@ body{margin:0;overflow-x:clip}
 .chap p{flex-basis:auto;font-size:clamp(13px,2vmin,18px);display:none}
 
 /* ---------- hero ---------- */
-.hero .frame{flex:1;min-height:0;position:relative}
-.hero #heroSvg{position:absolute;inset:0;width:100%;height:100%}
-.hero-t{position:absolute;left:4%;top:7%;max-width:min(580px,56%)}
+/* a moving picture: the exact painting as an <img>, a canvas over it for what moves, and a very slow drift */
+.living{flex:none;padding:0}
+.living-in{position:relative;transform-origin:62% 42%;animation:drift 28s ease-in-out infinite alternate}
+@keyframes drift{to{transform:scale(1.035)}}
+@media (prefers-reduced-motion:reduce){.living-in{animation:none}}
+.living img{display:block;width:100%;height:auto}
+.living canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+/* wide screens: the tall cover painting fills the screen height on the right, the title sits on its left */
+.hero{flex-direction:row-reverse;align-items:center;justify-content:center;height:100vh;height:100svh;gap:clamp(24px,4vw,72px)}
+.cover{width:calc((100svh - 2*var(--pad) - 10px)*1055/1491);max-width:55%}
+.hero-t{position:static;flex:1 1 0;min-width:0;max-width:min(620px,48%)}  /* its width never depends on its text, so the cover never moves when the title arrives */
 .hero-t .eyebrow{font-size:clamp(13px,2.2vmin,19px)}
 h1{font-size:clamp(24px,min(5.2vw,9vh),64px);margin:2px 0 clamp(4px,1.2vh,10px)}
 .hero-t p{font-size:clamp(13px,2.5vh,22px)}
 .scrollhint{font-size:clamp(13px,2.1vh,17px);margin-top:clamp(6px,1.6vh,14px)}
 
 /* ---------- chapter 1: the scene is sized by height, the two lines sit beside it ---------- */
-.s1{--sceneH:calc(100svh - 2*var(--pad) - var(--topH) - var(--gap));--sceneW:calc((var(--sceneH) - 8px)*900/480 + 8px)}
+.s1{--sceneH:calc(100svh - 2*var(--pad) - var(--topH) - var(--gap));--sceneW:calc((var(--sceneH) - 8px)*1538/1023 + 8px)}
 .story{display:grid;grid-template-columns:minmax(0,var(--sceneW)) minmax(var(--sideMin),1fr);gap:var(--gap);align-items:start}
 .stagecell{min-width:0}
-.stagecell .frame svg{display:block;width:100%;height:auto}
 .duo{display:flex;flex-direction:column;gap:var(--gap);margin:0;justify-content:flex-start;min-width:0}
 .line{display:grid;gap:clamp(8px,1.4vmin,12px)}
 
@@ -127,11 +134,14 @@ h1{font-size:clamp(24px,min(5.2vw,9vh),64px);margin:2px 0 clamp(4px,1.2vh,10px)}
 @media (orientation:portrait){
   :root{--topH:auto;--pad:clamp(10px,3.4vw,18px)}
   .top{min-height:0}
-  /* hero: the painting fills the whole frame (sides cropped by hero-fit); the words sit on a soft plaster wash below */
-  .hero{height:88vh;height:88svh;padding:0}
-  .hero .frame{flex:1;min-height:0}
-  .hero-t{left:0;right:0;top:auto;bottom:0;max-width:none;padding:clamp(70px,16svh,140px) clamp(16px,5vw,32px) clamp(18px,3svh,28px);display:flex;flex-direction:column;align-items:flex-start;
-    background:linear-gradient(to top,rgba(232,220,192,.97),rgba(232,220,192,.93) 58%,rgba(232,220,192,0))}
+  /* phones: the whole cover painting with the title under it, together about 90% of the screen so chapter 1 peeks.
+     Pure CSS (no script, so nothing moves while the page and its fonts load): the title block is about min(56vw, 150px + 19.5vw) tall */
+  .hero{flex-direction:column;align-items:center;justify-content:flex-start;height:auto;gap:var(--gap)}
+  .cover{width:min(100%,calc((90svh - 2*var(--pad) - var(--gap) - 10px - min(2px + 56vw,150px + 19.5vw))*1055/1491));max-width:100%}
+  .hero-t{flex:none;max-width:none;align-self:stretch;display:flex;flex-direction:column;align-items:flex-start}
+  /* room for the title and the lead before the study arrives, so nothing below moves when they fill in */
+  .hero-t h1{min-height:2.3em}
+  .hero-t p{min-height:4.1em}
   h1{font-size:clamp(26px,8.4vw,52px)}
   .hero-t p{font-size:clamp(14px,4vw,20px)}
   .scrollhint{font-size:clamp(13px,3.6vw,16px)}

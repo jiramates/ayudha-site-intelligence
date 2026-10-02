@@ -1,4 +1,4 @@
-// npm run art  →  public/art/{hero,scene,map}.jpg + manifest.json: the painted scenes, baked once through the mural filter.
+// npm run art  →  public/art/map.jpg + manifest.json: the painted map, baked once through the mural filter.
 // The browser uses them while their signature matches the drawing code, the age level and the site positions;
 // otherwise it bakes in the browser as before. Re-run after changing the art code, meta.ageLevel or site positions.
 import { chromium } from '@playwright/test'
@@ -20,7 +20,7 @@ try {
   await page.waitForFunction(() => document.getElementById('loading')?.hidden === true, null, { timeout: 120000 })
   await page.waitForTimeout(3000)
   const manifest = {}
-  for (const key of ['hero', 'scene', 'map']) {
+  for (const key of ['map']) {
     if (!got[key]) throw new Error(`art "${key}" was not baked`)
     writeFileSync(`public/art/${key}.jpg`, got[key].bytes)
     manifest[key] = { sig: got[key].sig }

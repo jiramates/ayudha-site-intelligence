@@ -95,7 +95,7 @@ for (const [w, h] of SIZES) {
       if (w >= 1280) expect(await page.locator('.page[data-page="0"] .scroll').evaluate(e => e.scrollWidth <= e.clientWidth + 1)).toBe(true)
       for (const i of [1, 2, 3]) {
         await page.evaluate(n => document.querySelectorAll<HTMLElement>('.page')[n].scrollIntoView({ behavior: 'instant', inline: 'start', block: 'nearest' }), i)
-        await page.waitForTimeout(150)
+        await settle(page); await page.waitForTimeout(400) // the pager eases to the new page's height
         await inside(page, `.page[data-page="${i}"] .leaf`)
       }
 

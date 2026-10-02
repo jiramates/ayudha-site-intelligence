@@ -23,7 +23,8 @@ export function fillStudy() {
   const count = numWord(STUDY.sites.length)
   el('heroTitle').textContent = STUDY.meta.title
   el('heroLead').textContent = S.hero.lead(count)
-  el('heroSvg').setAttribute('aria-label', S.hero.aria)
+  el('coverImg').setAttribute('alt', S.hero.aria)
+  el('plannersImg').setAttribute('alt', S.ch1.aria)
   el('map').setAttribute('aria-label', S.map.aria(count))
   el('cmpTitle').textContent = S.cmp.title(count)
   el('resolution').innerHTML = STUDY.resolution.map(p => `<p>${P(p)}</p>`).join('')

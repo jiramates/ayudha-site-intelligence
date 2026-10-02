@@ -1,5 +1,5 @@
-// npm run og  →  public/og-image.jpg (1200×630, under 300 kB): the painted hero plus the title, rendered from the built app.
-// The JPEG is committed, so deploy builds need no browser. Re-run when the title or the hero art changes.
+// npm run og  →  public/og-image.jpg (1200×630, under 300 kB): the cover painting plus the title (from the built app).
+// The JPEG is committed, so deploy builds need no browser. Re-run when the title or the cover painting changes.
 import { chromium } from '@playwright/test'
 import { spawn } from 'node:child_process'
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
@@ -9,28 +9,29 @@ const server = spawn('npx', ['vite', 'preview', '--port', '4173', '--strictPort'
 await new Promise(r => setTimeout(r, 2500))
 const browser = await chromium.launch({ executablePath: exe, args: ['--no-sandbox'] })
 try {
-  // a viewport shaped like the hero painting, so the frame is about 2.6:1 whatever the screen
-  const app = await browser.newPage({ viewport: { width: 1180, height: 470 } })
+  const app = await browser.newPage({ viewport: { width: 1280, height: 800 } })
   await app.goto('http://localhost:4173/')
   await app.waitForFunction(() => document.getElementById('loading')?.hidden === true, null, { timeout: 30000 })
-  await app.waitForTimeout(1500)
-  await app.addStyleTag({ content: '.hero-t{display:none!important}' })
-  const title = await app.locator('#heroTitle').evaluate(e => e.textContent)
-  const hero = (await app.locator('header.frame').screenshot()).toString('base64')
+  const [title, eyebrow] = await Promise.all(['#heroTitle', '.hero-t .eyebrow'].map(s => app.locator(s).evaluate(e => e.textContent)))
+  const cover = readFileSync('src/assets/cover.webp').toString('base64')
 
+  // the cover painting on the right (whole, as in the app), the title on a red board on the left
   const fonts = readFileSync('src/styles/fonts.css', 'utf-8')
   const html = `<!doctype html><meta charset="utf-8"><style>${fonts}
     html,body{margin:0;width:1200px;height:630px;background:#e6d9ba;overflow:hidden}
-    .card{box-sizing:border-box;width:1200px;height:630px;padding:36px;background:#e6d9ba;position:relative}
+    .card{box-sizing:border-box;width:1200px;height:630px;padding:36px 36px 36px 56px;background:#e6d9ba;position:relative;display:flex;align-items:center;gap:40px}
     .card::before{content:"";position:absolute;inset:14px;border:3px solid #7e3d2a;outline:1px solid #7e3d2a;outline-offset:4px}
-    img{display:block;width:1128px;height:auto;margin:0 auto}
-    .t{margin-top:16px;height:92px;display:grid;place-items:center;background:#a04a33;border:2px solid #5f2c1e;box-shadow:inset 0 0 0 2px rgba(241,227,196,.3);
-       font:700 54px/1.1 "Srisakdi","Taviraj",serif;color:#f1e3c4;text-shadow:0 2px 0 rgba(60,20,10,.45)}
-  </style><div class="card"><img src="data:image/png;base64,${hero}"><div class="t"></div></div>`
+    .txt{flex:1;display:flex;flex-direction:column;gap:18px}
+    .e{font:400 26px/1.3 "Charm","Taviraj",serif;color:#7e3d2a}
+    .t{padding:18px 24px;background:#a04a33;border:2px solid #5f2c1e;box-shadow:inset 0 0 0 2px rgba(241,227,196,.3);
+       white-space:pre-line;font:700 56px/1.2 "Srisakdi","Taviraj",serif;color:#f1e3c4;text-shadow:0 2px 0 rgba(60,20,10,.45)}
+    img{display:block;height:558px;width:auto;border:4px solid #7e3d2a;flex:none}
+  </style><div class="card"><div class="txt"><div class="e"></div><div class="t"></div></div><img src="data:image/webp;base64,${cover}"></div>`
   const card = await browser.newPage({ viewport: { width: 1200, height: 630 } })
   await card.route('http://localhost:4173/__og', r => r.fulfill({ status: 200, contentType: 'text/html', body: html }))
   await card.goto('http://localhost:4173/__og')
-  await card.locator('.t').evaluate((e, t) => { e.textContent = t }, title)
+  await card.locator('.t').evaluate((e, t) => { e.textContent = t.replace(/ (?=[^ ]*$)/, '\n') }, title) // break at the last space, never inside a word
+  await card.locator('.e').evaluate((e, t) => { e.textContent = t }, eyebrow)
   await card.evaluate(() => document.fonts.ready)
   await card.waitForTimeout(300)
   let jpg = Buffer.alloc(0), q = 0

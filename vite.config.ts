@@ -45,7 +45,7 @@ export function ogMeta(env: Record<string, string | undefined> = process.env): P
 /** Hash of the files that draw the painted art: prebaked art (public/art) is used only while it matches. */
 function artSource(): string {
   const walk = (d: string): string[] => readdirSync(d).flatMap(f => (statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : [join(d, f)]))
-  const files = [...walk('src/render'), 'src/scenes/hero.ts', 'src/scenes/story.ts', 'src/scenes/map.ts'].sort()
+  const files = [...walk('src/render'), 'src/scenes/map.ts'].sort()
   const h = createHash('sha1')
   for (const f of files) h.update(f).update(readFileSync(f))
   return h.digest('hex').slice(0, 12)

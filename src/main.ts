@@ -11,8 +11,8 @@ import { installStudy, SITES } from './data/content'
 import { numWord } from './data/units'
 import { S } from './data/strings.th'
 import { fillStatic, fillStudy, showLoadError } from './ui/chrome'
-import { drawHero } from './scenes/hero'
-import { drawScene, setSpeaker, nextSpeaker } from './scenes/story'
+import { drawStory, setSpeaker, nextSpeaker } from './scenes/story'
+import { initPictures } from './scenes/pictures'
 import { drawMap } from './scenes/map'
 import { bindMap, tick } from './scenes/map-live'
 import { renderOpinions } from './scenes/summary'
@@ -24,7 +24,6 @@ import { initSheet } from './ui/sheet'
 import { initPeek } from './ui/peek'
 import { initFull } from './ui/full'
 import { initStoryFit } from './ui/storyfit'
-import { initHeroFit } from './ui/herofit'
 import { initExport } from './ui/export'
 
 async function boot() {
@@ -39,14 +38,13 @@ async function boot() {
   installRenderer()
   renderOpinions()
   bindMap()
-  // draw order matters: the shared seeded RNG must be consumed hero → scene → map, as in v3
-  drawHero(); drawScene(); drawMap(); render()
+  drawStory(); drawMap(); render()
   speak('khun', S.narrator.intro(numWord(Object.keys(SITES).length)))
   setSpeaker(0); if (!RM) setInterval(nextSpeaker, 5000)
   requestAnimationFrame(tick)
   initPager()
   initStoryFit()
-  initHeroFit()
+  initPictures()
   initPeek()
   initFull()
   initSheet()

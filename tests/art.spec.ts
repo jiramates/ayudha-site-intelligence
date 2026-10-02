@@ -13,20 +13,20 @@ async function art(page: Page) {
 }
 
 test('the demo uses the prebaked art (fast start); stale art would show up here as "baked"', async ({ page }) => {
-  expect(await art(page)).toEqual({ hero: 'prebaked', scene: 'prebaked', map: 'prebaked' })
+  expect(await art(page)).toEqual({ map: 'prebaked' })
 })
 
 test('another age level bakes in the browser and still looks right (the knob keeps working)', async ({ page }) => {
   await serve(page, { ...base, meta: { ...base.meta, ageLevel: 1 } })
-  expect(await art(page)).toEqual({ hero: 'baked', scene: 'baked', map: 'baked' })
+  expect(await art(page)).toEqual({ map: 'baked' })
   await expect(page.locator('#art image')).toHaveCount(1)
 })
 
-test('moving a site makes the map art stale, so it is baked again; the other scenes stay prebaked', async ({ page }) => {
+test('moving a site makes the map art stale, so it is baked again', async ({ page }) => {
   const moved = JSON.parse(JSON.stringify(base))
   moved.sites[0].pos = [540, 410]
   await serve(page, moved)
-  expect(await art(page)).toEqual({ hero: 'prebaked', scene: 'prebaked', map: 'baked' })
+  expect(await art(page)).toEqual({ map: 'baked' })
 })
 
 test('the page is ready quickly with prebaked art (no long main-thread task over 300 ms)', async ({ page }) => {

@@ -9,5 +9,6 @@
 - TypeScript is strict; no `any`. Thai text lives only in `src/data/strings.th.ts` and `public/data/study.json` (enforced by `npm test`).
 - Each phase ends with `npm run build:single` and a committed `review/ayudha-<phase>.html` (bump `ayudhaPhase` in package.json).
 - Numbers inside study.json sentences are `{placeholders}` (see README), never typed digits. All data text is escaped; only `**bold**` is allowed.
-- The painted scenes are prebaked offline into `public/art` (`npm run art`); re-run it and commit after changing the art code, `meta.ageLevel` or site positions (`tests/art.spec.ts` fails when it is stale).
+- The painted map is prebaked offline into `public/art` (`npm run art`); re-run it and commit after changing the art code, `meta.ageLevel` or site positions (`tests/art.spec.ts` fails when it is stale).
+- The cover and chapter 1 paintings are finished images in `src/assets`, shown exactly; their motion is a canvas overlay (`src/ui/living.ts`, effect positions in `src/scenes/pictures.ts`).
 - Layout: a section is never taller than the screen but takes its height from its content (only the map section fills one screen); `tests/layout.spec.ts` must pass at all nine sizes.
