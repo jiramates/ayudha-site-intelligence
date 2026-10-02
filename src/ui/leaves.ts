@@ -51,7 +51,7 @@ export function panelReg(){const s=curSite(),r=s.rules;const z=st.zone?ZONES[st.
      <p class="dim" style="margin-top:6px">${S.reg.loreClimate}</p></div></div></div>`}
 export function panelTr(){const s=curSite();const H=S.tr.head;
   const rows=MODE_IDS.map(k=>{const m=MODES[k],t=travel(s.id,k);return `<tr><th><span style="display:inline-block;width:11px;height:11px;border-radius:2px;background:${m.color};margin-right:6px"></span>${m.name}</th><td>${DEST[k].name}<br><span class="tag mod">${m.equiv}</span></td><td class="n">${th(Math.round(t.sen))} ${UNIT.sen}</td><td class="n"><b>${bahtTxt(t.baht)}</b><br><span class="dim">${th(Math.round(t.min))} ${UNIT.minute}</span></td></tr>`}).join('');
-  const speeds=MODE_IDS.map(k=>`${MODES[k].name} ${th(+MODES[k].senPerBaht.toFixed(2))}`).join(' ');
+  const speeds=MODE_IDS.map(k=>`${MODES[k].name} ${th(+MODES[k].senPerBaht.toFixed(1))}`).join(' ');
   return `<div class="leaf"><h3>${S.tr.title(numWord(s.n))}</h3><p class="dim">${S.tr.hint}</p>
     <div class="modes">${MODE_IDS.map(k=>{const m=MODES[k];return `<button class="mode" data-m="${k}" aria-pressed="${st.tm[k]}"><span class="sw" style="background:${m.color}"></span><span><b>${m.name}</b><small>${m.meaning}</small></span></button>`}).join('')}</div>
     <h4>${S.tr.courierTitle}</h4><p>“${s.transportNote}”</p></div>

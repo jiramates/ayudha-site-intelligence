@@ -4,3 +4,7 @@ dist-single
 shots
 test-results
 playwright-report
+private/
+study.private*.json
+.env
+.env.*
