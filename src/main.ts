@@ -20,6 +20,7 @@ import { render } from './state/store'
 import { speak } from './ui/narrator'
 import { initPager } from './ui/pager'
 import { initSheet } from './ui/sheet'
+import { initPeek } from './ui/peek'
 import { initExport } from './ui/export'
 
 async function boot() {
@@ -40,6 +41,7 @@ async function boot() {
   setSpeaker(0); if (!RM) setInterval(nextSpeaker, 5000)
   requestAnimationFrame(tick)
   initPager()
+  initPeek()
   initSheet()
   startUrlSync() // after the sheet exists: a deep link opens it
   initExport()

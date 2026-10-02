@@ -13,31 +13,43 @@ export function initSheet() {
   const side = document.getElementById('side') as HTMLElement
   const handle = document.getElementById('sheetHandle') as HTMLButtonElement
   const body = document.getElementById('sheetBody') as HTMLElement
+  const panel = document.getElementById('panel') as HTMLElement
   const narr = document.getElementById('narr') as HTMLElement
   const sec = document.getElementById('mapsec') as HTMLElement
   const cap = document.getElementById('cap') as HTMLElement
   const mapbox = document.getElementById('mapbox') as HTMLElement
 
-  /** translateY (px) of the sheet for each position; the sheet is `height` tall and anchored at the bottom */
-  const stops = () => {
-    const H = side.offsetHeight, hh = handle.offsetHeight || 52
-    const under = narr.getBoundingClientRect().bottom - sec.getBoundingClientRect().top // free space under the narrator
-    const half = Math.min(innerHeight * 0.62, Math.max(170, innerHeight - under - 10))
-    return { closed: H - hh, half: H - half, full: 0 }
+  /**
+   * translateY (px) of the sheet for each position; the sheet is `height` tall and anchored at the bottom.
+   *  closed = "peek": it fills the space under the narrator with the four site buttons
+   *  half   = its top edge sits just under the map (the whole map stays visible above it)
+   *  full   = almost the whole screen
+   */
+  const geometry = () => {
+    const H = side.offsetHeight, secTop = sec.getBoundingClientRect().top
+    const narrBottom = narr.getBoundingClientRect().bottom - secTop
+    const mapBottom = mapbox.getBoundingClientRect().bottom - secTop
+    const peek = Math.max(130, innerHeight - narrBottom - 8)
+    const half = Math.min(innerHeight * 0.72, Math.max(peek + 40, innerHeight - mapBottom - 6))
+    return { H, peek, stops: { closed: H - peek, half: H - half, full: 0 } as Record<Pos, number> }
   }
+  const stops = () => geometry().stops
   const apply = (p: Pos, animate = true) => {
     pos = p
+    const g = geometry()
     side.classList.toggle('dragging', !animate)
-    side.style.setProperty('--sheet-y', `${stops()[p]}px`)
+    side.dataset.pos = p
+    side.style.setProperty('--sheet-y', `${g.stops[p]}px`)
+    side.style.setProperty('--peekH', `${g.peek - (handle.offsetHeight || 52) - 16}px`)
     handle.setAttribute('aria-expanded', String(p !== 'closed'))
-    body.inert = p === 'closed'
+    cap.inert = panel.inert = p === 'closed' // only the site buttons are reachable while peeking
   }
 
   applyFn = apply
   const place = () => {
-    if (portrait.matches) body.insertBefore(cap, body.firstChild)
+    if (portrait.matches) body.insertBefore(cap, panel)
     else mapbox.appendChild(cap)
-    if (portrait.matches) apply(pos); else { side.style.removeProperty('--sheet-y'); body.inert = false }
+    if (portrait.matches) apply(pos); else { side.style.removeProperty('--sheet-y'); cap.inert = panel.inert = false }
   }
   portrait.addEventListener('change', place)
   const relayout = () => { if (portrait.matches) apply(pos, false) }

@@ -54,10 +54,14 @@ export function drawDynamic(){
   (document.getElementById('tokens') as HTMLElement).innerHTML=tokens.map(t=>`<g id="tk-${t.k}"><g filter="url(#lite)">${VEH[t.k]}</g></g>`).join('');
   tokens.forEach(t=>t.el=document.getElementById('tk-'+t.k));
 }
+/** Flag tap (also used by the phone's site buttons): select the site, or go back to the whole city if it is already shown. */
+export function selectSite(k:string){
+  if(st.mode==='site'&&st.site===k){st.site=null;render('out')}else{st.site=k;st.zone=null;render('site')}
+}
 export function bindMap(){
 map.addEventListener('click',e=>{const sEl=(e.target as Element).closest<HTMLElement>('[data-site]'),zEl=(e.target as Element).closest<HTMLElement>('[data-zone]');
   if(zEl){st.zone=st.zone===zEl.dataset.zone?null:(zEl.dataset.zone??null);render('zone');return}
-  if(sEl){const k=sEl.dataset.site??null;if(st.mode==='site'&&st.site===k){st.site=null;render('out')}else{st.site=k;st.zone=null;render('site')}}});
+  if(sEl&&sEl.dataset.site)selectSite(sEl.dataset.site)});
 map.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=(e.target as Element).closest<HTMLElement>('[data-site],[data-zone]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
 }
 export function tick(now:number){const t=now/1000;
