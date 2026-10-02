@@ -1,0 +1,741 @@
+<title>Ayudha Site Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@400;700&family=Charm:wght@400;700&family=Taviraj:wght@400;500;600&display=swap">
+<style>
+/* Layout: one long, aged mural wall read top to bottom — painted hero panorama, a story scene, a bird's-eye mural map, then a bundle of palm leaves as the record. Deliberate single light look (lime plaster, faded mineral pigments). */
+:root{
+  --plaster:#e6d9ba; --red:#a04a33; --red-dk:#743524; --gold:#b48a40;
+  --ink:#3a2819; --ink-soft:#6a553d;
+  --leaf1:#e1c992; --leaf2:#cdb072; --leaf-ink:#1e130a;
+  --ok:#4c7444; --warn:#9a7020; --risk:#a1412a;
+  --f-display:"Srisakdi","Taviraj",serif;
+  --f-leaf:"Charm","Taviraj",serif;
+  --f-data:"Taviraj","Charm",Georgia,serif;
+  --tx-wall:none; --tx-fiber:none; --tx-fox:none; --tx-crack:none;
+  color-scheme:light;
+}
+body{background-color:var(--plaster);color:var(--ink);font-family:var(--f-data);font-size:16px;line-height:1.6;background-image:var(--tx-crack),var(--tx-wall)}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:12px 40px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+svg text{font-family:var(--f-data)}
+.paintfade{animation:pf 1s ease both}
+@keyframes pf{from{opacity:0}}
+
+/* painted frame used by hero, scene, map */
+.frame{position:relative;border:4px solid #7e3d2a;outline:1px solid #7e3d2a;outline-offset:4px;background:#ded0ad;overflow:hidden;box-shadow:inset 0 0 40px rgba(80,50,20,.35)}
+.frame svg{display:block;width:100%;height:auto}
+
+.band{height:26px;margin-block:24px;border-block:2px solid #5f2c1e;opacity:.9;background-color:#94462f;background-image:var(--tx-wall),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='22'%3E%3Cg fill='%23e8d6ae' opacity='.72'%3E%3Cellipse cx='16' cy='5.5' rx='2.4' ry='3.2'/%3E%3Cellipse cx='16' cy='16.5' rx='2.4' ry='3.2'/%3E%3Cellipse cx='10.5' cy='11' rx='3.2' ry='2.4'/%3E%3Cellipse cx='21.5' cy='11' rx='3.2' ry='2.4'/%3E%3C/g%3E%3Ccircle cx='16' cy='11' r='1.9' fill='%23c08e45'/%3E%3Cpath d='M0 11h4M28 11h4' stroke='%23e8d6ae' stroke-width='.8' opacity='.5'/%3E%3C/svg%3E");background-size:auto,32px 22px;background-repeat:repeat,repeat-x;background-position:0 0,center}
+
+/* hero */
+.hero-t{position:absolute;left:4%;top:8%;max-width:min(520px,62%)}
+.hero-t .eyebrow{font-family:var(--f-leaf);color:var(--red-dk);font-size:17px}
+h1{font-family:var(--f-display);font-weight:700;color:var(--red-dk);font-size:clamp(28px,5.2vw,56px);line-height:1.12;margin:2px 0 8px;text-wrap:balance;text-shadow:0 1px 0 rgba(255,246,222,.75),0 0 22px rgba(232,220,192,.95)}
+.hero-t p{margin:0;font-family:var(--f-leaf);font-size:clamp(15px,2vw,19px);text-shadow:0 0 12px rgba(232,220,192,1),0 0 4px rgba(232,220,192,1);max-width:40ch}
+.scrollhint{display:inline-flex;gap:8px;align-items:center;margin-top:12px;font-family:var(--f-leaf);font-size:16px;color:var(--red-dk);background:rgba(232,220,192,.85);padding:2px 12px;border:1px solid var(--red);border-radius:99px}
+.scrollhint i{display:inline-block;animation:bob 1.6s ease-in-out infinite;font-style:normal}
+@keyframes bob{50%{transform:translateY(4px)}}
+@media (max-width:640px){.hero-t{position:relative;left:0;top:0;max-width:none;padding:14px}}
+
+.chap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:6px 0 14px}
+.chap .no{font-family:var(--f-display);font-weight:700;color:#f1e3c4;background-color:var(--red);background-image:var(--tx-wall);border:2px solid #5f2c1e;padding:2px 16px 4px;font-size:20px;box-shadow:inset 0 0 0 2px rgba(241,227,196,.3)}
+.chap h2{font-family:var(--f-display);font-weight:700;color:var(--red-dk);font-size:clamp(24px,3.6vw,36px);margin:0;line-height:1.2;text-wrap:balance}
+.chap p{flex-basis:100%;margin:0;font-family:var(--f-leaf);font-size:18px;color:var(--ink-soft)}
+
+/* palm leaf */
+.leaf{position:relative;color:var(--leaf-ink);font-family:var(--f-leaf);font-size:18.5px;line-height:1.65;padding:18px 60px;border-radius:14px;min-width:0;
+  background-color:var(--leaf2);
+  background-image:
+   radial-gradient(ellipse 70px 90% at 0 50%,rgba(95,58,18,.42),transparent 72%),
+   radial-gradient(ellipse 70px 90% at 100% 50%,rgba(95,58,18,.42),transparent 72%),
+   var(--tx-fox),var(--tx-fiber),
+   repeating-linear-gradient(0deg,rgba(105,72,26,.11) 0 1px,transparent 1px 6px),
+   linear-gradient(180deg,#ead7a6 0%,var(--leaf1) 30%,var(--leaf2) 100%);
+  box-shadow:inset 0 0 0 1px rgba(90,58,20,.3),inset 0 10px 14px -10px rgba(255,245,215,.7),inset 0 -9px 14px rgba(100,64,22,.22),0 2px 0 #a88a50,0 8px 12px -6px rgba(60,38,16,.45);
+  text-shadow:0 1px 0 rgba(255,242,208,.6),0 -1px 0 rgba(70,40,12,.18)}
+.leaf::before,.leaf::after{content:"";position:absolute;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:#6d4f2a;box-shadow:inset 0 2px 3px rgba(0,0,0,.55),0 1px 0 rgba(255,238,200,.6)}
+.leaf::before{left:24px}.leaf::after{right:24px}
+.leaf h3{font-family:var(--f-display);font-weight:700;color:var(--red-dk);font-size:24px;margin:0 0 4px;line-height:1.25;text-wrap:balance}
+.leaf h4{font-family:var(--f-leaf);font-weight:700;font-size:19px;margin:10px 0 2px;color:var(--red-dk)}
+.leaf p{margin:0 0 6px}
+.leaf .dim{color:#56401f;font-size:16px}
+@media (max-width:640px){.leaf{padding:14px 36px;font-size:17px}.leaf::before{left:12px}.leaf::after{right:12px}}
+
+/* story */
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+@media (max-width:760px){.duo{grid-template-columns:minmax(0,1fr)}}
+.line{display:grid;grid-template-columns:58px minmax(0,1fr);gap:12px;align-items:start;cursor:pointer;transition:box-shadow .5s,transform .5s}
+.line.on{transform:translateY(-3px);box-shadow:inset 0 0 0 2px var(--red),inset 0 -9px 14px rgba(100,64,22,.22),0 2px 0 #a88a50,0 12px 18px -8px rgba(110,45,20,.5)}
+.who{font-family:var(--f-leaf);font-weight:700;color:var(--red-dk);font-size:17px;line-height:1.2}
+.who small{font-weight:400;color:#56401f;font-size:14.5px}
+.pt{width:58px;height:58px;border-radius:50%;background:#e2d3ae;border:2px solid var(--red);overflow:hidden;box-shadow:inset 0 0 8px rgba(80,50,20,.4)}
+.pt svg{display:block;width:100%;height:100%}
+.fig .halo{opacity:0;transition:opacity .6s}
+.fig.on .halo{opacity:1}
+.fig.on .body{animation:speak 1.6s ease-in-out infinite}
+@keyframes speak{50%{transform:translateY(-4px)}}
+.halo circle.r{transform-box:fill-box;transform-origin:center;animation:spin 16s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.steam{animation:steam 3s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes steam{0%{opacity:0;transform:translateY(6px)}40%{opacity:.7}100%{opacity:0;transform:translateY(-14px)}}
+.bird{animation:fly 30s linear infinite}
+@keyframes fly{from{transform:translateX(-140px)}to{transform:translateX(1100px)}}
+
+/* map */
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+@media (max-width:640px){.tabs{grid-template-columns:minmax(0,1fr)}}
+.tab{display:flex;gap:12px;align-items:center;text-align:left;padding:8px 14px;background-color:#e2d3ad;background-image:var(--tx-wall);border:2px solid #8a5a3c;box-shadow:inset 0 0 0 3px rgba(255,246,222,.35),0 3px 0 #9b7a52;transition:transform .25s}
+.tab:hover{transform:translateY(-2px)}
+.tab .k{font-family:var(--f-display);font-weight:700;font-size:26px;color:var(--red);line-height:1}
+.tab b{display:block;font-family:var(--f-leaf);font-size:19px;line-height:1.2}
+.tab small{display:block;font-family:var(--f-leaf);font-size:14.5px;color:var(--ink-soft)}
+.tab[aria-selected="true"]{background-color:var(--red);border-color:#5f2c1e;color:#f4e6c8}
+.tab[aria-selected="true"] .k,.tab[aria-selected="true"] small{color:#f4e6c8}
+#map{display:block;width:100%;height:auto}
+.mapbtn{position:absolute;right:10px;top:10px;font-family:var(--f-leaf);font-size:16px;padding:3px 14px;background:rgba(232,220,192,.94);border:1.5px solid var(--red);border-radius:99px;color:var(--red-dk)}
+.maphint{position:absolute;left:10px;top:10px;font-family:var(--f-leaf);font-size:16px;background:rgba(232,220,192,.88);padding:2px 12px;pointer-events:none;max-width:60%}
+[hidden]{display:none!important}
+.loading{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-leaf);font-size:20px;color:var(--ink-soft);pointer-events:none}
+.cap{position:absolute;left:12px;bottom:12px;max-width:430px;font-size:16.5px;padding:12px 46px}
+.cap h3{font-size:21px}
+.cap.show{animation:capin .7s cubic-bezier(.2,.9,.3,1.2) .55s both}
+@keyframes capin{from{opacity:0;transform:translateY(30px) rotate(-2deg)}}
+@media (max-width:760px){.cap{position:relative;left:0;bottom:0;max-width:none;margin:12px 0 0}.mapframe{overflow:visible}}
+.site{cursor:pointer}
+.flag{transform-box:fill-box;transform-origin:0 50%;animation:wave 2.2s ease-in-out infinite}
+@keyframes wave{50%{transform:skewY(-6deg) scaleX(.92)}}
+.ring{transform-box:fill-box;transform-origin:center;animation:ring 2.4s ease-out infinite}
+@keyframes ring{from{transform:scale(.5);opacity:.9}to{transform:scale(1.8);opacity:0}}
+.zic{cursor:pointer}
+.zic:hover circle.s,.zic.on circle.s{fill:var(--red)}
+.zic:hover text,.zic.on text{fill:#f4e6c8}
+.pop{transform-box:fill-box;transform-origin:50% 100%;animation:pop .7s cubic-bezier(.2,.9,.25,1.3) both;animation-delay:calc(.45s + var(--i)*.13s)}
+@keyframes pop{from{transform:scaleY(0) scaleX(.6);opacity:0}}
+.drop{animation:drop .6s cubic-bezier(.3,1.4,.4,1) both;animation-delay:calc(.45s + var(--i)*.13s)}
+@keyframes drop{from{transform:translateY(-60px);opacity:0}}
+.dust{transform-box:fill-box;transform-origin:center;animation:dust 1s ease-out .45s both}
+@keyframes dust{from{transform:scale(.2);opacity:.8}to{transform:scale(1.6);opacity:0}}
+.fade{animation:fade .6s ease both}
+@keyframes fade{from{opacity:0}}
+.flow{fill:none;stroke:rgba(250,246,230,.5);stroke-width:1.2;stroke-dasharray:3 16;animation:flow 8s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-190}}
+.routeln{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.draw{animation:draw 1.4s ease-out both}
+@keyframes draw{from{stroke-dashoffset:var(--len)}}
+
+/* panel */
+.narr{display:grid;grid-template-columns:58px minmax(0,1fr);gap:12px;align-items:center}
+.say{min-height:1.7em}
+.say::after{content:"";display:inline-block;width:2px;height:1em;background:var(--ink-soft);margin-left:2px;vertical-align:-2px;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0}}
+.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+.pgrid .wide{grid-column:1/-1}
+@media (max-width:860px){.pgrid{grid-template-columns:minmax(0,1fr)}}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:8px}
+@media (max-width:520px){.stats{grid-template-columns:minmax(0,1fr)}}
+.stat{border-top:2px solid rgba(116,53,36,.45);padding-top:4px}
+.stat .v{font-family:var(--f-leaf);font-weight:700;font-size:22px;line-height:1.2;color:var(--red-dk)}
+.stat .l{font-size:15px;color:#56401f}
+.pl{list-style:none;margin:0;padding:0;display:grid;gap:3px}
+.pl li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:4px}
+.pl .p>span:first-child::before{content:"๏";color:var(--ok)}
+.pl .c>span:first-child::before{content:"✕";color:var(--risk)}
+.bars{display:grid;gap:6px;margin-top:4px}
+.bar{display:grid;grid-template-columns:120px minmax(0,1fr) 44px;gap:8px;align-items:center;font-size:16px}
+.bar .t{height:9px;background:rgba(90,58,20,.2);border-radius:5px;overflow:hidden}
+.bar .t i{display:block;height:100%;background:var(--red);border-radius:5px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.bar b{text-align:right;color:var(--red-dk)}
+.tbl{width:100%;border-collapse:collapse;font-family:var(--f-data);font-size:15px;font-variant-numeric:tabular-nums;text-shadow:none}
+.tbl td,.tbl th{padding:5px 6px;border-bottom:1px solid rgba(90,58,20,.25);text-align:left;vertical-align:top}
+.tbl th{font-weight:500;color:#56401f}
+.tbl td.n,.tbl th.n{text-align:right;white-space:nowrap}
+.tag{display:inline-block;font-family:var(--f-data);font-size:13.5px;padding:0 9px;border-radius:99px;border:1px solid currentColor;white-space:nowrap;text-shadow:none;line-height:1.6}
+.tag.ok{color:var(--ok)}.tag.warn{color:var(--warn)}.tag.risk{color:var(--risk)}.tag.mod{color:#56401f}
+.diag{overflow-x:auto}
+.diag svg{display:block;width:100%;height:auto;min-width:250px;max-width:460px;margin:4px auto 0}
+.sitepick{display:grid;gap:6px;margin-top:6px}
+.sitepick button{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:center;text-align:left;background:rgba(255,244,214,.3);border:1px solid rgba(116,53,36,.35);border-radius:8px;padding:6px 10px;font-family:var(--f-leaf);font-size:17px}
+.sitepick button:hover{background:rgba(255,244,214,.65)}
+.sitepick .s{width:30px;height:30px;border-radius:50%;background:var(--red);color:#f4e6c8;display:grid;place-items:center;font-family:var(--f-display);font-weight:700}
+.modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:6px}
+.mode{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px;align-items:center;text-align:left;padding:5px 9px;background:rgba(255,244,214,.35);border:1px solid rgba(116,53,36,.4);border-radius:8px;font-family:var(--f-leaf)}
+.mode .sw{width:30px;height:9px;border-radius:2px}
+.mode b{display:block;font-size:17px;line-height:1.2}
+.mode small{font-size:14px;color:#56401f}
+.mode[aria-pressed="false"]{opacity:.45}
+.zonecard{box-shadow:inset 0 0 0 2px var(--red),0 2px 0 #a88a50,0 8px 12px -6px rgba(60,38,16,.45)}
+.zonecard .x{position:absolute;right:42px;top:8px;background:none;border:0;font-size:22px;color:var(--red-dk)}
+.astrogrid{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:16px;align-items:center}
+@media (max-width:640px){.astrogrid{grid-template-columns:minmax(0,1fr)}}
+
+.ending{display:grid;gap:14px}
+.scroll{overflow-x:auto}
+.cmp{min-width:760px}
+.cmp tr[data-site]{cursor:pointer}
+.cmp tr.on td{background:rgba(160,74,51,.14)}
+.colophon{text-align:center;max-width:720px;margin:0 auto}
+.colophon .seal{display:inline-grid;place-items:center;width:58px;height:58px;border-radius:50%;background:var(--red);color:#f4e6c8;font-family:var(--f-display);font-weight:700;font-size:20px;border:2px solid #5f2c1e;margin-bottom:6px}
+.note{font-family:var(--f-data);font-size:13.5px;color:var(--ink-soft);text-align:center;max-width:820px;margin:14px auto 0;line-height:1.55}
+.soon{list-style:none;padding:0;margin:6px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 18px}
+@media (max-width:640px){.soon{grid-template-columns:minmax(0,1fr)}}
+.soon li::before{content:"๏ ";color:var(--red)}
+.rv{transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+.rv.pre{opacity:0;transform:translateX(-46px) rotate(-1.4deg)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv.pre{opacity:1;transform:none}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="gdefs"></defs>
+  <path id="islandSrc" d="M 160 340 C 170 220, 320 160, 520 165 C 700 168, 850 210, 860 340 C 870 470, 820 600, 640 640 C 480 670, 280 650, 200 560 C 150 500, 150 420, 160 340 Z"/>
+  <path id="rvW" d="M 40 0 C 90 120, 150 240, 160 340"/>
+  <path id="rvN" d="M 470 0 C 480 70, 500 120, 520 165"/>
+  <path id="rvE" d="M 990 60 C 920 130, 870 200, 830 240"/>
+  <path id="rvS" d="M 650 640 C 640 690, 620 730, 600 760"/>
+</svg>
+
+<div class="wrap">
+  <header class="frame">
+    <svg id="heroSvg" viewBox="0 0 1000 380" role="img" aria-label="ภาพจิตรกรรมพระนครศรีอยุธยาริมน้ำ"></svg>
+    <div class="hero-t">
+      <div class="eyebrow">สมุดข่อยกรมช่างหลวง · ว่าด้วยการหาทำเลโรงหมอ</div>
+      <h1>ศึกษาทำเลโรงหมอหลวง กรุงศรีอยุธยา</h1>
+      <p>ขุนช่างกับหมอหลวงปรึกษากันสร้างโรงหมอใหม่ ออกสำรวจสี่ทำเล ดูหุ่นจำลอง ข้อห้ามที่ดิน ทิศมงคล แลทางสัญจรทั้งบกทั้งน้ำ</p>
+      <span class="scrollhint">ฉบับนำร่องแห่ง เทสต์ฟิต แดชบอร์ด · เลื่อนลงอ่าน <i>▾</i></span>
+    </div>
+  </header>
+
+  <div class="band" aria-hidden="true"></div>
+
+  <section aria-labelledby="c1">
+    <div class="chap"><span class="no">ตอนที่ ๑</span><h2 id="c1">ปรารภสร้างโรงหมอ</h2><p>ณ ศาลาโรงหมอเก่าข้างวัด คนเจ็บนอนล้นถึงชายคา</p></div>
+    <div class="frame"><svg id="scene" viewBox="0 0 900 480" role="img" aria-label="ภาพจิตรกรรม ขุนช่างกับหมอหลวงปรึกษาสร้างโรงหมอ"></svg></div>
+    <div class="duo" id="lines"></div>
+  </section>
+
+  <div class="band" aria-hidden="true"></div>
+
+  <section aria-labelledby="c2" id="mapsec">
+    <div class="chap"><span class="no">ตอนที่ ๒</span><h2 id="c2">ออกสำรวจทำเลทั่วพระนคร</h2><p>กดธงชาดเลือกทำเล แลสลับดูข้อห้ามกับทางสัญจร</p></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-mode="site" aria-selected="true"><span class="k">๑</span><span><b>ทำเลที่ตั้ง</b><small>ดูหุ่นจำลองโรงหมอผุดขึ้น</small></span></button>
+      <button class="tab" role="tab" id="t-reg" data-mode="reg" aria-selected="false"><span class="k">๒</span><span><b>ข้อห้ามแลทิศ</b><small>ระยะร่น เพดานสูง ทิศมงคล</small></span></button>
+      <button class="tab" role="tab" id="t-tr" data-mode="tr" aria-selected="false"><span class="k">๓</span><span><b>ทางสัญจร</b><small>เดินเท้า ม้าเร็ว ช้าง เรือ</small></span></button>
+    </div>
+    <div class="frame mapframe" id="mapbox">
+      <svg id="map" viewBox="0 0 1000 700" role="img" aria-label="แผนที่มุมสูงเกาะเมืองอยุธยา พร้อมทำเลสี่แห่ง"></svg>
+      <div class="loading" id="loading">ช่างกำลังลงสีแผนที่…</div>
+      <div class="maphint" id="hint"></div>
+      <button class="mapbtn" id="zoomOut" hidden>ถอยดูทั้งพระนคร</button>
+      <div class="leaf cap" id="cap" hidden></div>
+    </div>
+    <div class="pgrid">
+      <div class="leaf narr wide"><div class="pt" id="nPt"></div><div><div class="who" id="nWho"></div><div class="say" id="say"></div></div></div>
+      <div id="panel" style="display:contents"></div>
+    </div>
+  </section>
+
+  <div class="band" aria-hidden="true"></div>
+
+  <section aria-labelledby="c3">
+    <div class="chap"><span class="no">ตอนที่ ๓</span><h2 id="c3">บทสรุปแห่งการสำรวจ</h2><p>ขุนช่างกับหมอหลวงจดความลงใบลานไว้เป็นหลักฐาน</p></div>
+    <div class="ending">
+      <div class="leaf rv"><h3>บัญชีเทียบสี่ทำเล</h3><p class="dim">กดแถวเพื่อกลับไปดูทำเลนั้นบนแผนที่</p><div class="scroll"><table class="tbl cmp" id="cmp"></table></div></div>
+      <div class="duo" id="opin" style="margin-top:0"></div>
+      <div class="leaf rv"><h3>มติที่ประชุม</h3>
+        <p>ตั้ง <b>โรงหมอใหญ่ ณ ทำเลหนึ่ง กลางเกาะ</b> เป็นหลัก แยกทางช้างเสบียงออกริมคลอง</p>
+        <p>ตั้ง <b>เรือนรับคนไข้ต่างแดน ณ ทำเลสอง ริมน้ำ</b> เป็นสาขา หันประตูรับท่าน้ำทางบูรพา</p>
+        <p><b>จองทำเลสาม</b> ไว้ขยายภายหน้าเมื่อได้ขยายทางถึงห้าวา · <b>ทำเลสี่</b> เป็นเพียงเรือนหมอหลวงเฉพาะพระองค์</p>
+        <h4>ฉบับเต็มแห่ง เทสต์ฟิต แดชบอร์ด จักมีดังนี้</h4>
+        <ul class="soon"><li>ทดลองวางผังสี่ทางเลือก ทีละชั้น</li><li>คำนวณพื้นที่ทุกแผนก</li><li>ซ้อนชั้นแผนก โอพีดี ไอพีดี ห้องผ่าตัด ไอซียู</li><li>เทียบผลตอบแทนทุนรอนรายทางเลือก</li></ul>
+      </div>
+      <div class="leaf rv colophon"><div class="seal">จบ</div>
+        <p>สมุดใบลานผูกนี้ จารเสร็จ ณ วันพฤหัสบดี จุลศักราช ๑๓๘๘ ปีมะเมีย อัฐศก โดยกรมช่างหลวง ขอให้ผู้อ่านเจริญด้วยอายุ วรรณะ สุขะ พละ เทอญ</p>
+      </div>
+    </div>
+    <p class="note">หมายเหตุ (ภาษาปัจจุบัน): แผนที่ ตัวเลข และข้อกำหนดทั้งหมดเป็นข้อมูลสาธิต ระยะร่นและข้อจำกัดอิงหลักการกฎหมายควบคุมอาคารแบบย่อ ทิศมงคลอิงตำราปลูกเรือนโบราณ ไม่ใช่ค่าตรวจสอบจริงของโครงการใด · ๑ วา = ๒ เมตร · ๑ ศอก ≈ ครึ่งเมตร · ๑ เส้น = ๒๐ วา · ๑ ไร่ = ๔๐๐ ตารางวา · ๑ บาท (เพลา) = ๖ นาที</p>
+  </section>
+</div>
+
+<script>
+(function(){
+const TH='๐๑๒๓๔๕๖๗๘๙';
+const th=v=>String(v).replace(/\d/g,d=>TH[d]);
+const fmt=n=>th(Math.round(n).toLocaleString('en-US'));
+const RM=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NS='http://www.w3.org/2000/svg';
+const UNIT=6;
+const f1=n=>(+n).toFixed(1);
+let seed=11;const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
+const pick=a=>a[Math.floor(rnd()*a.length)];
+
+/* ---------- textures for CSS ---------- */
+(function(){const enc=s=>`url("data:image/svg+xml,${encodeURIComponent(s)}")`;const r=document.documentElement.style;
+  r.setProperty('--tx-wall',enc(`<svg xmlns="http://www.w3.org/2000/svg" width="520" height="520"><filter id="a"><feTurbulence type="fractalNoise" baseFrequency=".008" numOctaves="4" seed="3"/><feColorMatrix values="0 0 0 0 .42 0 0 0 0 .3 0 0 0 0 .16 0 0 0 1.4 -.62"/></filter><filter id="b"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="6"/><feColorMatrix values="0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .14 0 0 0 .26 0"/></filter><filter id="c"><feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="4" seed="17"/><feColorMatrix values="0 0 0 0 .97 0 0 0 0 .94 0 0 0 0 .86 16 0 0 0 -10.9"/></filter><rect width="520" height="520" filter="url(#a)" opacity=".7"/><rect width="520" height="520" filter="url(#c)" opacity=".55"/><rect width="520" height="520" filter="url(#b)"/></svg>`));
+  r.setProperty('--tx-crack',enc(`<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900"><g fill="none" stroke="#5a4129" stroke-width=".8" opacity=".35"><path d="M40 0 l12 40 l-6 30 l18 44 l-4 26 l20 38"/><path d="M58 70 l30 12 l14 24"/><path d="M600 300 l-20 30 l6 26 l-22 40 l10 34 l-14 30"/><path d="M586 356 l-34 10 l-16 22"/><path d="M300 700 l28 -10 l20 18 l34 -6 l22 20"/><path d="M860 600 l-10 40 l14 30 l-8 50"/></g><g fill="none" stroke="#fff6e0" stroke-width=".7" opacity=".4" transform="translate(1 1)"><path d="M40 0 l12 40 l-6 30 l18 44 l-4 26 l20 38"/><path d="M600 300 l-20 30 l6 26 l-22 40 l10 34 l-14 30"/></g></svg>`));
+  r.setProperty('--tx-fiber',enc(`<svg xmlns="http://www.w3.org/2000/svg" width="420" height="90"><filter id="f"><feTurbulence type="fractalNoise" baseFrequency=".004 .5" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .42 0 0 0 0 .28 0 0 0 0 .1 0 0 0 1.6 -.62"/></filter><rect width="420" height="90" filter="url(#f)"/></svg>`));
+  r.setProperty('--tx-fox',enc(`<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".06" numOctaves="3" seed="9"/><feColorMatrix values="0 0 0 0 .4 0 0 0 0 .25 0 0 0 0 .08 9 0 0 0 -5.7"/></filter><rect width="360" height="200" filter="url(#g)" opacity=".5"/></svg>`));
+})();
+
+/* ---------- shared defs (patterns + gradients + light paint filter) ---------- */
+const DEFS=`
+<pattern id="tileP" width="7" height="5" patternUnits="userSpaceOnUse"><path d="M0 5 Q3.5 0 7 5" fill="none" stroke="#5a2618" stroke-width=".8" opacity=".6"/></pattern>
+<pattern id="thatch" width="4" height="9" patternUnits="userSpaceOnUse"><path d="M1 0 L2 9 M3 0 L3.6 9" stroke="#7a5a30" stroke-width=".6" opacity=".7"/></pattern>
+<pattern id="plank" width="3.5" height="10" patternUnits="userSpaceOnUse"><line x1=".5" y1="0" x2=".5" y2="10" stroke="#6e4b2c" stroke-width=".5" opacity=".7"/></pattern>
+<pattern id="rice" width="9" height="7" patternUnits="userSpaceOnUse"><path d="M1 6.5 l1.6 -4.5 M4.5 6.5 l.8 -5.5 M7.5 6.5 l1.6 -4.5" stroke="#5c7a49" stroke-width=".9" fill="none" opacity=".7"/></pattern>
+<pattern id="waves" width="20" height="11" patternUnits="userSpaceOnUse"><path d="M0 8 q5 -6.5 10 0 q5 -6.5 10 0" fill="none" stroke="#dbe3d6" stroke-width="1.1" opacity=".8"/><path d="M-10 2.5 q5 -6 10 0 q5 -6 10 0 q5 -6 10 0" fill="none" stroke="#6e8c82" stroke-width=".8" opacity=".6"/></pattern>
+<pattern id="clothDot" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#4f6a49"/><circle cx="3" cy="3" r="1.2" fill="#d4bb82"/><circle cx="0" cy="0" r=".6" fill="#b5893f"/></pattern>
+<pattern id="clothBr" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#71331f"/><path d="M0 0 L7 7 M7 0 L0 7" stroke="#c4964a" stroke-width=".6"/><circle cx="3.5" cy="3.5" r="1" fill="#e2cb92"/></pattern>
+<pattern id="hatchR" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="#a04a33" stroke-width="1.2" opacity=".55"/></pattern>
+<pattern id="hatchB" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)"><line x1="0" y1="0" x2="0" y2="8" stroke="#46717f" stroke-width="1.3" opacity=".5"/></pattern>
+<linearGradient id="rockG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9d1c2"/><stop offset=".55" stop-color="#9fb0a3"/><stop offset="1" stop-color="#6f8579"/></linearGradient>
+<linearGradient id="rockG2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6d2bd"/><stop offset="1" stop-color="#93a395"/></linearGradient>
+<linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c7b892"/><stop offset=".45" stop-color="#ddd1b0"/><stop offset="1" stop-color="#e6dcc3"/></linearGradient>
+<linearGradient id="prangG" x1="0" x2="1"><stop offset="0" stop-color="#dba57a"/><stop offset=".5" stop-color="#c98b5f"/><stop offset=".52" stop-color="#a86b45"/><stop offset="1" stop-color="#8f5838"/></linearGradient>
+<linearGradient id="chediG" x1="0" x2="1"><stop offset="0" stop-color="#f4ecd8"/><stop offset=".5" stop-color="#e6dcc3"/><stop offset=".52" stop-color="#c9bc9e"/><stop offset="1" stop-color="#b3a585"/></linearGradient>
+<radialGradient id="stainG"><stop offset="0" stop-color="#6b4a24" stop-opacity=".22"/><stop offset="1" stop-color="#6b4a24" stop-opacity="0"/></radialGradient>
+<radialGradient id="hazeG"><stop offset="0" stop-color="#f6eedb" stop-opacity=".55"/><stop offset="1" stop-color="#f6eedb" stop-opacity="0"/></radialGradient>
+<radialGradient id="vigG" cx="50%" cy="50%" r="72%"><stop offset="62%" stop-color="#4a2e12" stop-opacity="0"/><stop offset="100%" stop-color="#4a2e12" stop-opacity=".42"/></radialGradient>
+<linearGradient id="dampG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3e1e" stop-opacity="0"/><stop offset="1" stop-color="#5a3e1e" stop-opacity=".28"/></linearGradient>`;
+const LITE=`<filter id="lite" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="4" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d"/><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" seed="2" result="g"/><feColorMatrix in="g" values="0.3 0.3 0.3 0 0.58  0.3 0.3 0.3 0 0.58  0.3 0.3 0.3 0 0.56  0 0 0 0 1" result="gg"/><feBlend in="d" in2="gg" mode="multiply" result="p"/><feComposite in="p" in2="SourceGraphic" operator="in"/></filter>`;
+document.getElementById('gdefs').innerHTML=DEFS+LITE;
+function paintFilter(w,h){return `<filter id="op" filterUnits="userSpaceOnUse" x="0" y="0" width="${w}" height="${h}" color-interpolation-filters="sRGB">
+ <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="4" result="w"/>
+ <feDisplacementMap in="SourceGraphic" in2="w" scale="3" xChannelSelector="R" yChannelSelector="G" result="d"/>
+ <feTurbulence type="fractalNoise" baseFrequency=".009 .015" numOctaves="3" seed="8" result="m"/>
+ <feColorMatrix in="m" values="0.36 0.36 0.36 0 0.37  0.36 0.36 0.36 0 0.37  0.36 0.36 0.36 0 0.34  0 0 0 0 1" result="mg"/>
+ <feBlend in="d" in2="mg" mode="multiply" result="p1"/>
+ <feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="2" seed="2" result="g"/>
+ <feColorMatrix in="g" values="0.32 0.32 0.32 0 0.58  0.32 0.32 0.32 0 0.58  0.32 0.32 0.32 0 0.55  0 0 0 0 1" result="gg"/>
+ <feBlend in="p1" in2="gg" mode="multiply" result="p2"/>
+ <feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="4" seed="21" result="f"/>
+ <feColorMatrix in="f" values="0 0 0 0 .93  0 0 0 0 .89  0 0 0 0 .79  18 0 0 0 -12.3" result="fl"/>
+ <feTurbulence type="fractalNoise" baseFrequency=".2" numOctaves="2" seed="31" result="f2"/>
+ <feColorMatrix in="f2" values="0 0 0 0 .95  0 0 0 0 .92  0 0 0 0 .84  26 0 0 0 -18.8" result="fl2"/>
+ <feMerge><feMergeNode in="p2"/><feMergeNode in="fl"/><feMergeNode in="fl2"/></feMerge></filter>`}
+function agePost(w,h,n=8){let s='';
+  for(let i=0;i<5;i++)s+=`<ellipse cx="${f1(rnd()*w)}" cy="${f1(rnd()*h)}" rx="${f1(60+rnd()*140)}" ry="${f1(40+rnd()*90)}" fill="url(#stainG)"/>`;
+  for(let i=0;i<4;i++)s+=`<ellipse cx="${f1(rnd()*w)}" cy="${f1(rnd()*h)}" rx="${f1(80+rnd()*120)}" ry="${f1(50+rnd()*60)}" fill="url(#hazeG)"/>`;
+  for(let c=0;c<n;c++){let x=rnd()*w,y=rnd()*h,a=rnd()*6.28;let d=`M${f1(x)} ${f1(y)}`;const steps=10+rnd()*22;for(let i=0;i<steps;i++){a+=(rnd()-.5)*1.1;x+=Math.cos(a)*(4+rnd()*8);y+=Math.sin(a)*(4+rnd()*8);d+=` L${f1(x)} ${f1(y)}`}
+    s+=`<path d="${d}" fill="none" stroke="#fff6e2" stroke-width="1" opacity=".5" transform="translate(.8 .8)"/><path d="${d}" fill="none" stroke="#4f3a24" stroke-width=".75" opacity=".55"/>`}
+  s+=`<rect y="${h*.8}" width="${w}" height="${h*.2}" fill="url(#dampG)"/><rect width="${w}" height="${h}" fill="url(#vigG)"/>`;return s}
+function bake(w,h,inner,post,scale,cb){
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${Math.round(w*scale)}" height="${Math.round(h*scale)}" viewBox="0 0 ${w} ${h}"><defs>${DEFS}${paintFilter(w,h)}</defs><rect width="${w}" height="${h}" fill="#e3d6b6"/><g filter="url(#op)">${inner}</g>${post}</svg>`;
+  const url='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  const img=new Image();
+  img.onload=()=>{try{const c=document.createElement('canvas');c.width=Math.round(w*scale);c.height=Math.round(h*scale);c.getContext('2d').drawImage(img,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.9))}catch(e){cb(url)}};
+  img.onerror=()=>cb(null);img.src=url}
+
+/* ---------- units ---------- */
+function waTxt(m){const v=m/2;if(Number.isInteger(v))return th(v)+' วา';const fl=Math.floor(v);if(Math.abs(v-fl-.5)<.01)return fl?th(fl)+' วาครึ่ง':'ครึ่งวา';return th(v.toFixed(1))+' วา'}
+function areaTxt(m2){let tw=Math.round(m2/4);const r=Math.floor(tw/400);tw-=r*400;const g=Math.floor(tw/100);const w=tw-g*100;
+  if(r>=20)return 'ราว '+th(Math.round(m2/1600))+' ไร่';
+  return [r?th(r)+' ไร่':'',g?th(g)+' งาน':'',w?th(w)+' ตารางวา':''].filter(Boolean).join(' ')||'๐'}
+const bahtTxt=b=>th(b<1?b.toFixed(1):b.toFixed(1).replace(/\.0$/,''))+' บาท';
+
+/* ---------- people & data ---------- */
+const PEOPLE={khun:{name:'ขุนวิเศษสถาปนิก',role:'นายช่างหลวง'},mor:{name:'หมอหลวงพรหม',role:'แพทย์หลวง'},phon:{name:'นายมั่น',role:'พลขับกรมม้าเร็ว'}};
+const STORY=[
+ ['mor','ข้าแต่ขุนวิเศษ โรงหมอเก่าคับแคบนัก คนเจ็บนอนล้นถึงชายคา ข้าขอโรงหมอใหม่ ให้ไพร่ฟ้าเดินถึงง่าย ม้าเร็วถึงวังไว แลมีท่าน้ำรับคนเจ็บ'],
+ ['khun','ข้าจักไปดูทำเลสี่แห่ง ตรวจข้อห้ามแลทิศมงคล แล้วตั้งหุ่นจำลองให้ท่านเทียบ — เอ็ง พลขับ! เตรียมช้าง ม้า เรือไว้ พรุ่งนี้ออกสำรวจ']
+];
+const DIRS=[['อุดร',0],['อีสาน',45],['บูรพา',90],['อาคเนย์',135],['ทักษิณ',180],['หรดี',225],['ประจิม',270],['พายัพ',315]];
+const DEST={walk:{name:'ตลาดป่าตะกั่ว',pt:[520,340]},horse:{name:'ประตูวังหลวง',pt:[330,295]},ele:{name:'ประตูไชย คลังเสบียง',pt:[440,655]},boat:{name:'ท่าสำเภา',pt:[790,655]}};
+const MODES={
+ walk:{name:'เดินเท้า',spd:10,color:'#4e3520',w:2.6,dash:'1 6',mean:'ไพร่ฟ้าเดินมารักษา',eq:'เทียบ: ผู้ป่วยนอก'},
+ horse:{name:'ม้าเร็ว',spd:30,color:'#a1412a',w:3,dash:'10 6',mean:'พลขับม้าเร็ว ยามฉุกเฉิน',eq:'เทียบ: หน่วยฉุกเฉิน'},
+ ele:{name:'ช้างพลาย',spd:11.25,color:'#a07628',w:6,dash:'',mean:'ขนเสบียง ยา ฟืน ผ้า',eq:'เทียบ: ลานบริการ ขนส่ง'},
+ boat:{name:'เรือเพรียว',spd:12.5,color:'#356870',w:3.4,dash:'14 6',mean:'รับคนไข้ต่างแดน',eq:'เทียบ: การแพทย์เชิงท่องเที่ยว'}
+};
+const SITES={
+ A:{n:1,name:'กลางเกาะ ย่านป่าตะกั่ว',pos:[560,400],pw:56,ph:42,desc:'ใจกลางพระนคร ติดตลาดใหญ่ ผู้คนสัญจรขวักไขว่ทั้งวัน',
+   form:'โรงหมอสูงหลังคาซ้อนสามชั้น ตั้งบนเรือนฐานยาว มีเรือนปีกสองข้างรับคนไข้นอก',
+   say:'ทำเลกลางเกาะ ใกล้ตลาด ข้าตั้งหุ่นโรงหมอซ้อนหลังคาสามชั้นให้ท่านดูแล้ว',
+   pros:['ใกล้ตลาดแลชุมชน คนไข้เดินถึงง่าย','มีคลองประตูข้าวเปลือกข้างแปลง ออกเรือได้','ร่นลึกแล้วสร้างสูงได้มาก'],cons:['ที่ดินแพงที่สุดในสี่ทำเล','ถนนหน้าแปลงแออัดเพลาเช้า ช้างเสบียงติดขัด'],
+   verdict:'ทำเลนี้ดีแก่ไพร่ฟ้าทั้งเมือง หากจักตั้งโรงหมอใหญ่ให้คนทั้งพระนครพึ่ง ก็พึงเลือกที่นี้ แต่ต้องแยกทางช้างเสบียงออกจากทางคนเดิน',score:{loc:5,reg:3,acc:4,grow:2},
+   reg:{dims:[160,120],road:16,roadSide:'bottom',roadSet:6,water:{name:'คลองประตูข้าวเปลือก',set:3,side:'right'},far:5,cap:null,top:68,flood:1,gfaAllow:96000,gfa:96000,flags:[['ok','ร่นลึกแล้วสูงได้ ๓๔ วา'],['warn','ทางกว้าง ๘ วา แออัด']]},
+   astro:{front:'ทักษิณ',good:true,txt:'หน้าโรงหันทักษิณ รับลมว่าวพัดเข้า ร่มเย็นดีนัก หัวเตียงคนไข้หันบูรพาได้ทั้งตึก',fix:'ตั้งเรือนเก็บศพไว้มุมประจิมของแปลง ออกทางคลองได้โดยไม่ผ่านหน้าโรง'}},
+ B:{n:2,name:'ริมน้ำ ย่านบ้านจีน',pos:[770,470],pw:48,ph:36,desc:'ริมแม่น้ำป่าสัก ใกล้ท่าสำเภาแลย่านพ่อค้าต่างแดน',
+   form:'โรงยาวริมน้ำหลังคาซ้อนสองชั้น มีสะพานท่าน้ำยื่นออกรับเรือคนไข้',say:'ริมน้ำย่านบ้านจีน เรือเทียบท่าได้ถึงหน้าโรงหมอ',
+   pros:['ใกล้ท่าสำเภา รับคนไข้ต่างแดนทางน้ำได้ทันที','ทัศนียภาพริมน้ำ เหมาะเรือนพักฟื้น'],cons:['ต้องร่นจากตลิ่งถึงหกวา','น้ำหลากเดือนสิบสอง ต้องยกพื้นสองศอก','ทางหน้าแปลงอยู่ทิศประจิม'],
+   verdict:'ทำเลนี้ต้องด้วยโรงหมอรับชาวต่างแดน เรือเทียบท่าแล้วหามคนไข้ขึ้นได้เลย แต่ต้องยกพื้นหนีน้ำให้พ้นสองศอก แลร่นจากตลิ่งให้ครบหกวา',score:{loc:4,reg:3,acc:4,grow:3},
+   reg:{dims:[150,96],road:12,roadSide:'left',roadSet:6,water:{name:'แม่น้ำป่าสัก',set:12,side:'right'},far:4,cap:null,top:60,flood:2,gfaAllow:57600,gfa:57600,flags:[['warn','ร่นริมน้ำ ๖ วา'],['warn','ยกพื้นหนีน้ำ ๒ ศอก'],['risk','ทางหน้าอยู่ทิศประจิม']]},
+   astro:{front:'ประจิม',good:false,txt:'ทางหน้าแปลงอยู่ทิศประจิม อันเป็นทิศอาทิตย์อัสดง ตำราว่าไม่ควรทำประตูหน้าทางนี้',fix:'กลับหน้าโรงไปทางบูรพารับท่าน้ำ ให้ทางประจิมเป็นทางเสบียงแลเรือนเก็บศพ'}},
+ C:{n:3,name:'นอกเกาะ ทุ่งภูเขาทอง',pos:[255,98],pw:70,ph:48,desc:'ทุ่งกว้างทางเหนือนอกกำแพงเมือง ต้องข้ามแม่น้ำจากพระนคร',
+   form:'หมู่ศาลาโรงหมอหลายหลังกลางทุ่ง มีลานต้นไม้คั่น สร้างเพิ่มได้ทีละหลัง',say:'ทุ่งภูเขาทอง ที่กว้าง ข้าวางหมู่ศาลาไว้ ขยายได้อีกมาก',
+   pros:['ที่ดินกว้างสามสิบไร่ ราคาถูกที่สุด','ขยายเป็นหมู่โรงหมอได้หลายระยะ'],cons:['ทางเข้ากว้างเพียงสี่วา โรงใหญ่ยังติดทางมิได้','ต้องข้ามแม่น้ำ ม้าเร็วถึงวังช้า','เป็นทุ่งรับน้ำ ลึกถึงสามศอก'],
+   verdict:'ที่ดินกว้างขวาง ขยายได้อีกหลายรัชกาล แต่ทางเข้าแคบเพียงสี่วา ต้องขอพระราชทานขยายทางเสียก่อน แลเพลาฉุกเฉินจักช้านัก',score:{loc:2,reg:4,acc:2,grow:5},
+   reg:{dims:[240,200],road:8,roadSide:'bottom',roadSet:6,water:null,far:2.5,cap:null,top:52,flood:3,gfaAllow:120000,gfa:120000,flags:[['risk','ทางกว้างเพียง ๔ วา ต่ำกว่าที่โรงใหญ่ต้องมี'],['warn','ทุ่งรับน้ำ ยกพื้น ๓ ศอก']]},
+   astro:{front:'ทักษิณ',good:true,txt:'หน้าโรงหันทักษิณลงสู่ทาง ต้องตามตำรา แลมีที่ว่างทางอีสานกว้างพอตั้งหอพระ',fix:'วางเรือนคนไข้ให้หัวเตียงหันบูรพาทุกหลัง ที่ดินกว้างทำได้ง่าย'}},
+ D:{n:4,name:'ข้างวังหลวง ริมคลองท่อ',pos:[482,225],pw:44,ph:30,desc:'ชิดเขตพระราชฐาน ริมคลองท่อ ใกล้พระมหาปรางค์',
+   form:'เรือนเตี้ยล้อมลาน หลังคาซ้อนสองชั้น มีศาลาประตูหน้า สูงไม่เกินแปดวา',say:'ข้างวังหลวง ห้ามสูงเกินแปดวา จึงได้เพียงเรือนเตี้ยล้อมลาน',
+   pros:['ใกล้พระราชวัง หมอหลวงเข้าเฝ้าทันพระทัย','ทางหน้าแปลงกว้างสิบวา'],cons:['เพดานสูงแปดวา บังพระปรางค์มิได้','ที่ดินน้อย หกไร่ ใช้ได้จริงเพียงส่วนหนึ่ง','ทางหน้าแปลงอยู่ทิศประจิม'],
+   verdict:'ใกล้วังหลวงก็จริง แต่ห้ามสูงเกินแปดวา พื้นที่ใช้ได้เหลือน้อยนัก เหมาะเป็นเรือนหมอหลวงเฉพาะพระองค์ มิใช่โรงหมอใหญ่ของพระนคร',score:{loc:4,reg:1,acc:3,grow:1},
+   reg:{dims:[120,80],road:20,roadSide:'left',roadSet:6,water:{name:'คลองท่อ',set:3,side:'bottom'},far:3,cap:16,top:16,flood:1,gfaAllow:28800,gfa:17280,flags:[['risk','เพดานสูง ๘ วา'],['risk','ตามเกณฑ์สร้างได้สามเท่า แต่ได้จริงไม่ถึงสองเท่า']]},
+   astro:{front:'ประจิม',good:false,txt:'ทางหน้าแปลงอยู่ทิศประจิม ซ้ำยังรับแดดบ่ายเต็มหน้าโรง',fix:'เปิดประตูหน้าทางทักษิณ ทอดสะพานข้ามคลองท่อเข้าลาน'}}
+};
+const LAND={A:19200,B:14400,C:48000,D:9600};
+const NUMW=['','หนึ่ง','สอง','สาม','สี่'];
+const ROUTES={
+ A:{walk:[[560,400],[560,340],[520,340]],horse:[[560,400],[560,340],[330,340],[330,295]],ele:[[560,400],[560,510],[440,510],[440,655]],boat:[[560,400],[600,400],[600,580],[828,580],[838,630],[790,655]]},
+ B:{walk:[[770,470],[770,510],[560,510],[560,340],[520,340]],horse:[[770,470],[770,510],[440,510],[440,340],[330,340],[330,295]],ele:[[770,470],[770,510],[440,510],[440,655]],boat:[[770,470],[848,470],[852,560],[838,630],[790,655]]},
+ C:{walk:[[255,98],[440,98],[440,340],[520,340]],horse:[[255,98],[440,98],[440,340],[330,340],[330,295]],ele:[[255,98],[440,98],[440,655]],boat:[[255,98],[262,192],[420,166],[600,168],[600,580],[828,580],[838,630],[790,655]]},
+ D:{walk:[[482,225],[440,225],[440,340],[520,340]],horse:[[482,225],[440,225],[440,340],[330,340],[330,295]],ele:[[482,225],[440,225],[440,655]],boat:[[482,225],[482,260],[600,260],[600,580],[828,580],[838,630],[790,655]]}
+};
+const ZONES={
+ palace:{ic:[430,150],g:'สูง',t:'เขตพระราชฐาน',p:'ห้ามมิให้ผู้ใดสร้างเรือนโรงสูงเกินแปดวา ในรัศมียี่สิบห้าเส้นรอบพระราชวัง มิให้บังพระมหาปรางค์แลยอดปราสาท ผู้ใดฝ่าฝืนต้องรื้อถอนเสียสิ้น',tags:['เพดานสูง ๘ วา','รัศมี ๒๕ เส้น','กระทบทำเลสี่']},
+ flood:{ic:[110,165],g:'น้ำ',t:'ทุ่งรับน้ำ',p:'เดือนสิบเอ็ดสิบสอง น้ำเหนือหลากท่วมทุ่งลึกถึงสามศอก ต้องยกพื้นโรงหมอให้พ้นน้ำ แลวางคลังยาไว้ชั้นบน',tags:['ยกพื้น ๓ ศอก','กระทบทำเลสาม']},
+ river:{ic:[905,430],g:'ร่น',t:'แนวร่นริมน้ำ',p:'คลองกว้างไม่ถึงห้าวา ร่นจากตลิ่งวาครึ่ง ลำน้ำกว้างตั้งแต่ห้าวา ร่นสามวา แม่น้ำใหญ่ร่นมิน้อยกว่าหกวา',tags:['คลองเล็ก วาครึ่ง','คลองใหญ่ ๓ วา','แม่น้ำ ๖ วา']},
+ road:{ic:[700,325],g:'ทาง',t:'ทางหน้าแปลง',p:'โรงใหญ่ต้องติดทางกว้างมิน้อยกว่าห้าวา แลร่นตัวเรือนจากเขตทางสามวา ให้ช้าง ม้า เกวียน สวนกันได้',tags:['ทางกว้าง ≥ ๕ วา','ร่นจากเขตทาง ๓ วา','กระทบทำเลสาม']},
+ astro:{ic:[905,655],g:'ทิศ',t:'ทิศมงคลตามตำราปลูกเรือน',p:'ห้ามทำประตูหน้าแลหัวนอนคนไข้ไปทางประจิม ให้หัวนอนหันบูรพาหรือทักษิณ ตั้งหอพระทางอีสาน โรงครัวเตายาทางอาคเนย์ แลเรือนเก็บศพทางประจิม',tags:['หัวเตียงคนไข้ บูรพา ทักษิณ','หอพระ อีสาน','เรือนเก็บศพ ประจิม']}
+};
+const CRIT={loc:'ใกล้ไพร่ฟ้า',reg:'ข้อห้ามที่ดิน',acc:'ทางสัญจร',grow:'ขยายภายหน้า'};
+const total=s=>Object.values(s.score).reduce((a,b)=>a+b,0);
+const plen=p=>{let L=0;for(let i=1;i<p.length;i++)L+=Math.hypot(p[i][0]-p[i-1][0],p[i][1]-p[i-1][1]);return L};
+function travel(k,mode){const sen=plen(ROUTES[k][mode])*UNIT/40;const baht=sen/MODES[mode].spd;return{sen,baht,min:baht*6}}
+
+/* ---------- painted primitives (bottom-centre origin) ---------- */
+const OL='#5e3420';
+function tree(scale=1){const g=pick([['#4e6a48','#88a275'],['#5b7650','#9cb183'],['#45603f','#7f9a6c'],['#5f6f45','#a3ad78']]);let s=`<path d="M-2.6 0 Q-4.5 -10 -1.6 -20 L-6 -27 M1.6 -20 L6 -28 M-1.6 -20 L1.6 -20 Q4.2 -10 2.6 0Z" fill="#5e3f26" stroke="#5e3f26" stroke-width="1.6"/>`;
+  const pads=[[0,-30,11],[-10,-23,8.5],[10,-24,8.5],[-6,-38,8],[6,-37,8],[0,-21,7]];
+  pads.forEach(([x,y,r])=>{s+=`<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${f1(r*.82)}" fill="${g[0]}" stroke="#2f422c" stroke-width=".7"/>`;
+    for(let i=0;i<6;i++){const a=rnd()*6.28,d=rnd()*r*.7;s+=`<ellipse cx="${f1(x+Math.cos(a)*d)}" cy="${f1(y+Math.sin(a)*d*.8)}" rx="2.1" ry="1" transform="rotate(${Math.round(rnd()*180)} ${f1(x+Math.cos(a)*d)} ${f1(y+Math.sin(a)*d*.8)})" fill="${g[1]}" opacity=".8"/>`}});
+  return `<g transform="scale(${scale})">${s}</g>`}
+function palm(){let s=`<path d="M0 0 Q-3 -24 3 -48" fill="none" stroke="#6b4a2c" stroke-width="3"/>`;for(let i=0;i<7;i++)s+=`<path d="M${f1(-1.2+i*.4)} ${-6-i*6} h3" stroke="#3e2a18" stroke-width=".6"/>`;
+  const fr=[[-22,-40],[-18,-56],[-6,-62],[8,-62],[20,-56],[24,-42],[0,-38]];fr.forEach(([x,y])=>{s+=`<path d="M3 -48 Q${f1((3+x)/2)} ${f1(y-6)} ${x} ${y}" fill="none" stroke="#4e6a48" stroke-width="2.6" stroke-linecap="round"/><path d="M3 -48 Q${f1((3+x)/2)} ${f1(y-6)} ${x} ${y}" fill="none" stroke="#9ab27f" stroke-width=".7" stroke-dasharray="1.5 1.5"/>`});
+  s+=`<circle cx="2" cy="-46" r="2.4" fill="#7a5a2c"/><circle cx="5" cy="-45" r="2.2" fill="#7a5a2c"/>`;return s}
+function house(){const thatch=rnd()>.55;const roof=thatch?'#b4955a':pick(['#9a4a32','#8e5236','#a5583a']);let s='';
+  s+=`<path d="M-9 0 V-8 M9 0 V-8 M0 0 V-8" stroke="#5e3f26" stroke-width="1.6"/><path d="M12 0 L15 -8 M14 -2 h2 M13 -5 h2.5" stroke="#5e3f26" stroke-width="1"/>`;
+  s+=`<rect x="-12" y="-9" width="24" height="2" fill="#7a5536"/><rect x="-11" y="-19" width="22" height="10" fill="#c4a06c" stroke="${OL}" stroke-width=".6"/><rect x="-11" y="-19" width="22" height="10" fill="url(#plank)"/><rect x="-3" y="-16" width="5" height="6" fill="#4a2c1b"/>`;
+  s+=`<path d="M-15 -18 L0 -36 L15 -18Z" fill="${roof}" stroke="${OL}" stroke-width=".8"/><path d="M-15 -18 L0 -36 L15 -18Z" fill="url(#${thatch?'thatch':'tileP'})"/><path d="M0 -36 L15 -18 L7 -18Z" fill="#3a2010" opacity=".18"/><path d="M-6 -24 L0 -31 L6 -24Z" fill="#e2cfa4" opacity=".6"/>`;
+  if(!thatch)s+=`<path d="M0 -36 q-1 -4 2.5 -6.5" stroke="#c09246" stroke-width="1.3" fill="none"/>`;return s}
+function prang(){return `<rect x="-24" y="-6" width="48" height="6" fill="#d8c7a2" stroke="${OL}" stroke-width=".7"/><rect x="-19" y="-12" width="38" height="6" fill="#d0b994" stroke="${OL}" stroke-width=".7"/>
+ <path d="M-16 -12 L-12 -24 L-11 -46 C-11 -62 -4 -70 0 -82 C4 -70 11 -62 11 -46 L12 -24 L16 -12Z" fill="url(#prangG)" stroke="${OL}" stroke-width="1"/>
+ <path d="M-11.5 -28 H11.5 M-11 -40 H11 M-9.5 -52 H9.5 M-7 -62 H7 M-4 -71 H4" stroke="${OL}" stroke-width=".8" opacity=".75"/>
+ <path d="M-11 -28 q-4 -4 -2 -8 M11 -28 q4 -4 2 -8 M-10 -40 q-4 -4 -2 -8 M10 -40 q4 -4 2 -8" stroke="#e7cfa0" stroke-width="1.2" fill="none"/>
+ <path d="M-3.5 -12 v-12 q3.5 -5 7 0 v12z" fill="#4a2c1b"/><line x1="0" y1="-82" x2="0" y2="-96" stroke="#c09246" stroke-width="2.2"/><circle cx="0" cy="-88" r="1.8" fill="#c09246"/><circle cx="0" cy="-93" r="1.3" fill="#c09246"/>`}
+function chedi(){return `<rect x="-26" y="-8" width="52" height="8" fill="#e3d8bd" stroke="${OL}" stroke-width=".7"/><rect x="-21" y="-15" width="42" height="7" fill="#e7ddc4" stroke="${OL}" stroke-width=".7"/><rect x="-17" y="-20" width="34" height="5" fill="#ebe2cb" stroke="${OL}" stroke-width=".7"/>
+ <path d="M-15 -20 C-15 -36 -8 -42 0 -44 C8 -42 15 -36 15 -20Z" fill="url(#chediG)" stroke="${OL}"/><rect x="-5" y="-49" width="10" height="5" fill="#e3d8bd" stroke="${OL}" stroke-width=".6"/>
+ <path d="M-3.5 -49 L0 -76 L3.5 -49Z" fill="#c4994c" stroke="${OL}" stroke-width=".7"/><path d="M-3 -53 h6 M-2.4 -58 h4.8 M-1.8 -63 h3.6 M-1.2 -68 h2.4" stroke="#7a5a2c" stroke-width=".6"/>`}
+function junk(){return `<path d="M-22 0 C-12 7 12 7 24 -3 L18 -3 L-18 -3Z" fill="#6e4127" stroke="#3a2819" stroke-width=".8"/><path d="M-18 -3 C-8 0 8 0 18 -3" stroke="#c09246" stroke-width=".8" fill="none"/>
+ <path d="M-3 -3 L-3 -34 L13 -27 L13 -9Z" fill="#cdb187" stroke="#3a2819" stroke-width=".7"/><path d="M-3 -7 H13 M-3 -15 H13 M-3 -23 H13" stroke="#7a5a3a" stroke-width=".6"/><path d="M-14 -3 L-14 -20 L-5 -16 L-5 -6Z" fill="#c2a378" stroke="#3a2819" stroke-width=".6"/><path d="M18 -3 q4 -8 8 -6" stroke="#6e4127" stroke-width="1.6" fill="none"/>`}
+function fort(){return `<rect x="-9" y="-16" width="18" height="16" fill="#c08560" stroke="${OL}" stroke-width=".8"/><path d="M-9 -16 v-3 h3 v3 h3 v-3 h3 v3 h3 v-3 h3 v3" fill="#c08560" stroke="${OL}" stroke-width=".6"/><path d="M-11 -19 L0 -29 L11 -19Z" fill="#8e4a31" stroke="${OL}" stroke-width=".8"/><path d="M-11 -19 L0 -29 L11 -19Z" fill="url(#tileP)"/><rect x="-2" y="-8" width="4" height="8" fill="#4a2c1b"/>`}
+function hallE(w,h,o={}){const d=o.d||0,fl=o.fl||1,base=6;let s='';
+  s+=`<rect x="${-w/2-6}" y="${-base}" width="${w+12}" height="${base}" fill="#ebe1c8" stroke="${OL}" stroke-width=".8"/><path d="M${-w/2-6} ${-base+2} h${w+12}" stroke="#c09246" stroke-width=".8"/>`;
+  if(d)s+=`<polygon points="${w/2+6},${-base} ${w/2+6+d},${-base-d*.5} ${w/2+6+d},${-d*.5} ${w/2+6},0" fill="#d2c4a4" stroke="${OL}" stroke-width=".7"/><polygon points="${w/2},${-base} ${w/2+d},${-base-d*.5} ${w/2+d},${-base-h-d*.5} ${w/2},${-base-h}" fill="#cbb78f" stroke="${OL}" stroke-width=".8"/>`;
+  s+=`<rect x="${-w/2}" y="${-base-h}" width="${w}" height="${h}" fill="#eae0c6" stroke="${OL}" stroke-width=".9"/><rect x="${-w/2}" y="${-base-h}" width="${w}" height="4" fill="#3a2010" opacity=".2"/>`;
+  const cols=Math.max(2,Math.round(w/22));for(let i=0;i<=cols;i++){const x=-w/2+i*w/cols;s+=`<rect x="${f1(x-1.8)}" y="${-base-h}" width="3.6" height="${h}" fill="#94452f"/><rect x="${f1(x-2.4)}" y="${-base-h}" width="4.8" height="2.4" fill="#c09246"/>`}
+  const fh=h/fl;for(let k=0;k<fl;k++){const y=-base-h+k*fh+fh*.25;for(let i=0;i<cols;i++){const x=-w/2+(i+.5)*w/cols;if(k===fl-1&&i===Math.floor(cols/2))continue;s+=`<path d="M${f1(x-3.6)} ${f1(y+fh*.5)} V${f1(y+3)} Q${f1(x)} ${f1(y-1.5)} ${f1(x+3.6)} ${f1(y+3)} V${f1(y+fh*.5)}Z" fill="#4a2c1b" stroke="#c09246" stroke-width=".6"/>`}}
+  const mx=-w/2+(Math.floor(cols/2)+.5)*w/cols;s+=`<path d="M${f1(mx-5.5)} ${-base} V${f1(-base-fh*.62)} Q${f1(mx)} ${f1(-base-fh*.84)} ${f1(mx+5.5)} ${f1(-base-fh*.62)} V${-base}Z" fill="#3e2416" stroke="#c09246" stroke-width=".8"/>`;
+  if(d)for(let k=0;k<fl;k++){const y=-base-h+k*fh+fh*.3;s+=`<line x1="${w/2+3}" y1="${f1(y-1.5)}" x2="${w/2+d-3}" y2="${f1(y-d*.5+1.5)}" stroke="#6e4b2c" stroke-width="2" stroke-dasharray="3 3"/>`}
+  return s}
+function roofE(w,h,tiers,d=0){let s='';for(let t=0;t<tiers;t++){const k=1-t*.2,ww=w*k,yb=-t*h*.42,yt=yb-h*.42;
+  const sk=`${f1(-ww/2-10)},${f1(yb)} ${f1(ww/2+10)},${f1(yb)} ${f1(ww*.3)},${f1(yt)} ${f1(-ww*.3)},${f1(yt)}`;
+  if(d)s+=`<polygon points="${f1(ww/2+10)},${f1(yb)} ${f1(ww/2+10+d)},${f1(yb-d*.5)} ${f1(ww*.3+d)},${f1(yt-d*.5)} ${f1(ww*.3)},${f1(yt)}" fill="#7d3c27" stroke="${OL}" stroke-width=".8"/><polygon points="${f1(ww/2+10)},${f1(yb)} ${f1(ww/2+10+d)},${f1(yb-d*.5)} ${f1(ww*.3+d)},${f1(yt-d*.5)} ${f1(ww*.3)},${f1(yt)}" fill="url(#tileP)"/>`;
+  s+=`<polygon points="${sk}" fill="#a3553a" stroke="${OL}" stroke-width=".9"/><polygon points="${sk}" fill="url(#tileP)"/><polygon points="${f1(-ww*.3)},${f1(yt)} ${f1(ww*.3)},${f1(yt)} ${f1(ww*.36)},${f1(yt+h*.08)} ${f1(-ww*.36)},${f1(yt+h*.08)}" fill="#f0dfb4" opacity=".22"/>`;
+  s+=`<line x1="${f1(-ww/2-10)}" y1="${f1(yb)}" x2="${f1(ww/2+10)}" y2="${f1(yb)}" stroke="#c09246" stroke-width="1.8"/><path d="M${f1(-ww/2-10)} ${f1(yb)} q-6 -2 -6 -9" fill="none" stroke="#c09246" stroke-width="1.8"/><path d="M${f1(ww/2+10)} ${f1(yb)} q6 -2 6 -9" fill="none" stroke="#c09246" stroke-width="1.8"/>`;
+  if(t===tiers-1){const ay=yt-h*.55;
+   if(d)s+=`<polygon points="${f1(ww*.3)},${f1(yt)} ${f1(ww*.3+d)},${f1(yt-d*.5)} ${f1(d)},${f1(ay-d*.5)} 0,${f1(ay)}" fill="#72331f" stroke="${OL}" stroke-width=".8"/><line x1="0" y1="${f1(ay)}" x2="${d}" y2="${f1(ay-d*.5)}" stroke="#c09246" stroke-width="2"/>`;
+   s+=`<polygon points="${f1(-ww*.3)},${f1(yt)} ${f1(ww*.3)},${f1(yt)} 0,${f1(ay)}" fill="#c4994c" stroke="${OL}" stroke-width=".9"/><polygon points="${f1(-ww*.22)},${f1(yt-2)} ${f1(ww*.22)},${f1(yt-2)} 0,${f1(ay+h*.12)}" fill="#9a4a32"/>`;
+   s+=`<path d="M${f1(-ww*.12)} ${f1(yt-3)} q${f1(ww*.12)} ${f1(-h*.22)} ${f1(ww*.24)} 0" fill="none" stroke="#e2c98c" stroke-width="1.2"/><circle cx="0" cy="${f1(yt-h*.16)}" r="${f1(Math.max(2,ww*.035))}" fill="#e7d3a0"/>`;
+   s+=`<path d="M${f1(-ww*.3)} ${f1(yt)} L0 ${f1(ay)} L${f1(ww*.3)} ${f1(yt)}" fill="none" stroke="#efe0bb" stroke-width="2.4" stroke-dasharray="2 2.4"/><path d="M0 ${f1(ay)} q-3 -8 3 -14" fill="none" stroke="#c09246" stroke-width="2.4" stroke-linecap="round"/>`}
+ }return s}
+function rocks(x,yb,w,h,g='rockG'){let s='';const n=4;for(let i=0;i<n;i++){const ww=w*(1-i*.2),hh=h*(1-i*.15)/n*1.8,y=yb-i*h/n*.9,xx=x+(i%2?w*.07:-w*.06);
+  s+=`<path d="M${f1(xx-ww/2)} ${f1(y)} Q${f1(xx-ww/2)} ${f1(y-hh)} ${f1(xx-ww*.15)} ${f1(y-hh*1.05)} Q${f1(xx+ww*.1)} ${f1(y-hh*1.3)} ${f1(xx+ww*.35)} ${f1(y-hh*.9)} Q${f1(xx+ww/2)} ${f1(y-hh*.6)} ${f1(xx+ww/2)} ${f1(y)}Z" fill="url(#${g})" stroke="#4f6355" stroke-width="1.1"/>`;
+  s+=`<path d="M${f1(xx-ww*.42)} ${f1(y-hh*.55)} Q${f1(xx-ww*.3)} ${f1(y-hh*1.02)} ${f1(xx-ww*.1)} ${f1(y-hh*1.05)}" stroke="#eef0e2" stroke-width="2" fill="none" opacity=".75"/><path d="M${f1(xx+ww*.05)} ${f1(y-hh*.2)} q${f1(ww*.06)} ${f1(-hh*.4)} ${f1(ww*.2)} ${f1(-hh*.55)} M${f1(xx-ww*.2)} ${f1(y-hh*.15)} q${f1(ww*.04)} ${f1(-hh*.3)} ${f1(ww*.12)} ${f1(-hh*.4)}" stroke="#4f6355" stroke-width=".9" fill="none" opacity=".8"/>`;
+  for(let j=0;j<3;j++){const sx=xx-ww*.3+rnd()*ww*.6,sy=y-hh*(.8+rnd()*.25);s+=`<circle cx="${f1(sx)}" cy="${f1(sy)}" r="${f1(1.6+rnd()*2.4)}" fill="#5b7650" opacity=".8"/>`}}
+  return s}
+function cloud(x,y,w){let s='';const n=6;for(let i=0;i<n;i++){const cx=x+i*w/n,cy=y-(i%2)*w*.05-Math.sin(i/n*3.14)*w*.06,r=w*.11+(i%3)*w*.015;s+=`<circle cx="${f1(cx)}" cy="${f1(cy)}" r="${f1(r)}" fill="#ece3cc" stroke="#b9a882" stroke-width="1"/>`}
+  for(let i=1;i<n-1;i++){const cx=x+i*w/n,cy=y-(i%2)*w*.05;s+=`<path d="M${f1(cx-w*.04)} ${f1(cy)} a${f1(w*.04)} ${f1(w*.04)} 0 1 1 ${f1(w*.05)} ${f1(w*.02)}" stroke="#b9a882" fill="none" stroke-width=".9"/>`}
+  s+=`<path d="M${f1(x-w*.05)} ${f1(y+w*.1)} H${f1(x+w*.95)}" stroke="#ece3cc" stroke-width="${f1(w*.07)}"/>`;return `<g opacity=".85">${s}</g>`}
+const bird=(x,y)=>`<path d="M${x} ${y} q5 -5 10 0 q5 -5 10 0" fill="none" stroke="#4e3a26" stroke-width="1.3"/>`;
+function dabs(n,x0,y0,w,h,cols,sz=1,test){let s='';for(let i=0;i<n;i++){const x=x0+rnd()*w,y=y0+rnd()*h;if(test&&!test(x,y))continue;s+=`<ellipse cx="${f1(x)}" cy="${f1(y)}" rx="${f1((4+rnd()*10)*sz)}" ry="${f1((1.5+rnd()*2.5)*sz)}" fill="${pick(cols)}" opacity="${f1(.25+rnd()*.35)}"/>`}return s}
+function tufts(n,x0,y0,w,h,test){let s='';for(let i=0;i<n;i++){const x=x0+rnd()*w,y=y0+rnd()*h;if(test&&!test(x,y))continue;s+=`<path d="M${f1(x-3)} ${f1(y)} l2 -5 M${f1(x)} ${f1(y)} l.4 -6 M${f1(x+3)} ${f1(y)} l-1.5 -5" stroke="#6a7f4e" stroke-width=".8" opacity=".6"/>`}return s}
+
+/* ---------- figures ---------- */
+function figure(o){const sk='#f0dfc0',ol='#6e3f26';let s='';
+  const arm=(d,c,w=7)=>`<path d="${d}" fill="none" stroke="${ol}" stroke-width="${w+1.8}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
+  s+=`<ellipse cx="-8" cy="-3" rx="7" ry="3" fill="${sk}" stroke="${ol}" stroke-width=".8"/><ellipse cx="9" cy="-3" rx="7" ry="3" fill="${sk}" stroke="${ol}" stroke-width=".8"/>`;
+  s+=`<polygon points="-12,-46 -4,-46 -6,-5 -11,-5" fill="${sk}" stroke="${ol}" stroke-width=".8"/><polygon points="4,-46 12,-46 11,-5 6,-5" fill="${sk}" stroke="${ol}" stroke-width=".8"/><path d="M-11 -10 h5 M6 -10 h5" stroke="#c09246" stroke-width="1.6"/>`;
+  s+=`<path d="M-17 -112 L17 -112 L20 -54 Q12 -44 4 -52 L0 -68 L-4 -52 Q-12 -44 -20 -54Z" fill="url(#${o.cloth})" stroke="${ol}" stroke-width=".9"/><path d="M-19 -56 Q-12 -47 -4 -53 M4 -53 Q12 -47 19 -56" stroke="#c09246" stroke-width="1.2" fill="none"/>`;
+  const tc=o.top||sk;
+  s+=arm('M-15 -164 Q-23 -136 -18 -110',tc)+`<circle cx="-18" cy="-108" r="4" fill="${sk}" stroke="${ol}" stroke-width=".7"/>`;
+  s+=`<path d="M-18 -168 Q-21 -140 -15 -112 L15 -112 Q21 -140 18 -168 Q0 -175 -18 -168Z" fill="${tc}" stroke="${ol}" stroke-width=".9"/>`;
+  if(o.top)s+=`<path d="M-6 -170 L0 -150 L6 -170" fill="none" stroke="${ol}" stroke-width=".8"/><path d="M-15 -116 H15" stroke="#c09246" stroke-width="3.2"/><path d="M-16 -140 Q0 -136 16 -140" stroke="${ol}" stroke-width=".5" opacity=".5" fill="none"/>`;
+  else s+=`<path d="M-17 -166 L15 -118" stroke="#c09246" stroke-width="4"/>`;
+  s+=`<rect x="-4" y="-180" width="8" height="13" fill="${sk}"/><path d="M-7 -171 Q0 -165 7 -171" stroke="#c09246" stroke-width="1.6" fill="none"/><ellipse cx="0" cy="-193" rx="12" ry="15" fill="${sk}" stroke="${ol}" stroke-width=".9"/>`;
+  s+=`<path d="M2 -198 q5 -3 9 0" stroke="#2a1c10" stroke-width="1" fill="none"/><path d="M3 -193 q4 2 8 0" stroke="#2a1c10" stroke-width="1.2" fill="none"/><path d="M6 -183 q2 1 4 0" stroke="#9a4a32" stroke-width="1.3" fill="none"/>`;
+  s+=`<path d="M-12 -195 Q-13 -210 0 -209 Q12 -210 12 -197 Q6 -204 -2 -202 Q-8 -202 -12 -195Z" fill="#2a1c10"/>`;
+  if(o.hat)s+=`<path d="M-12 -201 L12 -201 L4 -262 Q0 -267 -4 -262Z" fill="#efe6d0" stroke="${ol}" stroke-width=".9"/><path d="M-6 -230 L6 -230" stroke="${ol}" stroke-width=".5" opacity=".5"/><rect x="-12.5" y="-207" width="25" height="6" fill="#c09246" stroke="${ol}" stroke-width=".6"/><circle cx="0" cy="-265" r="2.4" fill="#c09246"/>`;
+  if(o.pose==='point'){s+=arm('M15 -164 Q36 -150 56 -160',tc)+`<circle cx="58" cy="-161" r="4" fill="${sk}" stroke="${ol}" stroke-width=".7"/><path d="M61 -162 L70 -165" stroke="${sk}" stroke-width="2.4" stroke-linecap="round"/>`}
+  else if(o.pose==='pot'){s+=arm('M15 -164 Q26 -136 12 -126',tc)+`<ellipse cx="6" cy="-122" rx="12" ry="9" fill="#7a4b2c" stroke="${ol}"/><path d="M-5 -124 h22" stroke="#c09246" stroke-width="1"/><rect x="-1" y="-134" width="14" height="5" fill="#5e3f26"/><circle cx="10" cy="-125" r="4" fill="${sk}" stroke="${ol}" stroke-width=".7"/>`}
+  else{s+=arm('M15 -164 Q26 -136 10 -128',tc)+`<rect x="-14" y="-136" width="34" height="8" rx="2" fill="#dcc48c" stroke="${ol}" stroke-width=".8"/><rect x="-16" y="-137" width="4" height="10" fill="#94452f"/><rect x="18" y="-137" width="4" height="10" fill="#94452f"/><circle cx="8" cy="-128" r="4" fill="${sk}" stroke="${ol}" stroke-width=".7"/>`}
+  return s}
+const FIG={khun:{hat:true,top:'#9e4a32',cloth:'clothDot',pose:'point'},mor:{top:'#efe8d6',cloth:'clothBr',pose:'pot'},phon:{cloth:'clothBr',pose:'leaf'}};
+function portrait(k){const v=FIG[k].hat?[-40,-272,80,104]:[-30,-226,60,60];return `<svg viewBox="${v.join(' ')}"><rect x="${v[0]}" y="${v[1]}" width="${v[2]}" height="${v[3]}" fill="#e2d3ae"/>${figure(FIG[k])}</svg>`}
+
+/* ---------- vehicles ---------- */
+const VEH={
+ walk:`<line x1="-3" y1="0" x2="-1" y2="-10" stroke="#f0dfc0" stroke-width="2.4"/><line x1="3" y1="0" x2="1" y2="-10" stroke="#f0dfc0" stroke-width="2.4"/><rect x="-4" y="-14" width="8" height="6" fill="url(#clothBr)"/><rect x="-3.5" y="-22" width="7" height="9" fill="#f0dfc0" stroke="${OL}" stroke-width=".5"/><circle cy="-26" r="3.6" fill="#f0dfc0" stroke="${OL}" stroke-width=".6"/><path d="M-3.6 -27 Q0 -31 3.6 -27" fill="#2a1c10"/><line x1="-12" y1="-20" x2="12" y2="-22" stroke="#5e3f26" stroke-width="1.4"/><circle cx="-12" cy="-17" r="3" fill="#b8925a"/><circle cx="12" cy="-19" r="3" fill="#b8925a"/>`,
+ horse:`<g stroke="#4a2c1b" stroke-width="2.2" stroke-linecap="round"><line x1="-9" y1="-10" x2="-11" y2="0"/><line x1="-5" y1="-10" x2="-4" y2="0"/><line x1="6" y1="-10" x2="5" y2="0"/><line x1="10" y1="-10" x2="12" y2="0"/></g><ellipse cx="0" cy="-14" rx="13" ry="6" fill="#80522f" stroke="#3e2416" stroke-width=".8"/><path d="M10 -16 L16 -27 L22 -25 L20 -21 L15 -14Z" fill="#80522f" stroke="#3e2416" stroke-width=".8"/><path d="M-13 -15 q-6 2 -6 8" stroke="#3e2416" stroke-width="2" fill="none"/><rect x="-6" y="-21" width="12" height="4" fill="#9e4a32"/><rect x="-4" y="-27" width="7" height="9" fill="#9e4a32"/><circle cy="-31" cx="0" r="3.4" fill="#f0dfc0" stroke="${OL}" stroke-width=".6"/>`,
+ ele:`<g fill="#858a80" stroke="#474a43" stroke-width=".8"><rect x="-12" y="-12" width="5" height="12" rx="1"/><rect x="-4" y="-12" width="5" height="12" rx="1"/><rect x="5" y="-12" width="5" height="12" rx="1"/><ellipse cx="0" cy="-17" rx="15" ry="10"/><circle cx="14" cy="-20" r="8"/></g><path d="M19 -16 Q23 -6 19 0" fill="none" stroke="#474a43" stroke-width="4.6" stroke-linecap="round"/><path d="M19 -16 Q23 -6 19 0" fill="none" stroke="#858a80" stroke-width="3" stroke-linecap="round"/><path d="M18 -14 l6 2" stroke="#efe6d0" stroke-width="1.6"/><path d="M-12 -22 h22 v4 h-22z" fill="#9e4a32"/><path d="M-10 -26 h18 v6 h-18z" fill="#9e4a32" stroke="${OL}" stroke-width=".6"/><path d="M-10 -26 L-1 -34 L8 -26Z" fill="#c4994c" stroke="${OL}" stroke-width=".6"/>`,
+ boat:`<path d="M-15 0 C-7 5 8 5 16 -2 L-15 -2Z" fill="#6e4127" stroke="#3a2819" stroke-width=".8"/><rect x="-7" y="-9" width="10" height="7" rx="2" fill="#cdb187" stroke="#3a2819" stroke-width=".6"/><circle cx="8" cy="-8" r="2.8" fill="#f0dfc0"/><path d="M8 -5 V-2" stroke="#9e4a32" stroke-width="3"/><path d="M11 -7 L18 4" stroke="#5e3f26" stroke-width="1.3"/>`
+};
+
+/* ---------- hero ---------- */
+function drawHero(){
+  const H=document.getElementById('heroSvg');H.innerHTML=`<rect width="1000" height="380" fill="#e1d4b3"/>`;
+  seed=41;let s=`<rect width="1000" height="230" fill="url(#skyG)"/>`;
+  s+=cloud(560,52,170)+cloud(810,96,130)+cloud(390,110,100)+cloud(80,40,140);
+  [[470,206,150,130],[610,210,190,160],[770,206,170,120],[900,212,170,150],[1000,210,160,120]].forEach(m=>s+=rocks(...m,'rockG'));
+  s+=`<rect y="200" width="1000" height="80" fill="#d3c7a0"/>`+dabs(140,0,200,1000,80,['#c9bb8f','#ddd0a8','#bdb88a']);
+  const items=[];for(let i=0;i<34;i++){const x=400+i*18+rnd()*14;items.push([x,232+rnd()*18,pick(['house','house','tree','palm','chedi','prang']),.5+rnd()*.35])}
+  items.push([700,250,'prang',1.3],[655,256,'prang',.9],[745,256,'prang',.9],[560,254,'chedi',1],[860,252,'chedi',.9]);
+  items.sort((a,b)=>a[1]-b[1]).forEach(([x,y,k,sc])=>{const f={prang,chedi,tree:()=>tree(),house,palm}[k];s+=`<g transform="translate(${f1(x)} ${f1(y)}) scale(${f1(sc)})">${f()}</g>`});
+  s+=`<rect x="370" y="262" width="630" height="13" fill="#b5714f" stroke="${OL}"/>${Array.from({length:62},(_,i)=>`<path d="M${373+i*10} 262 v-4 l2.5 -3 l2.5 3 v4" fill="#b5714f" stroke="${OL}" stroke-width=".6"/>`).join('')}`;
+  s+=`<rect y="275" width="1000" height="105" fill="#9fb6ab"/><rect y="275" width="1000" height="105" fill="url(#waves)"/>`;
+  s+=`<g transform="translate(520 322)">${junk()}</g><g transform="translate(700 352) scale(.8)">${junk()}</g><g transform="translate(880 310) scale(.7)">${junk()}</g>`;
+  s+=`<rect width="560" height="380" fill="url(#hazeG)" opacity=".9"/>`;
+  bake(1000,380,s,agePost(1000,380,9),2,url=>{if(!url)return;H.innerHTML=`<image class="paintfade" href="${url}" width="1000" height="380" preserveAspectRatio="none"/><path class="flow" d="M0 300 H1000 M0 336 H1000 M0 366 H1000"/><g class="bird">${bird(100,60)}${bird(124,72)}${bird(140,54)}</g>`});
+}
+
+/* ---------- scene ---------- */
+function drawScene(){
+  const G=document.getElementById('scene');G.innerHTML=`<rect width="900" height="480" fill="#e1d4b3"/>`;
+  seed=73;let s=`<rect width="900" height="270" fill="url(#skyG)"/>`+cloud(520,46,150)+cloud(730,84,120)+cloud(330,70,90);
+  s+=rocks(120,262,250,230)+rocks(300,262,160,150,'rockG2')+rocks(620,262,120,80,'rockG2');
+  s+=`<rect y="250" width="900" height="205" fill="#d4c79f"/>`+dabs(260,0,250,900,205,['#c6b98c','#dacda4','#b9b585','#c9b98a'],1.2)+tufts(90,0,270,900,180);
+  [[860,300,2.2],[30,300,2.2],[640,272,1.4],[600,276,1.2]].forEach(([x,y,k])=>s+=`<g transform="translate(${x} ${y}) scale(${k})">${tree()}</g>`);
+  [[880,330],[780,262],[700,258],[20,250]].forEach(([x,y])=>s+=`<g transform="translate(${x} ${y}) scale(1.6)">${palm()}</g>`);
+  s+=`<g transform="translate(780 330) scale(2.4)">${VEH.ele}</g><g transform="translate(812 312) scale(1.3)"><circle cx="0" cy="-30" r="3.6" fill="#f0dfc0"/><rect x="-4" y="-27" width="8" height="10" fill="#9e4a32"/></g>`;
+  s+=`<g transform="translate(180 410)">${hallE(260,74,{fl:1,d:22})}<g transform="translate(0 -80)">${roofE(260,72,2,22)}</g>
+    <rect x="-118" y="-32" width="236" height="22" fill="#cdb187" opacity=".9"/>
+    ${[-86,-26,34].map(x=>`<ellipse cx="${x-26}" cy="-26" rx="7" ry="6" fill="#f0dfc0" stroke="${OL}" stroke-width=".7"/><path d="M${x-31} -32 q4 -3 10 0" fill="#2a1c10"/><rect x="${x-19}" y="-32" width="46" height="12" rx="5" fill="#8b9e86" stroke="${OL}" stroke-width=".7"/><path d="M${x-15} -26 h38" stroke="#c09246" stroke-width=".8"/>`).join('')}
+    <g transform="translate(98 -12)"><ellipse cx="0" cy="0" rx="11" ry="8" fill="#6e4127" stroke="${OL}"/><path d="M-6 6 l-4 6 M6 6 l4 6" stroke="#3a2819" stroke-width="2"/><path d="M-4 8 q4 -4 8 0" stroke="#d26a3a" stroke-width="2" fill="none"/></g></g>`;
+  s+=`<g transform="translate(560 412)"><rect x="-74" y="-30" width="148" height="10" fill="#94452f" stroke="${OL}"/><path d="M-74 -26 h148" stroke="#c09246" stroke-width="1"/><path d="M-64 -20 v20 M64 -20 v20" stroke="#6e3524" stroke-width="7"/>
+    <polygon points="-62,-30 62,-30 50,-50 -50,-50" fill="#e5d3a2" stroke="${OL}" stroke-width=".8"/><ellipse cx="0" cy="-40" rx="32" ry="6.5" fill="none" stroke="#7a9e93" stroke-width="3.5"/><path d="M-10 -46 v12 M-32 -40 h64" stroke="#a88456" stroke-width="1.2"/><circle cx="18" cy="-42" r="2.6" fill="#a04a33"/><circle cx="-14" cy="-37" r="2.6" fill="#a04a33"/><circle cx="6" cy="-45" r="2.6" fill="#a04a33"/></g>`;
+  s+=`<rect y="452" width="900" height="28" fill="#94462f"/>`+Array.from({length:32},(_,i)=>`<g transform="translate(${14+i*28} 466)" fill="#e8d6ae" opacity=".75"><ellipse cy="-5" rx="2.4" ry="3.2"/><ellipse cy="5" rx="2.4" ry="3.2"/><ellipse cx="-5" rx="3.2" ry="2.4"/><ellipse cx="5" rx="3.2" ry="2.4"/><circle r="1.8" fill="#c08e45"/></g>`).join('');
+  const live=()=>{let L='';[['khun',440,412,false],['mor',690,412,true]].forEach(([k,x,y,flip])=>{L+=`<g transform="translate(${x} ${y}) scale(${flip?-1:1} 1)"><g class="fig" id="f-${k}"><g class="halo" transform="translate(0 -196)"><circle r="24" fill="#f3e4b0" opacity=".55"/><circle class="r" r="31" fill="none" stroke="#c09246" stroke-width="2" stroke-dasharray="3 5"/></g><g class="body" filter="url(#lite)">${figure(FIG[k])}</g></g></g>`});
+    L+=`<path class="steam" d="M276 390 q-4 -6 0 -12 q4 -6 0 -12" stroke="#b8a888" fill="none" stroke-width="1.6"/><g class="bird">${bird(80,58)}${bird(102,70)}${bird(120,52)}</g>`;return L};
+  bake(900,480,s,agePost(900,480,8),2,url=>{G.innerHTML=(url?`<image class="paintfade" href="${url}" width="900" height="480" preserveAspectRatio="none"/>`:`<g>${s}</g>`)+live();setSpeaker(curSpk)});
+  document.getElementById('lines').innerHTML=STORY.map(([k,t],i)=>`<div class="leaf line" data-k="${k}" data-i="${i}"><div class="pt">${portrait(k)}</div><div><div class="who">${PEOPLE[k].name} <small>· ${PEOPLE[k].role}</small></div><p>${t}</p></div></div>`).join('');
+  document.querySelectorAll('.line').forEach(l=>l.addEventListener('click',()=>{curSpk=+l.dataset.i;setSpeaker(curSpk)}));
+}
+let curSpk=0;
+function setSpeaker(i){const k=STORY[i][0];document.querySelectorAll('.fig').forEach(f=>f.classList.toggle('on',f.id==='f-'+k));document.querySelectorAll('.line').forEach(l=>l.classList.toggle('on',+l.dataset.i===i))}
+
+/* ---------- projection ---------- */
+function pj(x,y){const u=y/760;const s=.74+.26*u;return[500+(x-500)*s,175+501.6*(.85*u+.15*u*u),s]}
+function sampleEl(id,n){const p=document.getElementById(id);const L=p.getTotalLength();const a=[];for(let i=0;i<=n;i++){const q=p.getPointAtLength(L*i/n);a.push([q.x,q.y])}return a}
+const pathP=(pts,close)=>'M'+pts.map(p=>{const q=pj(p[0],p[1]);return f1(q[0])+' '+f1(q[1])}).join(' L')+(close?'Z':'');
+const scaleAround=(pts,cx,cy,k)=>pts.map(p=>[cx+(p[0]-cx)*k,cy+(p[1]-cy)*k]);
+const circleP=(cx,cy,rx,ry,n=64)=>Array.from({length:n+1},(_,i)=>[cx+rx*Math.cos(i/n*2*Math.PI),cy+ry*Math.sin(i/n*2*Math.PI)]);
+const bb=(x,y,inner,k=1,extra='')=>{const q=pj(x,y);return `<g transform="translate(${f1(q[0])} ${f1(q[1])}) scale(${(q[2]*k).toFixed(3)})" ${extra}>${inner}</g>`};
+
+let ISL;
+const map=document.getElementById('map');
+const boatsAmb=[];
+const boatG=`<path d="M-12 0 C-6 4 6 4 13 -2 L-12 -2Z" fill="#6e4127" stroke="#3a2819" stroke-width=".7"/><circle cx="-2" cy="-7" r="2.6" fill="#f0dfc0"/><path d="M-2 -4 V-1" stroke="#9e4a32" stroke-width="3"/><path d="M2 -6 L10 3" stroke="#5e3f26" stroke-width="1.2"/>`;
+function drawMap(){
+  ISL=sampleEl('islandSrc',180);seed=11;
+  const W=sampleEl('rvW',40),N=sampleEl('rvN',30),E=sampleEl('rvE',40),S=sampleEl('rvS',30);
+  const isl=document.getElementById('islandSrc');const inIsl=(x,y)=>isl.isPointInFill(new DOMPoint(x,y));
+  let s=`<rect width="1000" height="230" fill="url(#skyG)"/>`;
+  s+=cloud(110,62,140)+cloud(620,40,160)+cloud(860,86,110)+cloud(380,96,90);
+  [[60,196,180,100],[200,190,160,80],[340,194,220,110],[520,190,170,90],[680,194,230,120],[860,190,200,100],[990,196,180,110]].forEach(m=>s+=rocks(...m,'rockG2'));
+  [[130,200,200,120],[430,202,240,130],[760,202,260,140]].forEach(m=>s+=rocks(...m));
+  s+=`<path d="${pathP([[-600,0],[1600,0],[1600,760],[-600,760]],true)}" fill="#d3c69b"/>`;
+  // ground dabs (projected)
+  for(let i=0;i<1100;i++){const x=-300+rnd()*1600,y=rnd()*760;const q=pj(x,y);s+=`<ellipse cx="${f1(q[0])}" cy="${f1(q[1])}" rx="${f1((5+rnd()*12)*q[2])}" ry="${f1((1.6+rnd()*2.6)*q[2])}" fill="${pick(['#c6b98b','#dcd0a7','#bab688','#c9bd8f','#a9ab7c'])}" opacity="${f1(.25+rnd()*.35)}"/>`}
+  [[20,600,170,140],[700,40,170,120],[40,380,90,120],[860,640,140,110],[300,690,200,60],[560,20,120,90],[-200,200,180,300],[1020,300,180,300],[-250,560,220,180],[1000,560,260,200]].forEach(r=>{const pts=[[r[0],r[1]],[r[0]+r[2],r[1]],[r[0]+r[2],r[1]+r[3]],[r[0],r[1]+r[3]]];s+=`<path d="${pathP(pts,true)}" fill="#bfc28c" stroke="#9c9468" stroke-width="1"/><path d="${pathP(pts,true)}" fill="url(#rice)"/>`;
+    for(let gx=r[0]+30;gx<r[0]+r[2];gx+=30)s+=`<path d="${pathP([[gx,r[1]],[gx,r[1]+r[3]]])}" stroke="#a49a6c" stroke-width=".9"/>`;for(let gy=r[1]+30;gy<r[1]+r[3];gy+=30)s+=`<path d="${pathP([[r[0],gy],[r[0]+r[2],gy]])}" stroke="#a49a6c" stroke-width=".9"/>`});
+  const riv=(pts,w,close)=>`<path d="${pathP(pts,close)}" stroke="#6f8a7c" stroke-width="${w+6}" fill="none" stroke-linecap="round"/><path d="${pathP(pts,close)}" stroke="#9fb4a8" stroke-width="${w}" fill="none" stroke-linecap="round"/><path d="${pathP(pts,close)}" stroke="url(#waves)" stroke-width="${w-4}" fill="none" stroke-linecap="round"/>`;
+  s+=riv(W,40)+riv(N,26)+riv(E,36)+riv(S,44)+riv(ISL,42,true);
+  s+=`<path d="${pathP(ISL,true)}" fill="#e0d3ad"/>`;
+  for(let i=0;i<500;i++){const x=170+rnd()*680,y=170+rnd()*480;if(!inIsl(x,y))continue;const q=pj(x,y);s+=`<ellipse cx="${f1(q[0])}" cy="${f1(q[1])}" rx="${f1((4+rnd()*10)*q[2])}" ry="${f1((1.5+rnd()*2.2)*q[2])}" fill="${pick(['#d3c59c','#e9dfc1','#cfc392','#c5bd8c'])}" opacity="${f1(.3+rnd()*.35)}"/>`}
+  const wall=scaleAround(ISL,510,410,.952);
+  s+=`<path d="${pathP(wall,true)}" fill="none" stroke="#6f3424" stroke-width="9"/><path d="${pathP(wall,true)}" fill="none" stroke="#b06a4c" stroke-width="6"/><path d="${pathP(wall,true)}" fill="none" stroke="#e7d4b0" stroke-width="2" stroke-dasharray="3 4"/>`;
+  s+=riv([[600,168],[600,655]],8)+riv([[228,580],[838,580]],8)+riv([[380,260],[600,260]],8);
+  const roads=[[[440,98],[440,655]],[[178,340],[852,340]],[[205,510],[842,510]],[[560,340],[560,510]],[[255,98],[440,98]],[[440,225],[482,225]],[[770,470],[770,510]]];
+  s+=`<g fill="none" stroke-linecap="round"><g stroke="#9d8058" stroke-width="10">${roads.map(r=>`<path d="${pathP(r)}"/>`).join('')}</g><g stroke="#ebe0c2" stroke-width="6.5">${roads.map(r=>`<path d="${pathP(r)}"/>`).join('')}</g><g stroke="#c4ae86" stroke-width="1" stroke-dasharray="4 5">${roads.map(r=>`<path d="${pathP(r)}"/>`).join('')}</g></g>`;
+  // static billboards
+  const B=[];
+  for(let i=0;i<18;i++){const p=wall[Math.floor(i*wall.length/18)];B.push({x:p[0],y:p[1],h:fort()})}
+  B.push({x:300,y:296,k:.62,h:`<rect x="-74" y="-24" width="148" height="24" fill="#ebe1c8" stroke="${OL}"/>${Array.from({length:18},(_,i)=>`<path d="M${-73+i*8.1} -24 v-4 l2.5 -3.5 l2.5 3.5 v4" fill="#ebe1c8" stroke="${OL}" stroke-width=".6"/>`).join('')}<path d="M-8 0 V-13 Q0 -22 8 -13 V0Z" fill="#3e2416" stroke="#c09246"/><g transform="translate(-44 -24)">${roofE(40,40,2,6)}</g><g transform="translate(44 -24)">${roofE(40,40,2,6)}</g><g transform="translate(0 -24)">${roofE(60,62,3,10)}</g><path d="M0 -${24+62*.42*2+62*.55} v-26" stroke="#c09246" stroke-width="3"/>`});
+  [[300,420,1.05],[272,428,.72],[328,428,.72]].forEach(([x,y,k])=>B.push({x,y,h:prang(),k}));
+  B.push({x:330,y:62,h:chedi(),k:1.15});
+  B.push({x:520,y:338,h:[0,1,2,3].map(i=>`<g transform="translate(${-21+i*14} 0)"><rect x="-5" y="-9" width="10" height="9" fill="#c4a06c" stroke="${OL}" stroke-width=".6"/><path d="M-7 -9 L0 -16 L7 -9Z" fill="#a04a33"/><path d="M-7 -9 L0 -16 L7 -9Z" fill="url(#tileP)"/></g>`).join('')});
+  B.push({x:440,y:660,h:`<rect x="-12" y="-26" width="24" height="26" fill="#c08560" stroke="${OL}"/><path d="M-5 0 V-13 Q0 -19 5 -13 V0Z" fill="#3e2416"/><g transform="translate(0 -26)">${roofE(26,24,2)}</g>`});
+  B.push({x:792,y:668,h:junk()},{x:752,y:676,h:junk(),k:.8},{x:830,y:660,h:junk(),k:.7});
+  const avoid=[[300,250,95],[300,415,45],[520,335,30],[440,655,30],...Object.values(SITES).map(t=>[t.pos[0],t.pos[1],50])];
+  const nearLine=(x,y)=>Math.abs(x-440)<11||Math.abs(y-340)<11||Math.abs(y-510)<11||Math.abs(x-600)<11||Math.abs(y-580)<10||(Math.abs(y-260)<10&&x>380&&x<600)||(Math.abs(x-560)<11&&y>340&&y<510);
+  let tries=0,cnt=0;while(cnt<110&&tries<3000){tries++;const x=180+rnd()*660,y=180+rnd()*460;const sc=scaleAround([[x,y]],510,410,1/.92)[0];
+    if(!inIsl(sc[0],sc[1])||nearLine(x,y)||avoid.some(a=>Math.hypot(a[0]-x,a[1]-y)<a[2]))continue;const r=rnd();B.push({x,y,h:r>.38?house():r>.12?tree():palm(),k:.9+rnd()*.3});cnt++}
+  [[90,250,50],[930,300,50],[880,560,30],[150,700,50],[700,725,30],[620,80,40],[160,40,40],[380,130,25],[960,700,30],[60,500,40],[-40,380,60],[1040,460,60],[520,730,40]].forEach(c=>{for(let i=0;i<7;i++)B.push({x:c[0]+(rnd()-.5)*c[2]*2,y:c[1]+(rnd()-.5)*c[2],h:rnd()>.25?tree():palm(),k:1+rnd()*.5})});
+  for(let i=0;i<26;i++){const p=ISL[Math.floor(rnd()*ISL.length)];const o=scaleAround([p],510,410,1.09)[0];B.push({x:o[0],y:o[1],h:rnd()>.4?palm():tree(),k:.9})}
+  B.sort((a,b)=>a.y-b.y);s+=B.map(it=>bb(it.x,it.y,it.h,it.k||1)).join('');
+  // live skeleton
+  const liveTop=`<g id="flows"><path class="flow" d="${pathP(ISL,true)}"/><path class="flow" d="${pathP(W)}"/><path class="flow" d="${pathP(S)}"/></g><g id="ground"></g><g id="routes"></g><g id="boats"></g><g id="labels"></g><g id="bbs"></g><g id="tokens"></g>`;
+  map.innerHTML=`<rect width="1000" height="700" fill="#e1d4b3"/><g id="art"></g>`+liveTop;
+  const L=[[300,300,'พระราชวังหลวง',22],[300,432,'วัดพระศรีสรรเพชญ์',18],[330,66,'วัดภูเขาทอง',14],[520,342,'ตลาดป่าตะกั่ว',22],[440,666,'ประตูไชย',14],[792,674,'ท่าสำเภา',16]];
+  document.getElementById('labels').innerHTML=L.map(([x,y,t,o])=>{const q=pj(x,y);return `<text x="${f1(q[0])}" y="${f1(q[1]+o*q[2])}" text-anchor="middle" style="font-size:${f1(13*q[2]+2)}px;fill:#3a2819;paint-order:stroke;stroke:rgba(236,226,200,.85);stroke-width:3px">${t}</text>`}).join('')+
+   [[95,210,'แม่น้ำเจ้าพระยา'],[905,210,'แม่น้ำป่าสัก'],[620,700,'แม่น้ำ'],[606,470,'คลองประตูข้าวเปลือก'],[300,592,'คลองในไก่'],[530,252,'คลองท่อ']].map(([x,y,t])=>{const q=pj(x,y);return `<text x="${f1(q[0])}" y="${f1(q[1])}" text-anchor="middle" style="font-size:${f1(12*q[2]+1)}px;fill:#2f504a;font-style:italic;paint-order:stroke;stroke:rgba(225,215,185,.8);stroke-width:2.5px">${t}</text>`}).join('')+
+   `<g transform="translate(28 30)"><rect width="250" height="40" fill="#9a4630" stroke="#5f2c1e" stroke-width="2"/><rect x="4" y="4" width="242" height="32" fill="none" stroke="#efe0bd" stroke-dasharray="3 3"/><text x="125" y="27" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:20px;fill:#f1e3c4">แผนที่พระนครศรีอยุธยา</text></g>`;
+  const bg=document.getElementById('boats');[0,.34,.7].forEach((o,i)=>{const e=document.createElementNS(NS,'g');e.innerHTML=boatG;bg.appendChild(e);boatsAmb.push({e,o,v:.005+i*.002})});
+  bake(1000,700,s,agePost(1000,700,10),2.4,url=>{const a=document.getElementById('art');a.innerHTML=url?`<image class="paintfade" href="${url}" width="1000" height="700" preserveAspectRatio="none"/>`:s;document.getElementById('loading').hidden=true});
+}
+
+/* ---------- model massing ---------- */
+const MASS={
+ A:()=>[{h:hallE(176,26,{d:22,fl:1})},{h:`<g transform="translate(-66 -32)">${roofE(40,26,1,10)}</g><g transform="translate(66 -32)">${roofE(40,26,1,10)}</g>`,drop:1},{h:`<g transform="translate(0 -32)">${hallE(88,80,{d:16,fl:4})}</g>`},{h:`<g transform="translate(0 -118)">${roofE(88,48,3,16)}</g>`,drop:1}],
+ B:()=>[{h:`<polygon points="-140,12 140,12 150,0 -130,0" fill="#9fb4a8"/><polygon points="-140,12 140,12 150,0 -130,0" fill="url(#waves)"/>`},{h:hallE(200,32,{d:22,fl:2})},{h:`<g transform="translate(0 -38)">${roofE(200,52,2,22)}</g>`,drop:1},{h:`<rect x="-14" y="0" width="28" height="10" fill="#8a6644" stroke="${OL}"/><g transform="translate(46 11) scale(1.1)">${boatG}</g>`}],
+ C:()=>[{h:`<g transform="translate(-88 -6) scale(.85)">${hallE(70,22,{d:12})}<g transform="translate(0 -28)">${roofE(70,32,1,12)}</g></g>`},{h:`<g transform="translate(90 -6) scale(.85)">${hallE(70,22,{d:12})}<g transform="translate(0 -28)">${roofE(70,32,1,12)}</g></g>`},{h:`<g transform="translate(-40 6) scale(1.5)">${tree()}</g><g transform="translate(42 6) scale(1.4)">${palm()}</g>`},{h:`${hallE(96,28,{d:14})}<g transform="translate(0 -34)">${roofE(96,42,2,14)}</g>`}],
+ D:()=>[{h:hallE(160,18,{d:20})},{h:`<g transform="translate(0 -24)">${roofE(160,30,2,20)}</g>`,drop:1},{h:`<g transform="translate(0 10) scale(.8)">${hallE(36,12,{d:6})}<g transform="translate(0 -18)">${roofE(36,18,1,6)}</g></g>`},{h:`<line x1="-115" y1="-74" x2="130" y2="-74" stroke="#a1412a" stroke-width="2" stroke-dasharray="6 4"/><text x="132" y="-70" style="font-size:12px;fill:#743524">เพดาน ๘ วา</text>`,drop:1}]
+};
+
+/* ---------- state & zoom ---------- */
+const st={mode:'site',site:null,zone:null,tm:{walk:true,horse:true,ele:true,boat:true}};
+let vb=[0,0,1000,700],vbAnim=null;
+function zoomTo(t,dur=1000){const from=vb.slice();const t0=performance.now();cancelAnimationFrame(vbAnim);const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+  const step=n=>{const k=RM||!dur?1:Math.min(1,(n-t0)/dur);const e=ease(k);vb=from.map((v,i)=>v+(t[i]-v)*e);map.setAttribute('viewBox',vb.map(f1).join(' '));if(k<1)vbAnim=requestAnimationFrame(step)};vbAnim=requestAnimationFrame(step)}
+function siteBox(k){const q=pj(...SITES[k].pos);const w=520,h=364;let x=q[0]-w/2,y=q[1]-h*.66;x=Math.max(0,Math.min(1000-w,x));y=Math.max(0,Math.min(700-h,y));return[x,y,w,h]}
+
+/* ---------- live map layers ---------- */
+let tokens=[];
+function drawDynamic(){
+  const ground=document.getElementById('ground'),routes=document.getElementById('routes');let gs='',rs='';const items=[];
+  Object.entries(SITES).forEach(([k,s])=>{const on=k===st.site;const [x,y]=s.pos,hw=s.pw/2,hh=s.ph/2;const P=[[x-hw,y-hh],[x+hw,y-hh],[x+hw,y+hh],[x-hw,y+hh]];
+    gs+=`<path d="${pathP(P,true)}" fill="${on?'rgba(160,74,51,.24)':'rgba(160,74,51,.1)'}" stroke="#743524" stroke-width="${on?2:1.2}" stroke-dasharray="4 3"/>`;
+    if(st.mode==='reg'&&on){const r=s.reg,set={top:2,bottom:2,left:2,right:2};set[r.roadSide]=r.roadSet;if(r.water)set[r.water.side]=r.water.set;const fx=v=>v/r.dims[0]*s.pw*2.2,fy=v=>v/r.dims[1]*s.ph*2.2;
+      const ix1=x-hw+fx(set.left),ix2=x+hw-fx(set.right),iy1=y-hh+fy(set.top),iy2=y+hh-fy(set.bottom);
+      gs+=`<path d="${pathP(P,true)}" fill="url(#hatchR)"/><path d="${pathP([[ix1,iy1],[ix2,iy1],[ix2,iy2],[ix1,iy2]],true)}" fill="#e0d3ad" stroke="#a1412a" stroke-width="1.6" stroke-dasharray="5 3"/>`;
+      const dir=s.astro.front==='ทักษิณ'?[0,1]:[-1,0];const a0=[x+dir[0]*hw,y+dir[1]*hh],a1=[a0[0]+dir[0]*55,a0[1]+dir[1]*55];const c=s.astro.good?'#4c7444':'#a1412a';
+      gs+=`<path d="${pathP([a0,a1])}" stroke="${c}" stroke-width="4" stroke-linecap="round" class="fade"/>`;
+      items.push({x:a1[0],y:a1[1]+4,h:`<rect x="-46" y="-36" width="92" height="22" rx="3" fill="${c}"/><text y="-20" text-anchor="middle" style="font-size:13px;fill:#f4e6c8">หน้าโรง: ${s.astro.front}</text>`,k:1.1})}
+    if(!(st.mode==='site'&&on)){const q=pj(x,y);gs+=`<ellipse class="ring" cx="${f1(q[0])}" cy="${f1(q[1])}" rx="${f1(20*q[2])}" ry="${f1(9*q[2])}" fill="none" stroke="#a04a33" stroke-width="2"/>`}
+  });
+  if(st.mode==='reg'){
+    gs+=`<g class="fade"><path d="${pathP(circleP(300,250,168,168),true)}" fill="rgba(160,74,51,.08)" stroke="#a04a33" stroke-width="1.8" stroke-dasharray="8 5"/><path d="${pathP(circleP(230,110,210,62),true)}" fill="url(#hatchB)" stroke="#46717f" stroke-dasharray="4 3"/><path d="${pathP(scaleAround(ISL,510,410,.915),true)}" fill="none" stroke="#a04a33" stroke-width="1.6" stroke-dasharray="2 4"/></g>`;
+    const cx=905,cy=640;DIRS.forEach(([n,a])=>{const r=a*Math.PI/180;const e=[cx+Math.sin(r)*60,cy-Math.cos(r)*42];gs+=`<path d="${pathP([[cx,cy],e])}" stroke="${n==='ประจิม'?'#a1412a':'#6a553d'}" stroke-width="${a%90?1:2}"/>`;const q=pj(...e);gs+=`<text x="${f1(q[0])}" y="${f1(q[1]+4)}" text-anchor="middle" style="font-size:11px;fill:${n==='ประจิม'?'#a1412a':'#3a2819'};paint-order:stroke;stroke:rgba(225,215,185,.9);stroke-width:3px">${n}</text>`});
+    Object.entries(ZONES).forEach(([k,z])=>items.push({x:z.ic[0],y:z.ic[1],top:true,k:1.15,h:`<g class="zic${st.zone===k?' on':''}" data-zone="${k}" tabindex="0" role="button" aria-label="${z.t}"><line x1="0" y1="0" x2="0" y2="-18" stroke="#5e3420" stroke-width="2"/><circle class="s" cy="-36" r="19" fill="#e9dcbc" stroke="#a04a33" stroke-width="2.4"/><circle cy="-36" r="14.5" fill="none" stroke="#a04a33" stroke-width=".8" stroke-dasharray="2 2"/><text y="-30" text-anchor="middle" style="font-size:15px;font-weight:600;fill:#743524">${z.g}</text></g>`}));
+  }
+  tokens=[];
+  if(st.mode==='tr'&&st.site){Object.entries(ROUTES[st.site]).forEach(([k,p])=>{if(!st.tm[k])return;const m=MODES[k];const d=pathP(p);
+    if(k==='ele')rs+=`<path d="${d}" class="routeln" stroke="#4a2c1b" stroke-width="${m.w+3}" opacity=".45"/>`;
+    rs+=`<path d="${d}" class="routeln${m.dash?'':' draw'}" stroke="${m.color}" stroke-width="${m.w}" ${m.dash?`stroke-dasharray="${m.dash}"`:'pathLength="1000" stroke-dasharray="1000" style="--len:1000"'}/>`;
+    items.push({x:DEST[k].pt[0],y:DEST[k].pt[1],h:`<line x1="0" y1="0" x2="0" y2="-36" stroke="#4a2c1b" stroke-width="2"/><path class="flag" d="M0 -36 L24 -30 L0 -24Z" fill="${m.color}"/>`});
+    const segs=[];let L=0;for(let i=1;i<p.length;i++){const l=Math.hypot(p[i][0]-p[i-1][0],p[i][1]-p[i-1][1]);segs.push([p[i-1],p[i],L,l]);L+=l}tokens.push({k,segs,L,v:m.spd*1.6})})}
+  ground.innerHTML=gs;routes.innerHTML=rs;
+  Object.entries(SITES).forEach(([k,s])=>{const on=k===st.site;if(st.mode==='site'&&on)return;
+    items.push({x:s.pos[0],y:s.pos[1],top:true,k:1.15,h:`<g class="site" data-site="${k}" tabindex="0" role="button" aria-label="ทำเล ${s.name}"><ellipse rx="12" ry="4" fill="#3a2819" opacity=".22"/><line x1="0" y1="0" x2="0" y2="-62" stroke="#4a2c1b" stroke-width="2.6"/><path class="flag" d="M1 -62 L40 -52 L1 -42Z" fill="${on?'#743524':'#a04a33'}" stroke="#5f2c1e"/><circle cy="-70" r="15" fill="${on?'#743524':'#a04a33'}" stroke="#c09246" stroke-width="2.2"/><circle cy="-70" r="11" fill="none" stroke="#e9d3a0" stroke-width=".7" stroke-dasharray="2 2"/><text y="-63" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:19px;fill:#f4e6c8">${th(s.n)}</text></g>`})});
+  if(st.mode==='site'&&st.site){const s=SITES[st.site];const parts=MASS[st.site]();
+    items.push({x:s.pos[0],y:s.pos[1]+2,k:st.site==='C'?1.05:1.08,h:`<ellipse class="dust" rx="120" ry="16" fill="#c9b78c" opacity=".6"/><ellipse rx="110" ry="12" fill="#3a2819" opacity=".16"/><g filter="url(#lite)">`+parts.map((p,i)=>`<g class="${p.drop?'drop':'pop'}" style="--i:${i}">${p.h}</g>`).join('')+`</g><g data-site="${st.site}" class="site" tabindex="0" role="button" aria-label="ซ่อนหุ่น" transform="translate(-130 -30)"><circle r="13" fill="#743524" stroke="#c09246" stroke-width="2"/><text y="6" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:17px;fill:#f4e6c8">${th(s.n)}</text></g>`})}
+  items.sort((a,b)=>(a.top?1:0)-(b.top?1:0)||a.y-b.y);
+  document.getElementById('bbs').innerHTML=items.map(it=>bb(it.x,it.y,it.h,it.k||1)).join('');
+  document.getElementById('tokens').innerHTML=tokens.map(t=>`<g id="tk-${t.k}"><g filter="url(#lite)">${VEH[t.k]}</g></g>`).join('');
+  tokens.forEach(t=>t.el=document.getElementById('tk-'+t.k));
+}
+map.addEventListener('click',e=>{const sEl=e.target.closest('[data-site]'),zEl=e.target.closest('[data-zone]');
+  if(zEl){st.zone=st.zone===zEl.dataset.zone?null:zEl.dataset.zone;render('zone');return}
+  if(sEl){const k=sEl.dataset.site;if(st.mode==='site'&&st.site===k){st.site=null;render('out')}else{st.site=k;st.zone=null;render('site')}}});
+map.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target.closest('[data-site],[data-zone]');if(t){e.preventDefault();t.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
+function tick(now){const t=now/1000;
+  tokens.forEach(k=>{if(!k.el)return;const d=RM?k.L*.6:(t*k.v)%k.L;const sg=k.segs.find(s=>d>=s[2]&&d<=s[2]+s[3])||k.segs[k.segs.length-1];const f=(d-sg[2])/sg[3];
+    const q=pj(sg[0][0]+(sg[1][0]-sg[0][0])*f,sg[0][1]+(sg[1][1]-sg[0][1])*f);const fl=sg[1][0]<sg[0][0]?-1:1;k.el.setAttribute('transform',`translate(${f1(q[0])} ${f1(q[1])}) scale(${(fl*q[2]*1.25).toFixed(3)} ${(q[2]*1.25).toFixed(3)})`)});
+  if(!RM&&ISL)boatsAmb.forEach(b=>{const n=ISL.length-1;const f=((b.o+t*b.v)%1)*n;const i=Math.floor(f),r=f-i;const a=ISL[i],c=ISL[Math.min(n,i+1)];const q=pj(a[0]+(c[0]-a[0])*r,a[1]+(c[1]-a[1])*r);b.e.setAttribute('transform',`translate(${f1(q[0])} ${f1(q[1])}) scale(${(q[2]*1.1).toFixed(3)})`)});
+  requestAnimationFrame(tick)}
+
+/* ---------- narrator ---------- */
+const sayEl=document.getElementById('say'),nWho=document.getElementById('nWho'),nPt=document.getElementById('nPt');let sayTimer=null;
+function speak(k,text){clearTimeout(sayTimer);const p=PEOPLE[k];nWho.innerHTML=`${p.name} <small>· ${p.role}</small>`;nPt.innerHTML=portrait(k);
+  if(RM){sayEl.textContent=text;return}const ch=Array.from(text);let i=0;sayEl.textContent='';const step=()=>{i=Math.min(ch.length,i+2);sayEl.textContent=ch.slice(0,i).join('');if(i<ch.length)sayTimer=setTimeout(step,24)};step()}
+
+/* ---------- panel leaves ---------- */
+const panel=document.getElementById('panel');
+const scoreBars=s=>`<div class="bars">${Object.entries(CRIT).map(([k,l])=>`<div class="bar"><span>${l}</span><span class="t"><i style="width:${s.score[k]*20}%"></i></span><b>${th(s.score[k])}/๕</b></div>`).join('')}</div>`;
+function panelSite(){
+  if(!st.site)return `<div class="leaf wide"><h3>เลือกทำเลที่จะพินิจ</h3><p class="dim">กดธงชาดบนแผนที่ หรือเลือกจากบัญชีนี้</p><div class="sitepick">${Object.entries(SITES).map(([k,s])=>`<button data-pick="${k}"><span class="s">${th(s.n)}</span><span><b>${s.name}</b> — ${s.desc}</span></button>`).join('')}</div></div>`;
+  const s=SITES[st.site],r=s.reg;
+  return `<div class="leaf"><h3>ทำเล${NUMW[s.n]} · ${s.name}</h3><p class="dim">${s.desc}</p>
+   <div class="stats"><div class="stat"><div class="v">${areaTxt(LAND[st.site])}</div><div class="l">เนื้อที่ดิน</div></div><div class="stat"><div class="v">${areaTxt(r.gfa)}</div><div class="l">พื้นอาคารได้จริง</div></div><div class="stat"><div class="v">ราว ${fmt(r.gfa/130)}</div><div class="l">เตียงคนไข้</div></div></div></div>
+  <div class="leaf"><h3>ส่วนดี ส่วนเสีย</h3><ul class="pl">${s.pros.map(p=>`<li class="p"><span></span><span>${p}</span></li>`).join('')}${s.cons.map(p=>`<li class="c"><span></span><span>${p}</span></li>`).join('')}</ul></div>
+  <div class="leaf wide"><h3>คำวินิจฉัยของขุนวิเศษ</h3><p>“${s.verdict}”</p><h4>คะแนนทำเล ${th(total(s))} ใน ๒๐</h4>${scoreBars(s)}</div>`}
+function parcelSVG(s){const r=s.reg,[w,d]=r.dims,W=320,H=230,M=46;const k=Math.min((W-2*M)/w,(H-2*M-6)/d);const pw=w*k,ph=d*k,px=(W-pw)/2,py=(H-ph)/2+2;
+  const set={top:2,bottom:2,left:2,right:2};set[r.roadSide]=r.roadSet;if(r.water)set[r.water.side]=r.water.set;
+  const band=(side,t,fill,label,lf)=>{let x,y,ww,hh,tx,ty,rot=0;
+    if(side==='bottom'){x=px-14;y=py+ph;ww=pw+28;hh=t;tx=px+pw/2;ty=y+t/2}if(side==='top'){x=px-14;y=py-t;ww=pw+28;hh=t;tx=px+pw/2;ty=y+t/2}
+    if(side==='left'){x=px-t;y=py-14;ww=t;hh=ph+28;tx=x+t/2;ty=py+ph/2;rot=-90}if(side==='right'){x=px+pw;y=py-14;ww=t;hh=ph+28;tx=x+t/2;ty=py+ph/2;rot=90}
+    return `<rect x="${f1(x)}" y="${f1(y)}" width="${f1(ww)}" height="${f1(hh)}" fill="${fill}" opacity=".85"/><text x="${f1(tx)}" y="${f1(ty)}" text-anchor="middle" dominant-baseline="middle" transform="rotate(${rot} ${f1(tx)} ${f1(ty)})" style="font-size:11px;fill:${lf}">${label}</text>`};
+  const bx=px+set.left*k,by=py+set.top*k,bw=pw-(set.left+set.right)*k,bh=ph-(set.top+set.bottom)*k;const area=(w-set.left-set.right)*(d-set.top-set.bottom);
+  const lab=(side,v)=>{const m={top:[px+pw/2,py+set.top*k/2+4],bottom:[px+pw/2,py+ph-set.bottom*k/2+4],left:[px+set.left*k/2,py+ph/2+4],right:[px+pw-set.right*k/2-2,py+ph/2-12]}[side];return v>2?`<text x="${f1(m[0])}" y="${f1(m[1])}" text-anchor="middle" style="font-size:10.5px;fill:#743524;font-weight:600">${waTxt(v)}</text>`:''};
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="ผังแปลงที่ดินแลระยะร่น">${band(r.roadSide,22,'#c4aa7c',`ทางกว้าง ${waTxt(r.road)}`,'#3a2819')}${r.water?band(r.water.side,18,'#9fb4a8',r.water.name,'#21403b'):''}
+   <rect x="${f1(px)}" y="${f1(py)}" width="${f1(pw)}" height="${f1(ph)}" fill="url(#hatchR)" stroke="#3a2819" stroke-width="1.4"/><rect x="${f1(bx)}" y="${f1(by)}" width="${f1(bw)}" height="${f1(bh)}" fill="#e3cf9c" stroke="#a1412a" stroke-width="1.6" stroke-dasharray="5 3"/>
+   <text x="${f1(bx+bw/2)}" y="${f1(by+bh/2-3)}" text-anchor="middle" style="font-size:13px;fill:#3a2819">แนวสร้างได้</text><text x="${f1(bx+bw/2)}" y="${f1(by+bh/2+13)}" text-anchor="middle" style="font-size:11.5px;fill:#56401f">${areaTxt(area)}</text>
+   ${['top','bottom','left','right'].map(sd=>lab(sd,set[sd])).join('')}<text x="${f1(px+pw)}" y="${f1(py-6-((r.roadSide==='top'||(r.water&&r.water.side==='top'))?20:0))}" text-anchor="end" style="font-size:11px;fill:#56401f">กว้าง ${th(w/2)} วา ลึก ${th(d/2)} วา</text></svg>`}
+function compassSVG(s){const C=110,R=82;let g='';
+  DIRS.forEach(([n,a])=>{const r=(a-90)*Math.PI/180;const isF=n===s.astro.front;const good=['บูรพา','ทักษิณ'].includes(n),bad=n==='ประจิม';
+    const fill=isF?(s.astro.good?'#4c7444':'#a1412a'):good?'rgba(76,116,68,.28)':bad?'rgba(161,65,42,.22)':'rgba(180,138,64,.25)';
+    const p1=[C+Math.cos(r-.32)*30,C+Math.sin(r-.32)*30],tip=[C+Math.cos(r)*R*.78,C+Math.sin(r)*R*.78],p2=[C+Math.cos(r+.32)*30,C+Math.sin(r+.32)*30];
+    g+=`<path d="M${f1(p1[0])} ${f1(p1[1])} Q${f1(C+Math.cos(r-.22)*R*.7)} ${f1(C+Math.sin(r-.22)*R*.7)} ${f1(tip[0])} ${f1(tip[1])} Q${f1(C+Math.cos(r+.22)*R*.7)} ${f1(C+Math.sin(r+.22)*R*.7)} ${f1(p2[0])} ${f1(p2[1])}Z" fill="${fill}" stroke="#5e3420" stroke-width="1"/>`;
+    const lp=[C+Math.cos(r)*(R+16),C+Math.sin(r)*(R+16)];g+=`<text x="${f1(lp[0])}" y="${f1(lp[1]+4)}" text-anchor="middle" style="font-size:12.5px;font-weight:${isF?700:400};fill:${isF?(s.astro.good?'#4c7444':'#a1412a'):'#3a2819'}">${n}</text>`});
+  g+=`<circle cx="${C}" cy="${C}" r="26" fill="#e3cf9c" stroke="#5e3420"/><text x="${C}" y="${C-2}" text-anchor="middle" style="font-size:11px;fill:#56401f">หน้าโรง</text><text x="${C}" y="${C+13}" text-anchor="middle" style="font-size:13px;font-weight:700;fill:#743524">${s.astro.front}</text>`;
+  return `<svg viewBox="-10 -6 240 232" role="img" aria-label="ทักษาทิศ">${g}</svg>`}
+function panelReg(){const s=SITES[st.site],r=s.reg;const z=st.zone&&ZONES[st.zone];
+  return `${z?`<div class="leaf wide zonecard"><button class="x" id="zx" aria-label="ปิด">×</button><h3>${z.t}</h3><p>${z.p}</p><div style="display:flex;gap:6px;flex-wrap:wrap">${z.tags.map(t=>`<span class="tag mod">${t}</span>`).join('')}</div></div>`:''}
+   <div class="leaf"><h3>ข้อห้ามแห่งทำเล${NUMW[s.n]}</h3><p class="dim">กดตราประทับ สูง · น้ำ · ร่น · ทาง · ทิศ บนแผนที่เพื่ออ่านทีละข้อ</p>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 8px">${r.flags.map(f=>`<span class="tag ${f[0]}">${f[1]}</span>`).join('')}</div>
+    <table class="tbl"><tr><th>เนื้อที่ดิน</th><td class="n">${areaTxt(LAND[st.site])}</td></tr><tr><th>ทางหน้าแปลงกว้าง</th><td class="n">${waTxt(r.road)}</td></tr><tr><th>ร่นจากเขตทาง</th><td class="n">${waTxt(r.roadSet)}</td></tr><tr><th>ร่นจากน้ำ</th><td class="n">${r.water?waTxt(r.water.set):'—'}</td></tr><tr><th>สูงได้มากที่สุด</th><td class="n">${waTxt(r.top)}</td></tr><tr><th>เพดานเขตพระราชฐาน</th><td class="n">${r.cap?waTxt(r.cap):'ไม่ติด'}</td></tr><tr><th>พื้นอาคารตามเกณฑ์</th><td class="n">${th(r.far)} เท่าของที่ดิน</td></tr><tr><th>พื้นอาคารได้จริง</th><td class="n" style="color:${r.gfa<r.gfaAllow?'var(--risk)':'inherit'}">${areaTxt(r.gfa)}</td></tr><tr><th>ยกพื้นหนีน้ำ</th><td class="n">${th(r.flood)} ศอก</td></tr></table></div>
+   <div class="leaf"><h3>ผังแปลงแลระยะร่น</h3><div class="diag">${parcelSVG(s)}</div><p class="dim">ลายทแยงคือแนวร่นที่สร้างมิได้ เส้นประแดงคือแนวตั้งตัวโรง</p></div>
+   <div class="leaf wide"><h3>ทักษาทิศตามตำราปลูกเรือน</h3><div class="astrogrid"><div class="diag">${compassSVG(s)}</div>
+     <div><p><span class="tag ${s.astro.good?'ok':'risk'}">${s.astro.good?'ต้องตามตำรา':'ผิดตำรา ต้องแก้'}</span></p><p>${s.astro.txt}</p><p><b>ข้าแนะว่า</b> ${s.astro.fix}</p>
+     <table class="tbl"><tr><th>หัวเตียงคนไข้</th><td>บูรพา หรือ ทักษิณ ห้ามประจิม</td></tr><tr><th>หอพระ ศาลพระภูมิ</th><td>อีสาน</td></tr><tr><th>โรงครัว เตาต้มยา</th><td>อาคเนย์</td></tr><tr><th>เรือนเก็บศพ</th><td>ประจิม</td></tr><tr><th>หอตำราหมอ</th><td>อุดร</td></tr></table>
+     <p class="dim" style="margin-top:6px">ตำรานี้ตรงกับแดดลมด้วย ทิศประจิมรับแดดบ่ายร้อนจัด ควรเป็นเรือนบริการ มิใช่เรือนคนไข้</p></div></div></div>`}
+function panelTr(){const s=SITES[st.site];
+  const rows=Object.keys(MODES).map(k=>{const m=MODES[k],t=travel(st.site,k);return `<tr><th><span style="display:inline-block;width:11px;height:11px;border-radius:2px;background:${m.color};margin-right:6px"></span>${m.name}</th><td>${DEST[k].name}<br><span class="tag mod">${m.eq}</span></td><td class="n">${th(Math.round(t.sen))} เส้น</td><td class="n"><b>${bahtTxt(t.baht)}</b><br><span class="dim">${th(Math.round(t.min))} นาที</span></td></tr>`}).join('');
+  const note={A:'ช้างเสบียงต้องผ่านหน้าตลาด ควรเปิดประตูเสบียงด้านหลังติดคลอง',B:'ทางน้ำดีที่สุดในสี่ทำเล ท่าเรือติดประตูโรงหมอ',C:'ม้าเร็วต้องข้ามแม่น้ำ ทางเข้ากว้างเพียงสี่วา ช้างสวนกันมิได้',D:'ใกล้วังที่สุด แต่ช้างเสบียงต้องเลี่ยงเขตพระราชฐาน'}[st.site];
+  return `<div class="leaf"><h3>ทางสัญจรจากทำเล${NUMW[s.n]}</h3><p class="dim">กดเปิดปิดพาหนะ บนแผนที่จะเห็นคน ม้า ช้าง เรือ เดินทางจริง</p>
+    <div class="modes">${Object.entries(MODES).map(([k,m])=>`<button class="mode" data-m="${k}" aria-pressed="${st.tm[k]}"><span class="sw" style="background:${m.color}"></span><span><b>${m.name}</b><small>${m.mean}</small></span></button>`).join('')}</div>
+    <h4>ข้อสังเกตของพลขับ</h4><p>“${note}”</p></div>
+   <div class="leaf"><h3>เพลาเดินทาง</h3><div class="scroll"><table class="tbl" style="min-width:330px"><tr><th>พาหนะ</th><th>ปลายทาง</th><th class="n">ระยะ</th><th class="n">เพลา</th></tr>${rows}</table></div><p class="dim" style="margin-top:6px">ความเร็วสมมุติ เดินเท้า ๑๐ ม้าเร็ว ๓๐ ช้าง ๑๑ เรือ ๑๒ เส้นต่อบาท</p></div>`}
+function renderPanel(){panel.innerHTML=st.mode==='site'?panelSite():st.mode==='reg'?panelReg():panelTr();
+  panel.querySelectorAll('[data-pick]').forEach(b=>b.addEventListener('click',()=>{st.site=b.dataset.pick;render('site');document.getElementById('mapbox').scrollIntoView({behavior:RM?'auto':'smooth',block:'center'})}));
+  const zx=document.getElementById('zx');if(zx)zx.onclick=()=>{st.zone=null;render('zoneclose')};
+  panel.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>{st.tm[b.dataset.m]=!st.tm[b.dataset.m];drawDynamic();renderPanel()}))}
+function renderCap(){const cap=document.getElementById('cap');if(st.mode!=='site'||!st.site){cap.hidden=true;return}
+  const s=SITES[st.site],r=s.reg;cap.hidden=false;cap.classList.remove('show');void cap.offsetWidth;cap.classList.add('show');
+  cap.innerHTML=`<h3>ทำเล${NUMW[s.n]} · ${s.name}</h3><p>${s.form}</p><p class="dim">เนื้อที่ ${areaTxt(LAND[st.site])} · สูงได้ ${waTxt(r.top)} · พื้นอาคาร${areaTxt(r.gfa)} · ราว ${fmt(r.gfa/130)} เตียง</p>`}
+function renderCompare(){
+  const head=`<tr><th>ทำเล</th><th class="n">เนื้อที่</th><th class="n">พื้นอาคารได้จริง</th><th class="n">เตียง</th><th class="n">สูงได้</th><th class="n">ม้าเร็วถึงวัง</th><th class="n">เรือถึงท่าสำเภา</th><th>หน้าโรง</th><th>ข้อติดสำคัญ</th><th class="n">คะแนน</th></tr>`;
+  const rows=Object.entries(SITES).map(([k,s])=>{const r=s.reg;const f=r.flags.find(x=>x[0]==='risk')||r.flags[0];
+    return `<tr data-site="${k}" class="${k===st.site?'on':''}"><td><b style="font-family:var(--f-display);color:var(--red-dk)">${th(s.n)}</b> ${s.name}</td><td class="n">${areaTxt(LAND[k])}</td><td class="n">${areaTxt(r.gfa)}</td><td class="n">${fmt(r.gfa/130)}</td><td class="n">${waTxt(r.top)}</td><td class="n">${bahtTxt(travel(k,'horse').baht)}</td><td class="n">${bahtTxt(travel(k,'boat').baht)}</td><td><span class="tag ${s.astro.good?'ok':'risk'}">${s.astro.front}</span></td><td><span class="tag ${f[0]}">${f[1]}</span></td><td class="n"><b style="color:var(--red-dk)">${th(total(s))}</b>/๒๐</td></tr>`}).join('');
+  const t=document.getElementById('cmp');t.innerHTML=head+rows;
+  t.querySelectorAll('tr[data-site]').forEach(tr=>tr.addEventListener('click',()=>{st.site=tr.dataset.site;st.mode='site';render('site');document.getElementById('mapsec').scrollIntoView({behavior:RM?'auto':'smooth'})}))}
+document.getElementById('opin').innerHTML=[
+ ['khun','ข้าเลือกทำเลหนึ่งกลางเกาะเป็นโรงหมอใหญ่ แลจองทำเลสามไว้ขยายภายหน้า ส่วนทำเลสี่เตี้ยแลแคบนัก ให้เป็นเพียงเรือนหมอหลวง'],
+ ['mor','ข้าขอทำเลสองริมน้ำเป็นเรือนรับคนไข้ต่างแดน เรือเทียบถึงประตู หันหน้ารับท่าน้ำทางบูรพา ทั้งต้องตำราทั้งต้องคนไข้']
+].map(([k,t])=>`<div class="leaf rv"><div class="narr"><div class="pt">${portrait(k)}</div><div><div class="who">${PEOPLE[k].name}</div><div class="dim">${PEOPLE[k].role}</div></div></div><p style="margin-top:8px">“${t}”</p></div>`).join('');
+
+const hint=document.getElementById('hint'),zoomBtn=document.getElementById('zoomOut');
+zoomBtn.onclick=()=>{st.site=null;render('out')};
+function render(ev){
+  if(st.mode!=='site'&&!st.site)st.site='A';
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.mode===st.mode));
+  drawDynamic();renderPanel();renderCap();renderCompare();
+  const zoomed=st.mode==='site'&&st.site;zoomBtn.hidden=!zoomed;
+  if(ev)zoomTo(zoomed?siteBox(st.site):[0,0,1000,700],ev==='zone'||ev==='zoneclose'?0:1000);
+  hint.textContent={site:st.site?'กดธงทำเลอื่นเพื่อย้ายไปดู':'กดธงชาดเพื่อให้หุ่นจำลองผุดขึ้น',reg:'กดตราประทับ สูง · น้ำ · ร่น · ทาง · ทิศ',tr:'ดูพาหนะเดินทางจากทำเลที่เลือก'}[st.mode];
+  if(!ev||ev==='zoneclose')return;const s=st.site&&SITES[st.site];
+  if(st.mode==='site')speak('khun',s?s.say:'ท่านจงกดธงชาดทำเลใดก็ได้ หุ่นโรงหมอจักผุดขึ้น');
+  else if(st.mode==='reg')speak('khun',ev==='zone'&&st.zone?`ตรา${ZONES[st.zone].t} ข้าคลี่ใบลานให้อ่านข้างล่างแล้ว`:`ทำเล${s.name} ${s.astro.good?'หันหน้าต้องตำรา':'หันหน้าผิดตำรา'} ข้าจดข้อห้ามไว้ข้างล่าง`);
+  else speak('phon',`ม้าเร็วจากทำเลนี้ถึงประตูวังราว ${bahtTxt(travel(st.site,'horse').baht)} ขอรับ`)}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{st.mode=t.dataset.mode;st.zone=null;if(st.mode==='site')st.site=null;render('tab')}));
+
+/* ---------- boot ---------- */
+drawHero();drawScene();drawMap();render();
+speak('khun','ข้าปักธงชาดไว้สี่ทำเล ท่านจงกดธง หุ่นโรงหมอจักผุดขึ้น ณ ที่นั้น');
+setSpeaker(0);if(!RM)setInterval(()=>{curSpk=(curSpk+1)%STORY.length;setSpeaker(curSpk)},5000);
+requestAnimationFrame(tick);
+if(!RM&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{threshold:.12});
+  document.querySelectorAll('.rv').forEach(el=>{if(el.getBoundingClientRect().top>innerHeight){el.classList.add('pre');io.observe(el)}})}
+})();
+</script>
