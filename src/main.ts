@@ -1,3 +1,4 @@
+import './styles/fonts.css'
 import './styles/mural.css'
 import { installTextures } from './styles/textures'
 import { installDefs } from './render/defs'

@@ -4,8 +4,8 @@ test('load, click flag, model rises, switch lens, no console errors, Thai-only t
   const errors: string[] = []
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()) })
   page.on('pageerror', e => errors.push(e.message))
-  // fonts are external; stub them so the test is deterministic and offline-safe
-  await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.fulfill({ status: 200, contentType: 'text/css', body: '' }))
+  const external: string[] = []
+  page.on('request', r => { const u = new URL(r.url()); if (u.hostname !== 'localhost' && u.protocol.startsWith('http')) external.push(r.url()) })
 
   await page.goto('/')
   await expect(page.locator('#loading')).toBeHidden({ timeout: 30000 })
@@ -25,4 +25,12 @@ test('load, click flag, model rises, switch lens, no console errors, Thai-only t
   const text = await page.evaluate(() => document.body.innerText)
   expect(text.match(/[0-9A-Za-z]/g) ?? []).toEqual([])
   expect(errors).toEqual([])
+
+  // self-hosted fonts really load (no external requests, no fallback)
+  const fonts = await page.evaluate(async () => {
+    await document.fonts.ready
+    return ['Srisakdi', 'Charm', 'Taviraj'].map(f => [f, [...document.fonts].some(ff => ff.family.replace(/"/g, '') === f && ff.status === 'loaded')])
+  })
+  expect(fonts).toEqual([['Srisakdi', true], ['Charm', true], ['Taviraj', true]])
+  expect(external).toEqual([])
 })
