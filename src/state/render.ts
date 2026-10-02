@@ -21,7 +21,8 @@ function syncUrl(){
   const h=formatHash({mode:st.mode,site:st.site});
   if(h===location.hash)return;
   const url=h||location.pathname+location.search;
-  if(st.mode!==lensInUrl)history.pushState(null,'',url);else history.replaceState(null,'',url);
+  // an embedded or sandboxed page may not be allowed to change its address: the app then simply works without links
+  try{if(st.mode!==lensInUrl)history.pushState(null,'',url);else history.replaceState(null,'',url)}catch{/* no address bar to update */}
   lensInUrl=st.mode;
 }
 /**
