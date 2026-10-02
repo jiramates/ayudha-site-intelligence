@@ -1,6 +1,6 @@
 import { setSeed, rnd, pick } from '../render/rng'
 import { f1, OL } from '../render/util'
-import { bake } from '../render/bake'
+import { bakeArt, type Art } from '../render/bake'
 import { agePost } from '../render/mural-filter'
 import { cloud, rocks, dabs, tree, palm, bird } from '../render/primitives/nature'
 import { prang, chedi, house, junk } from '../render/primitives/buildings'
@@ -11,7 +11,7 @@ const DY=80
 
 export function drawHero(){
   const H=document.getElementById('heroSvg') as HTMLElement;H.innerHTML=`<rect width="${HERO_W}" height="${HERO_H}" fill="#e1d4b3"/>`;
-  setSeed(41);let s=`<rect width="1000" height="${230+DY}" fill="url(#skyG)"/>`;
+  const art=():Art=>{setSeed(41);let s=`<rect width="1000" height="${230+DY}" fill="url(#skyG)"/>`;
   s+=cloud(560,52,170)+cloud(810,96,130)+cloud(390,110,100)+cloud(80,40,140);
   s+=`<g transform="translate(0 ${DY})">`;
   [[470,206,150,130],[610,210,190,160],[770,206,170,120],[900,212,170,150],[1000,210,160,120]].forEach((m:number[])=>s+=rocks(...(m as [number,number,number,number]),'rockG'));
@@ -23,5 +23,6 @@ export function drawHero(){
   s+=`<rect y="275" width="1000" height="${HERO_H-DY-275}" fill="#9fb6ab"/><rect y="275" width="1000" height="${HERO_H-DY-275}" fill="url(#waves)"/>`;
   s+=`<g transform="translate(520 322)">${junk()}</g><g transform="translate(700 352) scale(.8)">${junk()}</g><g transform="translate(880 310) scale(.7)">${junk()}</g>`;
   s+=`</g><rect width="560" height="${HERO_H}" fill="url(#hazeG)" opacity=".9"/>`;
-  bake(HERO_W,HERO_H,s,agePost(HERO_W,HERO_H,9),2,(url:string|null)=>{if(!url)return;H.innerHTML=`<image class="paintfade" href="${url}" width="${HERO_W}" height="${HERO_H}" preserveAspectRatio="none"/><path class="flow" d="M0 ${300+DY} H1000 M0 ${336+DY} H1000 M0 ${366+DY} H1000 M0 ${HERO_H-14} H1000"/><g class="bird">${bird(100,60)}${bird(124,72)}${bird(140,54)}</g>`});
+  return {inner:s,post:agePost(HERO_W,HERO_H,9)}}
+  bakeArt('hero',HERO_W,HERO_H,2,null,art,(url:string|null)=>{if(!url)return;H.innerHTML=`<image class="paintfade" href="${url}" width="${HERO_W}" height="${HERO_H}" preserveAspectRatio="none"/><path class="flow" d="M0 ${300+DY} H1000 M0 ${336+DY} H1000 M0 ${366+DY} H1000 M0 ${HERO_H-14} H1000"/><g class="bird">${bird(100,60)}${bird(124,72)}${bird(140,54)}</g>`});
 }

@@ -9,3 +9,5 @@
 - TypeScript is strict; no `any`. Thai text lives only in `src/data/strings.th.ts` and `public/data/study.json` (enforced by `npm test`).
 - Each phase ends with `npm run build:single` and a committed `review/ayudha-<phase>.html` (bump `ayudhaPhase` in package.json).
 - Numbers inside study.json sentences are `{placeholders}` (see README), never typed digits. All data text is escaped; only `**bold**` is allowed.
+- The painted scenes are prebaked offline into `public/art` (`npm run art`); re-run it and commit after changing the art code, `meta.ageLevel` or site positions (`tests/art.spec.ts` fails when it is stale).
+- Layout: one screen per section; `tests/layout.spec.ts` must pass at all seven sizes.

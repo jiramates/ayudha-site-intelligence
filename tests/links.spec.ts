@@ -68,31 +68,53 @@ test.describe('deep links', () => {
     expect(await hash(page)).toBe('#lens-tr-B')
   })
 
-  test('back and forward move between views', async ({ page }) => {
+  test('switching lens adds a history entry; switching site only rewrites the address', async ({ page }) => {
     await page.goto('/'); await ready(page)
+    const len0 = await page.evaluate(() => history.length)
     await page.locator('.site[data-site="A"]').first().dispatchEvent('click')
-    expect(await hash(page)).toBe('#site-A')
     await page.locator('.site[data-site="B"]').first().dispatchEvent('click')
     expect(await hash(page)).toBe('#site-B')
+    expect(await page.evaluate(() => history.length)).toBe(len0) // two site changes, no new entries
+
     await page.locator('#t-reg').click()
     expect(await hash(page)).toBe('#lens-reg-B')
+    await page.locator('#t-tr').click()
+    expect(await hash(page)).toBe('#lens-tr-B')
+    expect(await page.evaluate(() => history.length)).toBe(len0 + 2) // one entry per lens switch
 
+    // a site change inside a lens rewrites the current entry
+    await page.locator('.site[data-site="C"]').first().dispatchEvent('click')
+    expect(await hash(page)).toBe('#lens-tr-C')
+    expect(await page.evaluate(() => history.length)).toBe(len0 + 2)
+
+    await page.goBack()
+    expect(await hash(page)).toBe('#lens-reg-B')
+    expect(await mode(page)).toBe('reg')
     await page.goBack()
     expect(await hash(page)).toBe('#site-B')
     expect(await mode(page)).toBe('site')
     await expect(page.locator('#cap')).toContainText(name('B'))
+
+    await page.goForward()
+    expect(await mode(page)).toBe('reg')
+    await page.goForward()
+    expect(await hash(page)).toBe('#lens-tr-C') // the entry that was rewritten
+    expect(await mode(page)).toBe('tr')
+  })
+
+  test('going back to the whole city zooms out', async ({ page }) => {
+    await page.goto('/'); await ready(page)
+    await page.locator('#t-reg').click()           // push: #lens-reg-A
+    await page.locator('.tab[data-mode="site"]').click() // push: back to the city view ('')
+    expect(await hash(page)).toBe('')
+    await page.locator('.site[data-site="D"]').first().dispatchEvent('click') // rewrite: #site-D
+    await expect(page.locator('#cap')).toContainText(name('D'))
     await page.goBack()
-    await expect(page.locator('#cap')).toContainText(name('A'))
+    expect(await hash(page)).toBe('#lens-reg-A')
     await page.goBack()
     expect(await hash(page)).toBe('')
     await expect(page.locator('#cap')).toBeHidden()
-    await expect.poll(() => viewBoxWidth(page)).toBe(1000) // zoomed back out
-
-    await page.goForward()
-    await expect(page.locator('#cap')).toContainText(name('A'))
-    await page.goForward(); await page.goForward()
-    expect(await mode(page)).toBe('reg')
-    expect(await hash(page)).toBe('#lens-reg-B')
+    await expect.poll(() => viewBoxWidth(page)).toBe(1000)
   })
 
   test('editing the address bar hash changes the view', async ({ page }) => {

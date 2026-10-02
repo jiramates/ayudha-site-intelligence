@@ -34,3 +34,12 @@ describe('study.json schema', () => {
     expect(JSON.stringify(demo())).not.toMatch(/2H|2h|สองเท่าของความกว้างถนน/)
   })
 })
+
+describe('the public demo carries no contact details', () => {
+  it('meta.contact is empty in public/data/study.json and defaults to empty', () => {
+    expect((readJson('public/data/study.json') as { meta: { contact: string } }).meta.contact).toBe('')
+    const d = readJson('public/data/study.json'); setPath(d, 'meta.contact', undefined)
+    const r = parseStudy(d); expect(r.ok).toBe(true)
+    if (r.ok) expect(r.study.meta.contact).toBe('')
+  })
+})

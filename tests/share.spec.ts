@@ -30,16 +30,25 @@ test('when the clipboard fails the link is selected instead', async ({ page }) =
   await expect(page.locator('.copied')).toContainText('เลือกลิงก์ไว้แล้ว')
 })
 
-test('map export downloads a non-empty PNG of the current view', async ({ page }) => {
+test('map export downloads a JPEG of the current view, 2000 px wide and under 1.5 MB', async ({ page }) => {
   await page.goto('/#site-A'); await expect(page.locator('#loading')).toBeHidden({ timeout: 30000 })
   await page.waitForTimeout(1500)
   await expect(page.locator('#saveMap')).toHaveText('บันทึกภาพแผนที่')
   const [dl] = await Promise.all([page.waitForEvent('download'), page.locator('#saveMap').click()])
-  expect(dl.suggestedFilename()).toBe('ayudha-map-site-A.png')
+  expect(dl.suggestedFilename()).toBe('ayudha-map-site-A.jpg')
   const buf = readFileSync((await dl.path()) as string)
   expect(buf.length).toBeGreaterThan(100_000)
-  expect([...buf.subarray(0, 8)]).toEqual([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
-  expect(buf.readUInt32BE(16)).toBe(2000) // width
-  expect(buf.readUInt32BE(20)).toBeGreaterThan(1000) // height follows the zoomed view
+  expect(buf.length).toBeLessThanOrEqual(1_500_000)
+  expect([...buf.subarray(0, 3)]).toEqual([0xff, 0xd8, 0xff]) // JPEG
+  // size from the SOF marker
+  let i = 2, w = 0, h = 0
+  while (i < buf.length) {
+    if (buf[i] !== 0xff) { i++; continue }
+    const m = buf[i + 1], len = buf.readUInt16BE(i + 2)
+    if (m >= 0xc0 && m <= 0xc3) { h = buf.readUInt16BE(i + 5); w = buf.readUInt16BE(i + 7); break }
+    i += 2 + len
+  }
+  expect(w).toBe(2000)
+  expect(h).toBeGreaterThan(1000)
   await expect(page.locator('#mapStatus')).toHaveText('บันทึกภาพแล้ว')
 })

@@ -19,5 +19,5 @@ function bindCopy(cap:HTMLElement){
   if(!btn||!msg||!fld)return;
   btn.onclick=async()=>{
     try{await navigator.clipboard.writeText(fld.value);fld.hidden=true;msg.textContent=S.cap.copied;setTimeout(()=>{msg.textContent=''},2500)}
-    catch{msg.textContent=S.cap.copyFail;fld.hidden=false;fld.focus();fld.select()}
+    catch{msg.textContent=S.cap.copyFail;fld.hidden=false;fld.focus();fld.select();fld.setSelectionRange(0,fld.value.length)} // iOS needs the explicit range
   }}

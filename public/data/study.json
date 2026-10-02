@@ -18,7 +18,8 @@
    "riverSetback_m": 12,
    "minRoad_m": 10,
    "roadSetback_m": 6
-  }
+  },
+  "contact": ""
  },
  "cast": {
   "khun": {

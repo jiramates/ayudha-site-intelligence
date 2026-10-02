@@ -1,14 +1,22 @@
 import { describe, it, expect } from 'vitest'
-import { readFileSync } from 'node:fs'
+import { readFileSync, existsSync } from 'node:fs'
 import { build } from 'vite'
 import type { Rollup } from 'vite'
 
 describe('link preview', () => {
-  it('public/og-image.png is a 1200×630 PNG', () => {
-    const b = readFileSync('public/og-image.png')
-    expect([...b.subarray(0, 8)]).toEqual([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
-    expect([b.readUInt32BE(16), b.readUInt32BE(20)]).toEqual([1200, 630])
-    expect(b.length).toBeLessThan(5_000_000)
+  it('public/og-image.jpg is a 1200×630 JPEG under 300 kB', () => {
+    const b = readFileSync('public/og-image.jpg')
+    expect([...b.subarray(0, 3)]).toEqual([0xff, 0xd8, 0xff])
+    let i = 2, w = 0, h = 0
+    while (i < b.length) {
+      if (b[i] !== 0xff) { i++; continue }
+      const m = b[i + 1], len = b.readUInt16BE(i + 2)
+      if (m >= 0xc0 && m <= 0xc3) { h = b.readUInt16BE(i + 5); w = b.readUInt16BE(i + 7); break }
+      i += 2 + len
+    }
+    expect([w, h]).toEqual([1200, 630])
+    expect(b.length).toBeLessThan(300_000)
+    expect(existsSync('public/og-image.png')).toBe(false)
   })
 
   async function html(site?: string) {
@@ -22,8 +30,9 @@ describe('link preview', () => {
 
   it('SITE_URL makes the Open Graph and Twitter links absolute', async () => {
     const h = await html('https://ayudha.example.com/')
-    expect(h).toContain('<meta property="og:image" content="https://ayudha.example.com/og-image.png">')
-    expect(h).toContain('<meta name="twitter:image" content="https://ayudha.example.com/og-image.png">')
+    expect(h).toContain('<meta property="og:image" content="https://ayudha.example.com/og-image.jpg">')
+    expect(h).toContain('<meta property="og:image:type" content="image/jpeg">')
+    expect(h).toContain('<meta name="twitter:image" content="https://ayudha.example.com/og-image.jpg">')
     expect(h).toContain('<meta property="og:url" content="https://ayudha.example.com/">')
     expect(h).toContain('<meta name="twitter:card" content="summary_large_image">')
     expect(h).toContain('<meta property="og:title" content="ศึกษาทำเลโรงหมอหลวง กรุงศรีอยุธยา">')
@@ -34,7 +43,7 @@ describe('link preview', () => {
 
   it('without SITE_URL the build still works and the image link is relative', async () => {
     const h = await html()
-    expect(h).toContain('<meta property="og:image" content="./og-image.png">')
+    expect(h).toContain('<meta property="og:image" content="./og-image.jpg">')
     expect(h).not.toContain('og:url')
   }, 60000)
 })

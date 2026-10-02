@@ -87,7 +87,7 @@
         </div></div>
         <div class="page" data-page="3"><div class="leaf colophon"><div class="seal" data-t="end.seal"></div>
           <p id="colophon"></p>
-        </div><p class="note" data-t="end.note"></p></div>
+        </div><button class="fullbtn" id="fullBtn" type="button" hidden data-t="full.button"></button><p class="note" data-t="end.note"></p></div>
       </div>
       <div class="dots" id="dots" role="tablist">
         <button class="dot" role="tab" data-page="0" aria-selected="true"></button>
@@ -98,6 +98,12 @@
     </div>
   </section>
 </main>
+<dialog class="leaf fulldlg" id="fullDlg" aria-labelledby="fullTitle">
+  <h3 id="fullTitle" data-t="full.title"></h3>
+  <p data-t="full.body"></p>
+  <p class="contact"><b data-t="full.contact"></b> <span id="fullContact"></span></p>
+  <button class="linkbtn" id="fullClose" type="button" data-t="full.close"></button>
+</dialog>
 <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

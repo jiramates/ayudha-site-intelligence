@@ -28,6 +28,9 @@ export function fillStudy() {
   el('cmpTitle').textContent = S.cmp.title(count)
   el('resolution').innerHTML = STUDY.resolution.map(p => `<p>${P(p)}</p>`).join('')
   el('comingSoon').innerHTML = STUDY.comingSoon.map(t => `<li>${P(t)}</li>`).join('')
+  const contact = STUDY.meta.contact.trim()
+  el('fullContact').textContent = contact
+  el('fullBtn').hidden = !contact // no contact line, no button
   el('colophon').textContent = S.end.colophon(`${STUDY.meta.era.label} ${th(STUDY.meta.era.year)}`)
 }
 

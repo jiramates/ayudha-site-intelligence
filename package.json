@@ -10,10 +10,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "shoot": "node scripts/shoot.mjs",
     "build:single": "node scripts/build-single.mjs",
     "review:shots": "node scripts/review-shots.mjs",
-    "og": "npm run build && node scripts/og-image.mjs"
+    "og": "npm run build && node scripts/og-image.mjs",
+    "art": "npm run build && node scripts/art.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
@@ -24,5 +24,5 @@
     "vitest": "^5.0.3",
     "zod": "^4.6.5"
   },
-  "ayudhaPhase": "p3"
+  "ayudhaPhase": "p4"
 }

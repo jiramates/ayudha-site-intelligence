@@ -4,6 +4,8 @@ import { formatHash } from '../state/url'
 import { map } from '../scenes/map'
 
 const OUT_WIDTH = 2000
+const MAX_BYTES = 1_500_000 // target size of the saved picture
+const QUALITIES = [0.9, 0.86, 0.82, 0.78, 0.74, 0.7]
 
 const toDataUrl = (blob: Blob) => new Promise<string>((res, rej) => {
   const r = new FileReader(); r.onload = () => res(r.result as string); r.onerror = () => rej(r.error); r.readAsDataURL(blob)
@@ -53,16 +55,24 @@ async function mapSvg(): Promise<{ svg: string; w: number; h: number }> {
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
-export async function mapPng(): Promise<Blob> {
+export async function mapJpeg(): Promise<Blob> {
   const { svg, w, h } = await mapSvg()
   const img = new Image()
   await new Promise<void>((res, rej) => { img.onload = () => res(); img.onerror = () => rej(new Error('svg')); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg) })
   const c = document.createElement('canvas'); c.width = w; c.height = h
   const g = c.getContext('2d') as CanvasRenderingContext2D
+  g.fillStyle = '#e1d4b3'; g.fillRect(0, 0, w, h) // JPEG has no transparency
   g.drawImage(img, 0, 0, w, h)
   await sleep(200) // embedded fonts decode lazily: paint once, wait, paint again
-  g.clearRect(0, 0, w, h); g.drawImage(img, 0, 0, w, h)
-  return new Promise<Blob>((res, rej) => c.toBlob(b => (b ? res(b) : rej(new Error('png'))), 'image/png'))
+  g.fillRect(0, 0, w, h); g.drawImage(img, 0, 0, w, h)
+  // JPEG at about 0.9; step the quality down only if the file would be over the size target
+  let blob: Blob | null = null
+  for (const q of QUALITIES) {
+    blob = await new Promise<Blob | null>(res => c.toBlob(res, 'image/jpeg', q))
+    if (blob && blob.size <= MAX_BYTES) break
+  }
+  if (!blob) throw new Error('jpeg')
+  return blob
 }
 
 export const exportName = () => 'ayudha-map' + formatHash({ mode: st.mode, site: st.site }).replace('#', '-').replace('lens-', '')
@@ -73,9 +83,9 @@ export function initExport() {
   btn.addEventListener('click', async () => {
     btn.disabled = true; status.textContent = S.map.saving
     try {
-      const blob = await mapPng()
+      const blob = await mapJpeg()
       const url = URL.createObjectURL(blob)
-      const a = document.createElement('a'); a.href = url; a.download = `${exportName()}.png`
+      const a = document.createElement('a'); a.href = url; a.download = `${exportName()}.jpg`
       document.body.appendChild(a); a.click(); a.remove()
       setTimeout(() => URL.revokeObjectURL(url), 10000)
       status.textContent = S.map.saved

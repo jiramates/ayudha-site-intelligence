@@ -1,5 +1,5 @@
-// npm run og  →  public/og-image.png (1200×630): the painted hero plus the title, rendered from the built app.
-// The PNG is committed, so deploy builds need no browser. Re-run when the title or the hero art changes.
+// npm run og  →  public/og-image.jpg (1200×630, under 300 kB): the painted hero plus the title, rendered from the built app.
+// The JPEG is committed, so deploy builds need no browser. Re-run when the title or the hero art changes.
 import { chromium } from '@playwright/test'
 import { spawn } from 'node:child_process'
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
@@ -9,7 +9,8 @@ const server = spawn('npx', ['vite', 'preview', '--port', '4173', '--strictPort'
 await new Promise(r => setTimeout(r, 2500))
 const browser = await chromium.launch({ executablePath: exe, args: ['--no-sandbox'] })
 try {
-  const app = await browser.newPage({ viewport: { width: 1280, height: 900 } })
+  // a viewport shaped like the hero painting, so the frame is about 2.6:1 whatever the screen
+  const app = await browser.newPage({ viewport: { width: 1180, height: 470 } })
   await app.goto('http://localhost:4173/')
   await app.waitForFunction(() => document.getElementById('loading')?.hidden === true, null, { timeout: 30000 })
   await app.waitForTimeout(1500)
@@ -32,6 +33,12 @@ try {
   await card.locator('.t').evaluate((e, t) => { e.textContent = t }, title)
   await card.evaluate(() => document.fonts.ready)
   await card.waitForTimeout(300)
-  writeFileSync('public/og-image.png', await card.screenshot({ type: 'png', clip: { x: 0, y: 0, width: 1200, height: 630 } }))
-  console.log('public/og-image.png written')
+  let jpg = Buffer.alloc(0), q = 0
+  for (q of [90, 86, 82, 78, 74, 70, 66, 62]) {
+    jpg = await card.screenshot({ type: 'jpeg', quality: q, clip: { x: 0, y: 0, width: 1200, height: 630 } })
+    if (jpg.length < 300_000) break
+  }
+  if (jpg.length >= 300_000) throw new Error(`og image is ${jpg.length} bytes, over the 300 kB target`)
+  writeFileSync('public/og-image.jpg', jpg)
+  console.log(`public/og-image.jpg written (${(jpg.length / 1024).toFixed(0)} kB, quality ${q})`)
 } finally { await browser.close(); server.kill() }

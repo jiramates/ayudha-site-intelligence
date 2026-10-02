@@ -8,16 +8,21 @@ import { renderCompare } from '../scenes/summary'
 import { speak } from '../ui/narrator'
 import { sheetFor } from '../ui/sheet'
 import { renderPeek } from '../ui/peek'
-import { RM } from '../render/util'
+import { RM, jumpTo } from '../render/util'
 import { S } from '../data/strings.th'
 import type { Mode } from './store'
 import { parseHash, formatHash } from './url'
 
 /** true while the view is being set from the address bar, so it is not pushed back as a new history entry */
 let fromUrl=false;
+/** the lens of the current history entry: switching lens adds an entry, switching site only rewrites the address */
+let lensInUrl:Mode=st.mode;
 function syncUrl(){
   const h=formatHash({mode:st.mode,site:st.site});
-  if(h!==location.hash)history.pushState(null,'',h||location.pathname+location.search);
+  if(h===location.hash)return;
+  const url=h||location.pathname+location.search;
+  if(st.mode!==lensInUrl)history.pushState(null,'',url);else history.replaceState(null,'',url);
+  lensInUrl=st.mode;
 }
 /**
  * A deep link opens on the map. While the page is still settling (fonts, the browser's own toolbar, first resize)
@@ -26,7 +31,7 @@ function syncUrl(){
 function holdMapInView(){
   const sec=document.getElementById('mapsec') as HTMLElement;
   let live=true;
-  const align=()=>{if(live)sec.scrollIntoView({behavior:'instant',block:'start'})};
+  const align=()=>{if(live)jumpTo(sec)};
   const stop=()=>{live=false};
   for(const e of ['wheel','touchstart','keydown','pointerdown'])addEventListener(e,stop,{once:true,passive:true});
   align();
@@ -41,9 +46,9 @@ function holdMapInView(){
 function applyUrl(initial:boolean){
   const v=parseHash(location.hash,Object.keys(SITES))??{mode:'site' as Mode,site:null};
   if(initial?v.site===null:(v.mode===st.mode&&v.site===st.site))return;
-  fromUrl=true;
+  fromUrl=true;lensInUrl=v.mode;
   try{st.mode=v.mode;st.site=v.site;st.zone=null;render(initial?'restore':v.mode!=='site'?'tab':v.site?'site':'out')
-    if(v.site){if(initial)holdMapInView();else document.getElementById('mapsec')?.scrollIntoView({behavior:RM?'instant':'smooth',block:'start'})}}
+    if(v.site){if(initial)holdMapInView();else{const m=document.getElementById('mapsec') as HTMLElement;if(RM)jumpTo(m);else m.scrollIntoView({behavior:'smooth',block:'start'})}}}
   finally{fromUrl=false}
 }
 export function startUrlSync(){

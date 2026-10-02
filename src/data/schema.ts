@@ -43,6 +43,8 @@ const line = z.object({ speaker: z.enum(['khun', 'mor']), text })
 
 export const studySchema = z.object({
   meta: z.object({
+    /** how to ask for the full dashboard (a line of plain text); empty hides the button */
+    contact: z.string().default(''),
     title: text, era: z.object({ label: text, year: z.number().int().positive() }), ageLevel: z.number().min(0).max(2),
     bedDivisor: z.number().positive(), planUnit_m: z.number().positive(), minPerBaht: z.number().positive(),
     /** regulation constants that prose and zones cite, in SI units */

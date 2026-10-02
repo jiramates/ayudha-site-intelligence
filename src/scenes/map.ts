@@ -1,6 +1,6 @@
 import { setSeed, rnd, pick } from '../render/rng'
 import { f1, NS, OL } from '../render/util'
-import { bake } from '../render/bake'
+import { bakeArt, type Art } from '../render/bake'
 import { agePost } from '../render/mural-filter'
 import { pj, sampleEl, pathP, scaleAround, bb } from '../render/projection'
 import { cloud, rocks, tree, palm } from '../render/primitives/nature'
@@ -17,7 +17,7 @@ export function drawMap(){
   ISL=sampleEl('islandSrc',180);setSeed(11);
   const W=sampleEl('rvW',40),N=sampleEl('rvN',30),E=sampleEl('rvE',40),S=sampleEl('rvS',30);
   const isl=document.getElementById('islandSrc') as unknown as SVGGeometryElement;const inIsl=(x:number,y:number)=>isl.isPointInFill(new DOMPoint(x,y));
-  let s=`<rect width="1000" height="230" fill="url(#skyG)"/>`;
+  const art=():Art=>{setSeed(11);let s=`<rect width="1000" height="230" fill="url(#skyG)"/>`;
   s+=cloud(110,62,140)+cloud(620,40,160)+cloud(860,86,110)+cloud(380,96,90);
   [[60,196,180,100],[200,190,160,80],[340,194,220,110],[520,190,170,90],[680,194,230,120],[860,190,200,100],[990,196,180,110]].forEach((m:number[])=>s+=rocks(...(m as [number,number,number,number]),'rockG2'));
   [[130,200,200,120],[430,202,240,130],[760,202,260,140]].forEach((m:number[])=>s+=rocks(...(m as [number,number,number,number])));
@@ -51,6 +51,7 @@ export function drawMap(){
   [[90,250,50],[930,300,50],[880,560,30],[150,700,50],[700,725,30],[620,80,40],[160,40,40],[380,130,25],[960,700,30],[60,500,40],[-40,380,60],[1040,460,60],[520,730,40]].forEach(c=>{for(let i=0;i<7;i++)B.push({x:c[0]+(rnd()-.5)*c[2]*2,y:c[1]+(rnd()-.5)*c[2],h:rnd()>.25?tree():palm(),k:1+rnd()*.5})});
   for(let i=0;i<26;i++){const p=ISL[Math.floor(rnd()*ISL.length)];const o=scaleAround([p],510,410,1.09)[0];B.push({x:o[0],y:o[1],h:rnd()>.4?palm():tree(),k:.9})}
   B.sort((a,b)=>a.y-b.y);s+=B.map(it=>bb(it.x,it.y,it.h,it.k||1)).join('');
+  return {inner:s,post:agePost(1000,700,10)}}
   // live skeleton
   const liveTop=`<g id="flows"><path class="flow" d="${pathP(ISL,true)}"/><path class="flow" d="${pathP(W)}"/><path class="flow" d="${pathP(S)}"/></g><g id="ground"></g><g id="routes"></g><g id="boats"></g><g id="labels"></g><g id="bbs"></g><g id="tokens"></g>`;
   map.innerHTML=`<rect width="1000" height="700" fill="#e1d4b3"/><g id="art"></g>`+liveTop;
@@ -59,5 +60,5 @@ export function drawMap(){
    ([[95,210,W_.chaoPhraya],[905,210,W_.pasak],[620,700,W_.river],[606,470,W_.khaoPluek],[300,592,W_.naiKai],[530,252,W_.tho]] as [number,number,string][]).map(([x,y,t])=>{const q=pj(x,y);return `<text x="${f1(q[0])}" y="${f1(q[1])}" text-anchor="middle" style="font-size:${f1(12*q[2]+1)}px;fill:#2f504a;font-style:italic;paint-order:stroke;stroke:rgba(225,215,185,.8);stroke-width:2.5px">${t}</text>`}).join('')+
    `<g transform="translate(28 30)"><rect width="250" height="40" fill="#9a4630" stroke="#5f2c1e" stroke-width="2"/><rect x="4" y="4" width="242" height="32" fill="none" stroke="#efe0bd" stroke-dasharray="3 3"/><text x="125" y="27" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:20px;fill:#f1e3c4">${STR.map.title}</text></g>`;
   const bg=document.getElementById('boats') as HTMLElement;[0,.34,.7].forEach((o,i)=>{const e=document.createElementNS(NS,'g');e.innerHTML=boatG;bg.appendChild(e);boatsAmb.push({e,o,v:.005+i*.002})});
-  bake(1000,700,s,agePost(1000,700,10),2.4,(url:string|null)=>{const a=document.getElementById('art') as HTMLElement;a.innerHTML=url?`<image class="paintfade" href="${url}" width="1000" height="700" preserveAspectRatio="none"/>`:s;(document.getElementById('loading') as HTMLElement).hidden=true});
+  bakeArt('map',1000,700,2.4,Object.values(SITES).map(t=>t.pos),art,(url:string|null,inner:string)=>{const a=document.getElementById('art') as HTMLElement;a.innerHTML=url?`<image class="paintfade" href="${url}" width="1000" height="700" preserveAspectRatio="none"/>`:inner;(document.getElementById('loading') as HTMLElement).hidden=true});
 }

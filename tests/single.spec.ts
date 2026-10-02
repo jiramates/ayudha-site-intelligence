@@ -23,22 +23,22 @@ test.describe('the single-file review build (opened from file://)', () => {
     })
   }
 
-  test('copy link gives a link or selects it, and the map exports a PNG', async ({ page }) => {
+  test('copy link gives a link or selects it, and the map exports a JPEG', async ({ page }) => {
     await page.goto(url('#site-B'))
     await expect(page.locator('#loading')).toBeHidden({ timeout: 30000 })
     await page.waitForTimeout(1500)
     await page.locator('[data-copy]').click()
     await expect(page.locator('.copied')).not.toHaveText('')
     const [dl] = await Promise.all([page.waitForEvent('download'), page.locator('#saveMap').click()])
-    expect(dl.suggestedFilename()).toBe('ayudha-map-site-B.png')
+    expect(dl.suggestedFilename()).toBe('ayudha-map-site-B.jpg')
     expect(readFileSync((await dl.path()) as string).length).toBeGreaterThan(100_000)
   })
 
-  test('back and forward work between views', async ({ page }) => {
-    await page.goto(url())
+  test('back and forward work between lenses', async ({ page }) => {
+    await page.goto(url('#site-A'))
     await expect(page.locator('#loading')).toBeHidden({ timeout: 30000 })
-    await page.locator('.site[data-site="A"]').first().dispatchEvent('click')
-    await page.locator('.site[data-site="C"]').first().dispatchEvent('click')
+    await page.locator('#t-reg').click()
+    expect(await page.evaluate(() => location.hash)).toBe('#lens-reg-A')
     await page.goBack()
     expect(await page.evaluate(() => location.hash)).toBe('#site-A')
     await expect(page.locator('#cap')).toBeVisible()

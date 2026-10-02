@@ -6,6 +6,7 @@ import { installDefs } from './render/defs'
 import { RM } from './render/util'
 import { setAgeLevel } from './render/age'
 import { loadStudy } from './data/loader'
+import { loadArtManifest } from './render/bake'
 import { installStudy, SITES } from './data/content'
 import { numWord } from './data/units'
 import { S } from './data/strings.th'
@@ -21,13 +22,14 @@ import { speak } from './ui/narrator'
 import { initPager } from './ui/pager'
 import { initSheet } from './ui/sheet'
 import { initPeek } from './ui/peek'
+import { initFull } from './ui/full'
 import { initExport } from './ui/export'
 
 async function boot() {
   fillStatic()
   installTextures()
   installDefs()
-  const res = await loadStudy()
+  const [res] = await Promise.all([loadStudy(), loadArtManifest()])
   if (!res.ok) { showLoadError(res.issues); return }
   installStudy(res.study)
   setAgeLevel(res.study.meta.ageLevel)
@@ -42,6 +44,7 @@ async function boot() {
   requestAnimationFrame(tick)
   initPager()
   initPeek()
+  initFull()
   initSheet()
   startUrlSync() // after the sheet exists: a deep link opens it
   initExport()
