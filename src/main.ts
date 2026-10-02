@@ -23,6 +23,8 @@ import { initPager } from './ui/pager'
 import { initSheet } from './ui/sheet'
 import { initPeek } from './ui/peek'
 import { initFull } from './ui/full'
+import { initStoryFit } from './ui/storyfit'
+import { initHeroFit } from './ui/herofit'
 import { initExport } from './ui/export'
 
 async function boot() {
@@ -43,6 +45,8 @@ async function boot() {
   setSpeaker(0); if (!RM) setInterval(nextSpeaker, 5000)
   requestAnimationFrame(tick)
   initPager()
+  initStoryFit()
+  initHeroFit()
   initPeek()
   initFull()
   initSheet()

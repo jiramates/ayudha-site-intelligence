@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test'
 
-const SIZES: [number, number][] = [[1920, 1080], [1366, 768], [1280, 720], [768, 1024], [390, 844], [375, 667], [844, 390]]
-const DESIGNATED = '.sheet-body, .pages, .page, .scroll, .diag, #side'
+const SIZES: [number, number][] = [[1920, 1080], [1366, 768], [1280, 720], [768, 1024], [390, 844], [375, 667], [844, 390], [390, 700], [375, 600]]
+const DESIGNATED = '.sheet-body, .pages, .page, .scroll, .diag, #side, .duo'
 
 async function ready(page: Page) {
   await expect(page.locator('#loading')).toBeHidden({ timeout: 30000 })
@@ -30,6 +30,23 @@ async function inside(page: Page, sel: string, label = sel) {
   expect(r.bottom, `${label} bottom`).toBeLessThanOrEqual(vh + 1)
 }
 
+/** vertical gap above each block, measured to the nearest block above that overlaps it sideways */
+async function gaps(page: Page, sec: string, blocks: string[]) {
+  return page.evaluate(([sec, blocks]) => {
+    const rs = blocks.flatMap(b => Array.from(document.querySelectorAll<HTMLElement>(`${sec} ${b}`)))
+      .filter(e => e.offsetParent !== null).map(e => e.getBoundingClientRect()).filter(r => r.height > 0)
+    const secBox = (document.querySelector(sec) as HTMLElement).getBoundingClientRect()
+    const first = Math.min(...rs.map(r => r.top))
+    const out: number[] = []
+    for (const r of rs) {
+      if (r.top <= first + 1) continue
+      const above = rs.filter(o => o !== r && o.bottom <= r.top + 1 && Math.min(o.right, r.right) - Math.max(o.left, r.left) > 20)
+      if (above.length) out.push(r.top - Math.max(...above.map(o => o.bottom)))
+    }
+    return { gaps: out, tail: secBox.bottom - Math.max(...rs.map(r => r.bottom)) }
+  }, [sec, blocks] as [string, string[]])
+}
+
 for (const [w, h] of SIZES) {
   const phone = w < 900
   const portrait = h > w
@@ -43,15 +60,20 @@ for (const [w, h] of SIZES) {
       const heights = await page.locator('.screen').evaluateAll(els => els.map(e => e.getBoundingClientRect().height))
       expect(heights).toHaveLength(4)
       for (const hh of heights) expect(hh).toBeLessThanOrEqual(h + 1)
+      // only the map section (and the hero painting) fill the screen; the others take their content's height
+      expect(heights[2], 'map section = one screen').toBeGreaterThanOrEqual(h - 1)
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
 
       // hero
       await toSection(page, '.hero')
       await inside(page, '.hero-t'); await inside(page, '.hero .frame')
+      if (portrait) expect(heights[0], 'phone hero ≈ 88svh').toBeLessThanOrEqual(h * 0.9)
 
       // chapter 1: the scene and both lines are on screen
       await toSection(page, '.s1')
-      await inside(page, '.s1 .frame'); await inside(page, '.duo .leaf:first-child'); await inside(page, '.duo .leaf:last-child')
+      await inside(page, '.s1 .frame')
+      if (await page.locator('.duo[data-swipe]').count()) await inside(page, '.duo') // swipe pair: the first leaf and its neighbour peeking
+      else { await inside(page, '.duo .leaf:first-child'); await inside(page, '.duo .leaf:last-child') }
 
       // chapter 2: tabs, the whole map and the narrator
       await toSection(page, '#mapsec')
@@ -95,6 +117,23 @@ for (const [w, h] of SIZES) {
       expect(spill).toEqual([])
     })
 
+    test('content is packed: even gaps inside each section, no big empty space', async ({ page }) => {
+      await page.goto('/'); await ready(page)
+      const secs: [string, string[]][] = [
+        ['.s1', ['.top', '.stagecell .frame', '.duo > .leaf']],
+        ['.s3', ['.top', '.pages', '.dots']],
+      ]
+      for (const [sec, blocks] of secs) {
+        await toSection(page, sec)
+        const g = await gaps(page, sec, blocks)
+        for (const x of g.gaps) expect(x, `${sec} gap`).toBeLessThanOrEqual(48)
+        expect(g.tail, `${sec} empty space below the content`).toBeLessThanOrEqual(48)
+      }
+      // gaps between sections
+      const between = await page.locator('.screen').evaluateAll(els => els.slice(1).map((e, i) => e.getBoundingClientRect().top - els[i].getBoundingClientRect().bottom))
+      for (const [i, x] of between.entries()) expect(x, `between sections ${i}`).toBeLessThanOrEqual(i === 0 ? 40 : 48)
+    })
+
     test('a deep link scrolls to the map and fits it on screen', async ({ page }) => {
       await page.goto('/#site-A'); await ready(page); await settle(page)
       await expect.poll(async () => Math.abs((await rect(page, '#mapsec')).top), { timeout: 8000 }).toBeLessThanOrEqual(2)
@@ -103,14 +142,20 @@ for (const [w, h] of SIZES) {
     })
 
     if (portrait && phone) {
-      test('sheet: closed shows the four site buttons; half keeps the selected site visible above the sheet', async ({ page }) => {
+      test('sheet: closed shows one compact row of four site chips; half keeps the selected site visible above the sheet', async ({ page }) => {
         await page.goto('/'); await ready(page); await toSection(page, '#mapsec')
-        // closed (peek): four buttons, all on screen, filling the space under the narrator
-        await expect(page.locator('#side')).toHaveAttribute('data-pos', 'closed')
+        // closed: the WHOLE map is visible and not overlapped by the sheet; one compact row of four chips docked under the narrator
+        const side = await rect(page, '#side'), sideClip = await page.locator('#side').evaluate(e => getComputedStyle(e).clipPath)
+        expect(sideClip).not.toBe('none')
+        const mapC = await rect(page, '#mapbox'), narrC = await rect(page, '#narr')
+        await inside(page, '#mapbox'); await inside(page, '#narr')
+        expect(mapC.bottom).toBeLessThanOrEqual(side.top + 1)
+        expect(narrC.bottom).toBeLessThanOrEqual(side.top + 1)
         const btns = await page.locator('.peekbtn').evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return [r.top, r.bottom, r.left, r.right] }))
         expect(btns).toHaveLength(4)
-        const narrB = (await rect(page, '#narr')).bottom
-        for (const [t, b, l, r] of btns) { expect(t).toBeGreaterThan(narrB); expect(b).toBeLessThanOrEqual(h); expect(l).toBeGreaterThanOrEqual(0); expect(r).toBeLessThanOrEqual(w) }
+        const narrB = narrC.bottom
+        for (const [t, b, l, r] of btns) { expect(t).toBeGreaterThan(narrB); expect(b).toBeLessThanOrEqual(h); expect(h - side.top, 'closed strip height').toBeLessThanOrEqual(76); expect(l).toBeGreaterThanOrEqual(0); expect(r).toBeLessThanOrEqual(w) }
+        expect(new Set(btns.map(x => Math.round(x[0] / 6))).size, 'one row').toBe(1)
 
         // tapping a button selects the site exactly like its flag
         await page.locator('.peekbtn[data-peek="C"]').tap()

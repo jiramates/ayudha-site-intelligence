@@ -6,6 +6,7 @@
 type Pos = 'closed' | 'half' | 'full'
 
 const portrait = matchMedia('(orientation: portrait)')
+const CLOSED_H = 72 // keep in step with the clip-path in layout.css
 let pos: Pos = 'closed'
 let applyFn: (p: Pos, animate?: boolean) => void = () => {}
 
@@ -21,7 +22,7 @@ export function initSheet() {
 
   /**
    * translateY (px) of the sheet for each position; the sheet is `height` tall and anchored at the bottom.
-   *  closed = "peek": it fills the space under the narrator with the four site buttons
+   *  closed = a compact strip (handle + one row of site chips, CLOSED_H tall) docked at the bottom of the screen
    *  half   = its top edge sits just under the map (the whole map stays visible above it)
    *  full   = almost the whole screen
    */
@@ -29,9 +30,9 @@ export function initSheet() {
     const H = side.offsetHeight, secTop = sec.getBoundingClientRect().top
     const narrBottom = narr.getBoundingClientRect().bottom - secTop
     const mapBottom = mapbox.getBoundingClientRect().bottom - secTop
-    const peek = Math.max(130, innerHeight - narrBottom - 8)
-    const half = Math.min(innerHeight * 0.72, Math.max(peek + 40, innerHeight - mapBottom - 6))
-    return { H, peek, stops: { closed: H - peek, half: H - half, full: 0 } as Record<Pos, number> }
+    const closed = CLOSED_H
+    const half = Math.min(innerHeight * 0.72, Math.max(150, innerHeight - mapBottom - 6))
+    return { H, stops: { closed: H - closed, half: H - half, full: 0 } as Record<Pos, number> }
   }
   const stops = () => geometry().stops
   const apply = (p: Pos, animate = true) => {
@@ -40,9 +41,8 @@ export function initSheet() {
     side.classList.toggle('dragging', !animate)
     side.dataset.pos = p
     side.style.setProperty('--sheet-y', `${g.stops[p]}px`)
-    side.style.setProperty('--peekH', `${g.peek - (handle.offsetHeight || 52) - 16}px`)
     handle.setAttribute('aria-expanded', String(p !== 'closed'))
-    cap.inert = panel.inert = p === 'closed' // only the site buttons are reachable while peeking
+    cap.inert = panel.inert = p === 'closed' // only the site chips are reachable while peeking
   }
 
   applyFn = apply

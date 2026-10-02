@@ -1,4 +1,4 @@
-// node scripts/sheet-shots.mjs [outDir] — chapter 2 at 1366×768 and the phone sizes with the sheet closed (peek) and half open.
+// node scripts/sheet-shots.mjs [outDir] — every section at the phone sizes (hero, ch.1, ch.2 closed, ch.2 site A half, ch.3) plus ch.2 at 1366×768.
 import { chromium } from '@playwright/test'
 import { spawn } from 'node:child_process'
 import { mkdirSync, existsSync } from 'node:fs'
@@ -15,19 +15,24 @@ const open = async (w, h, phone) => {
   await p.goto('http://localhost:4173/')
   await p.waitForFunction(() => document.getElementById('loading')?.hidden === true, null, { timeout: 30000 })
   await p.waitForTimeout(1500)
-  await p.evaluate(() => document.getElementById('mapsec').scrollIntoView({ behavior: 'instant' }))
-  await settle(p); await p.waitForTimeout(600)
   return p
 }
+const to = async (p, sel) => { await p.evaluate(s => document.querySelector(s).scrollIntoView({ behavior: 'instant' }), sel); await settle(p); await p.waitForTimeout(500) }
+const shot = (p, name) => p.screenshot({ path: `${out}/${name}.jpg`, type: 'jpeg', quality: 88 })
+
 const d = await open(1366, 768, false)
+await to(d, '#mapsec')
 await d.locator('.site[data-site="A"]').first().dispatchEvent('click'); await d.waitForTimeout(3000)
-await d.screenshot({ path: `${out}/p4-1366x768-map.jpg`, type: 'jpeg', quality: 88 })
-for (const [w, h] of [[390, 844], [375, 667]]) {
-  const p = await open(w, h, true)
-  await p.screenshot({ path: `${out}/p4-${w}x${h}-closed.jpg`, type: 'jpeg', quality: 88 })
-  await p.locator('.peekbtn[data-peek="A"]').tap()
-  await p.waitForTimeout(3200)
-  await p.screenshot({ path: `${out}/p4-${w}x${h}-half.jpg`, type: 'jpeg', quality: 88 })
+await shot(d, 'p4-1366x768-map')
+for (const [w, h] of [[390, 844], [390, 700]]) {
+  const p = await open(w, h, true), n = `p4-${w}x${h}`
+  await shot(p, `${n}-1-hero`)
+  await to(p, '.s1'); await shot(p, `${n}-2-ch1`)
+  await to(p, '#mapsec'); await shot(p, `${n}-3-ch2-closed`)
+  await p.locator('.peekbtn[data-peek="A"]').tap(); await p.waitForTimeout(3200)
+  await shot(p, `${n}-4-ch2-half`)
+  await to(p, '.s3'); await shot(p, `${n}-5-ch3`)
+  await p.locator('.lhead').nth(1).tap(); await p.waitForTimeout(600); await shot(p, `${n}-6-ch3-open`)
 }
 await browser.close(); server.kill()
 console.log('written to', out)
