@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "shoot": "node scripts/shoot.mjs"
+    "shoot": "node scripts/shoot.mjs",
+    "build:single": "node scripts/build-single.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
@@ -19,5 +20,6 @@
     "vite-plugin-singlefile": "^2.3.3",
     "vitest": "^5.0.3",
     "zod": "^4.6.5"
-  }
+  },
+  "ayudhaPhase": "p1"
 }

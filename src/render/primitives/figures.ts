@@ -1,7 +1,9 @@
 import { OL } from '../util'
+import type { SpeakerId } from '../../data/schema'
 
-export function figure(o){const sk='#f0dfc0',ol='#6e3f26';let s='';
-  const arm=(d,c,w=7)=>`<path d="${d}" fill="none" stroke="${ol}" stroke-width="${w+1.8}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
+export interface FigOpts{hat?:boolean;top?:string;cloth:string;pose:'point'|'pot'|'leaf'}
+export function figure(o:FigOpts){const sk='#f0dfc0',ol='#6e3f26';let s='';
+  const arm=(d:string,c:string,w=7)=>`<path d="${d}" fill="none" stroke="${ol}" stroke-width="${w+1.8}" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
   s+=`<ellipse cx="-8" cy="-3" rx="7" ry="3" fill="${sk}" stroke="${ol}" stroke-width=".8"/><ellipse cx="9" cy="-3" rx="7" ry="3" fill="${sk}" stroke="${ol}" stroke-width=".8"/>`;
   s+=`<polygon points="-12,-46 -4,-46 -6,-5 -11,-5" fill="${sk}" stroke="${ol}" stroke-width=".8"/><polygon points="4,-46 12,-46 11,-5 6,-5" fill="${sk}" stroke="${ol}" stroke-width=".8"/><path d="M-11 -10 h5 M6 -10 h5" stroke="#c09246" stroke-width="1.6"/>`;
   s+=`<path d="M-17 -112 L17 -112 L20 -54 Q12 -44 4 -52 L0 -68 L-4 -52 Q-12 -44 -20 -54Z" fill="url(#${o.cloth})" stroke="${ol}" stroke-width=".9"/><path d="M-19 -56 Q-12 -47 -4 -53 M4 -53 Q12 -47 19 -56" stroke="#c09246" stroke-width="1.2" fill="none"/>`;
@@ -18,5 +20,5 @@ export function figure(o){const sk='#f0dfc0',ol='#6e3f26';let s='';
   else if(o.pose==='pot'){s+=arm('M15 -164 Q26 -136 12 -126',tc)+`<ellipse cx="6" cy="-122" rx="12" ry="9" fill="#7a4b2c" stroke="${ol}"/><path d="M-5 -124 h22" stroke="#c09246" stroke-width="1"/><rect x="-1" y="-134" width="14" height="5" fill="#5e3f26"/><circle cx="10" cy="-125" r="4" fill="${sk}" stroke="${ol}" stroke-width=".7"/>`}
   else{s+=arm('M15 -164 Q26 -136 10 -128',tc)+`<rect x="-14" y="-136" width="34" height="8" rx="2" fill="#dcc48c" stroke="${ol}" stroke-width=".8"/><rect x="-16" y="-137" width="4" height="10" fill="#94452f"/><rect x="18" y="-137" width="4" height="10" fill="#94452f"/><circle cx="8" cy="-128" r="4" fill="${sk}" stroke="${ol}" stroke-width=".7"/>`}
   return s}
-export const FIG={khun:{hat:true,top:'#9e4a32',cloth:'clothDot',pose:'point'},mor:{top:'#efe8d6',cloth:'clothBr',pose:'pot'},phon:{cloth:'clothBr',pose:'leaf'}};
-export function portrait(k){const v=FIG[k].hat?[-40,-272,80,104]:[-30,-226,60,60];return `<svg viewBox="${v.join(' ')}"><rect x="${v[0]}" y="${v[1]}" width="${v[2]}" height="${v[3]}" fill="#e2d3ae"/>${figure(FIG[k])}</svg>`}
+export const FIG:Record<SpeakerId,FigOpts>={khun:{hat:true,top:'#9e4a32',cloth:'clothDot',pose:'point'},mor:{top:'#efe8d6',cloth:'clothBr',pose:'pot'},phon:{cloth:'clothBr',pose:'leaf'}};
+export function portrait(k:SpeakerId){const v=FIG[k].hat?[-40,-272,80,104]:[-30,-226,60,60];return `<svg viewBox="${v.join(' ')}"><rect x="${v[0]}" y="${v[1]}" width="${v[2]}" height="${v[3]}" fill="#e2d3ae"/>${figure(FIG[k])}</svg>`}

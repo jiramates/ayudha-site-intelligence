@@ -6,15 +6,17 @@ import { pj, sampleEl, pathP, scaleAround, bb } from '../render/projection'
 import { cloud, rocks, tree, palm } from '../render/primitives/nature'
 import { house, prang, chedi, junk, fort, roofE } from '../render/primitives/buildings'
 import { SITES } from '../data/content'
+import { S as STR } from '../data/strings.th'
+import type { XY } from '../data/schema'
 
-export let ISL;
-export const map=document.getElementById('map');
-export const boatsAmb=[];
+export let ISL:XY[]=[];
+export const map=document.getElementById('map') as unknown as SVGSVGElement;
+export const boatsAmb:{e:SVGGElement;o:number;v:number}[]=[];
 export const boatG=`<path d="M-12 0 C-6 4 6 4 13 -2 L-12 -2Z" fill="#6e4127" stroke="#3a2819" stroke-width=".7"/><circle cx="-2" cy="-7" r="2.6" fill="#f0dfc0"/><path d="M-2 -4 V-1" stroke="#9e4a32" stroke-width="3"/><path d="M2 -6 L10 3" stroke="#5e3f26" stroke-width="1.2"/>`;
 export function drawMap(){
   ISL=sampleEl('islandSrc',180);setSeed(11);
   const W=sampleEl('rvW',40),N=sampleEl('rvN',30),E=sampleEl('rvE',40),S=sampleEl('rvS',30);
-  const isl=document.getElementById('islandSrc') as unknown as SVGGeometryElement;const inIsl=(x,y)=>isl.isPointInFill(new DOMPoint(x,y));
+  const isl=document.getElementById('islandSrc') as unknown as SVGGeometryElement;const inIsl=(x:number,y:number)=>isl.isPointInFill(new DOMPoint(x,y));
   let s=`<rect width="1000" height="230" fill="url(#skyG)"/>`;
   s+=cloud(110,62,140)+cloud(620,40,160)+cloud(860,86,110)+cloud(380,96,90);
   [[60,196,180,100],[200,190,160,80],[340,194,220,110],[520,190,170,90],[680,194,230,120],[860,190,200,100],[990,196,180,110]].forEach((m:number[])=>s+=rocks(...(m as [number,number,number,number]),'rockG2'));
@@ -43,7 +45,7 @@ export function drawMap(){
   B.push({x:440,y:660,h:`<rect x="-12" y="-26" width="24" height="26" fill="#c08560" stroke="${OL}"/><path d="M-5 0 V-13 Q0 -19 5 -13 V0Z" fill="#3e2416"/><g transform="translate(0 -26)">${roofE(26,24,2)}</g>`});
   B.push({x:792,y:668,h:junk()},{x:752,y:676,h:junk(),k:.8},{x:830,y:660,h:junk(),k:.7});
   const avoid=[[300,250,95],[300,415,45],[520,335,30],[440,655,30],...Object.values(SITES).map(t=>[t.pos[0],t.pos[1],50])];
-  const nearLine=(x,y)=>Math.abs(x-440)<11||Math.abs(y-340)<11||Math.abs(y-510)<11||Math.abs(x-600)<11||Math.abs(y-580)<10||(Math.abs(y-260)<10&&x>380&&x<600)||(Math.abs(x-560)<11&&y>340&&y<510);
+  const nearLine=(x:number,y:number)=>Math.abs(x-440)<11||Math.abs(y-340)<11||Math.abs(y-510)<11||Math.abs(x-600)<11||Math.abs(y-580)<10||(Math.abs(y-260)<10&&x>380&&x<600)||(Math.abs(x-560)<11&&y>340&&y<510);
   let tries=0,cnt=0;while(cnt<110&&tries<3000){tries++;const x=180+rnd()*660,y=180+rnd()*460;const sc=scaleAround([[x,y]],510,410,1/.92)[0];
     if(!inIsl(sc[0],sc[1])||nearLine(x,y)||avoid.some(a=>Math.hypot(a[0]-x,a[1]-y)<a[2]))continue;const r=rnd();B.push({x,y,h:r>.38?house():r>.12?tree():palm(),k:.9+rnd()*.3});cnt++}
   [[90,250,50],[930,300,50],[880,560,30],[150,700,50],[700,725,30],[620,80,40],[160,40,40],[380,130,25],[960,700,30],[60,500,40],[-40,380,60],[1040,460,60],[520,730,40]].forEach(c=>{for(let i=0;i<7;i++)B.push({x:c[0]+(rnd()-.5)*c[2]*2,y:c[1]+(rnd()-.5)*c[2],h:rnd()>.25?tree():palm(),k:1+rnd()*.5})});
@@ -52,10 +54,10 @@ export function drawMap(){
   // live skeleton
   const liveTop=`<g id="flows"><path class="flow" d="${pathP(ISL,true)}"/><path class="flow" d="${pathP(W)}"/><path class="flow" d="${pathP(S)}"/></g><g id="ground"></g><g id="routes"></g><g id="boats"></g><g id="labels"></g><g id="bbs"></g><g id="tokens"></g>`;
   map.innerHTML=`<rect width="1000" height="700" fill="#e1d4b3"/><g id="art"></g>`+liveTop;
-  const L=[[300,300,'พระราชวังหลวง',22],[300,432,'วัดพระศรีสรรเพชญ์',18],[330,66,'วัดภูเขาทอง',14],[520,342,'ตลาดป่าตะกั่ว',22],[440,666,'ประตูไชย',14],[792,674,'ท่าสำเภา',16]];
-  document.getElementById('labels').innerHTML=L.map(([x,y,t,o]:any)=>{const q=pj(x,y);return `<text x="${f1(q[0])}" y="${f1(q[1]+o*q[2])}" text-anchor="middle" style="font-size:${f1(13*q[2]+2)}px;fill:#3a2819;paint-order:stroke;stroke:rgba(236,226,200,.85);stroke-width:3px">${t}</text>`}).join('')+
-   [[95,210,'แม่น้ำเจ้าพระยา'],[905,210,'แม่น้ำป่าสัก'],[620,700,'แม่น้ำ'],[606,470,'คลองประตูข้าวเปลือก'],[300,592,'คลองในไก่'],[530,252,'คลองท่อ']].map(([x,y,t]:any)=>{const q=pj(x,y);return `<text x="${f1(q[0])}" y="${f1(q[1])}" text-anchor="middle" style="font-size:${f1(12*q[2]+1)}px;fill:#2f504a;font-style:italic;paint-order:stroke;stroke:rgba(225,215,185,.8);stroke-width:2.5px">${t}</text>`}).join('')+
-   `<g transform="translate(28 30)"><rect width="250" height="40" fill="#9a4630" stroke="#5f2c1e" stroke-width="2"/><rect x="4" y="4" width="242" height="32" fill="none" stroke="#efe0bd" stroke-dasharray="3 3"/><text x="125" y="27" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:20px;fill:#f1e3c4">แผนที่พระนครศรีอยุธยา</text></g>`;
-  const bg=document.getElementById('boats');[0,.34,.7].forEach((o,i)=>{const e=document.createElementNS(NS,'g');e.innerHTML=boatG;bg.appendChild(e);boatsAmb.push({e,o,v:.005+i*.002})});
-  bake(1000,700,s,agePost(1000,700,10),2.4,url=>{const a=document.getElementById('art');a.innerHTML=url?`<image class="paintfade" href="${url}" width="1000" height="700" preserveAspectRatio="none"/>`:s;document.getElementById('loading').hidden=true});
+  const P=STR.map.places,W_=STR.map.waters;const L:[number,number,string,number][]=[[300,300,P.palace,22],[300,432,P.wat,18],[330,66,P.phuKhao,14],[520,342,P.market,22],[440,666,P.gate,14],[792,674,P.wharf,16]];
+  (document.getElementById('labels') as HTMLElement).innerHTML=L.map(([x,y,t,o])=>{const q=pj(x,y);return `<text x="${f1(q[0])}" y="${f1(q[1]+o*q[2])}" text-anchor="middle" style="font-size:${f1(13*q[2]+2)}px;fill:#3a2819;paint-order:stroke;stroke:rgba(236,226,200,.85);stroke-width:3px">${t}</text>`}).join('')+
+   ([[95,210,W_.chaoPhraya],[905,210,W_.pasak],[620,700,W_.river],[606,470,W_.khaoPluek],[300,592,W_.naiKai],[530,252,W_.tho]] as [number,number,string][]).map(([x,y,t])=>{const q=pj(x,y);return `<text x="${f1(q[0])}" y="${f1(q[1])}" text-anchor="middle" style="font-size:${f1(12*q[2]+1)}px;fill:#2f504a;font-style:italic;paint-order:stroke;stroke:rgba(225,215,185,.8);stroke-width:2.5px">${t}</text>`}).join('')+
+   `<g transform="translate(28 30)"><rect width="250" height="40" fill="#9a4630" stroke="#5f2c1e" stroke-width="2"/><rect x="4" y="4" width="242" height="32" fill="none" stroke="#efe0bd" stroke-dasharray="3 3"/><text x="125" y="27" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:20px;fill:#f1e3c4">${STR.map.title}</text></g>`;
+  const bg=document.getElementById('boats') as HTMLElement;[0,.34,.7].forEach((o,i)=>{const e=document.createElementNS(NS,'g');e.innerHTML=boatG;bg.appendChild(e);boatsAmb.push({e,o,v:.005+i*.002})});
+  bake(1000,700,s,agePost(1000,700,10),2.4,(url:string|null)=>{const a=document.getElementById('art') as HTMLElement;a.innerHTML=url?`<image class="paintfade" href="${url}" width="1000" height="700" preserveAspectRatio="none"/>`:s;(document.getElementById('loading') as HTMLElement).hidden=true});
 }
