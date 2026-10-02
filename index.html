@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayudha Site Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@400;700&family=Charm:wght@400;700&family=Taviraj:wght@400;500;600&display=swap">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="gdefs"></defs>
+  <path id="islandSrc" d="M 160 340 C 170 220, 320 160, 520 165 C 700 168, 850 210, 860 340 C 870 470, 820 600, 640 640 C 480 670, 280 650, 200 560 C 150 500, 150 420, 160 340 Z"/>
+  <path id="rvW" d="M 40 0 C 90 120, 150 240, 160 340"/>
+  <path id="rvN" d="M 470 0 C 480 70, 500 120, 520 165"/>
+  <path id="rvE" d="M 990 60 C 920 130, 870 200, 830 240"/>
+  <path id="rvS" d="M 650 640 C 640 690, 620 730, 600 760"/>
+</svg>
+
+<div class="wrap">
+  <header class="frame">
+    <svg id="heroSvg" viewBox="0 0 1000 380" role="img" aria-label="ภาพจิตรกรรมพระนครศรีอยุธยาริมน้ำ"></svg>
+    <div class="hero-t">
+      <div class="eyebrow">สมุดข่อยกรมช่างหลวง · ว่าด้วยการหาทำเลโรงหมอ</div>
+      <h1>ศึกษาทำเลโรงหมอหลวง กรุงศรีอยุธยา</h1>
+      <p>ขุนช่างกับหมอหลวงปรึกษากันสร้างโรงหมอใหม่ ออกสำรวจสี่ทำเล ดูหุ่นจำลอง ข้อห้ามที่ดิน ทิศมงคล แลทางสัญจรทั้งบกทั้งน้ำ</p>
+      <span class="scrollhint">ฉบับนำร่องแห่ง เทสต์ฟิต แดชบอร์ด · เลื่อนลงอ่าน <i>▾</i></span>
+    </div>
+  </header>
+
+  <div class="band" aria-hidden="true"></div>
+
+  <section aria-labelledby="c1">
+    <div class="chap"><span class="no">ตอนที่ ๑</span><h2 id="c1">ปรารภสร้างโรงหมอ</h2><p>ณ ศาลาโรงหมอเก่าข้างวัด คนเจ็บนอนล้นถึงชายคา</p></div>
+    <div class="frame"><svg id="scene" viewBox="0 0 900 480" role="img" aria-label="ภาพจิตรกรรม ขุนช่างกับหมอหลวงปรึกษาสร้างโรงหมอ"></svg></div>
+    <div class="duo" id="lines"></div>
+  </section>
+
+  <div class="band" aria-hidden="true"></div>
+
+  <section aria-labelledby="c2" id="mapsec">
+    <div class="chap"><span class="no">ตอนที่ ๒</span><h2 id="c2">ออกสำรวจทำเลทั่วพระนคร</h2><p>กดธงชาดเลือกทำเล แลสลับดูข้อห้ามกับทางสัญจร</p></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-mode="site" aria-selected="true"><span class="k">๑</span><span><b>ทำเลที่ตั้ง</b><small>ดูหุ่นจำลองโรงหมอผุดขึ้น</small></span></button>
+      <button class="tab" role="tab" id="t-reg" data-mode="reg" aria-selected="false"><span class="k">๒</span><span><b>ข้อห้ามแลทิศ</b><small>ระยะร่น เพดานสูง ทิศมงคล</small></span></button>
+      <button class="tab" role="tab" id="t-tr" data-mode="tr" aria-selected="false"><span class="k">๓</span><span><b>ทางสัญจร</b><small>เดินเท้า ม้าเร็ว ช้าง เรือ</small></span></button>
+    </div>
+    <div class="frame mapframe" id="mapbox">
+      <svg id="map" viewBox="0 0 1000 700" role="img" aria-label="แผนที่มุมสูงเกาะเมืองอยุธยา พร้อมทำเลสี่แห่ง"></svg>
+      <div class="loading" id="loading">ช่างกำลังลงสีแผนที่…</div>
+      <div class="maphint" id="hint"></div>
+      <button class="mapbtn" id="zoomOut" hidden>ถอยดูทั้งพระนคร</button>
+      <div class="leaf cap" id="cap" hidden></div>
+    </div>
+    <div class="pgrid">
+      <div class="leaf narr wide"><div class="pt" id="nPt"></div><div><div class="who" id="nWho"></div><div class="say" id="say"></div></div></div>
+      <div id="panel" style="display:contents"></div>
+    </div>
+  </section>
+
+  <div class="band" aria-hidden="true"></div>
+
+  <section aria-labelledby="c3">
+    <div class="chap"><span class="no">ตอนที่ ๓</span><h2 id="c3">บทสรุปแห่งการสำรวจ</h2><p>ขุนช่างกับหมอหลวงจดความลงใบลานไว้เป็นหลักฐาน</p></div>
+    <div class="ending">
+      <div class="leaf rv"><h3>บัญชีเทียบสี่ทำเล</h3><p class="dim">กดแถวเพื่อกลับไปดูทำเลนั้นบนแผนที่</p><div class="scroll"><table class="tbl cmp" id="cmp"></table></div></div>
+      <div class="duo" id="opin" style="margin-top:0"></div>
+      <div class="leaf rv"><h3>มติที่ประชุม</h3>
+        <p>ตั้ง <b>โรงหมอใหญ่ ณ ทำเลหนึ่ง กลางเกาะ</b> เป็นหลัก แยกทางช้างเสบียงออกริมคลอง</p>
+        <p>ตั้ง <b>เรือนรับคนไข้ต่างแดน ณ ทำเลสอง ริมน้ำ</b> เป็นสาขา หันประตูรับท่าน้ำทางบูรพา</p>
+        <p><b>จองทำเลสาม</b> ไว้ขยายภายหน้าเมื่อได้ขยายทางถึงห้าวา · <b>ทำเลสี่</b> เป็นเพียงเรือนหมอหลวงเฉพาะพระองค์</p>
+        <h4>ฉบับเต็มแห่ง เทสต์ฟิต แดชบอร์ด จักมีดังนี้</h4>
+        <ul class="soon"><li>ทดลองวางผังสี่ทางเลือก ทีละชั้น</li><li>คำนวณพื้นที่ทุกแผนก</li><li>ซ้อนชั้นแผนก โอพีดี ไอพีดี ห้องผ่าตัด ไอซียู</li><li>เทียบผลตอบแทนทุนรอนรายทางเลือก</li></ul>
+      </div>
+      <div class="leaf rv colophon"><div class="seal">จบ</div>
+        <p>สมุดใบลานผูกนี้ จารเสร็จ ณ วันพฤหัสบดี จุลศักราช ๑๓๘๘ ปีมะเมีย อัฐศก โดยกรมช่างหลวง ขอให้ผู้อ่านเจริญด้วยอายุ วรรณะ สุขะ พละ เทอญ</p>
+      </div>
+    </div>
+    <p class="note">หมายเหตุ (ภาษาปัจจุบัน): แผนที่ ตัวเลข และข้อกำหนดทั้งหมดเป็นข้อมูลสาธิต ระยะร่นและข้อจำกัดอิงหลักการกฎหมายควบคุมอาคารแบบย่อ ทิศมงคลอิงตำราปลูกเรือนโบราณ ไม่ใช่ค่าตรวจสอบจริงของโครงการใด · ๑ วา = ๒ เมตร · ๑ ศอก ≈ ครึ่งเมตร · ๑ เส้น = ๒๐ วา · ๑ ไร่ = ๔๐๐ ตารางวา · ๑ บาท (เพลา) = ๖ นาที</p>
+  </section>
+</div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
