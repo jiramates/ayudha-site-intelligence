@@ -1,5 +1,7 @@
 import { z } from 'zod'
 import { DIR_NAMES, S } from './strings.th'
+import { ARCHETYPE_NAMES } from './archetypes'
+import { checkProse } from './prose'
 
 const xy = z.tuple([z.number(), z.number()])
 const text = z.string().min(1)
@@ -14,7 +16,7 @@ const water = z.object({ name: text, setback_m: z.number().min(0), side })
 export const siteSchema = z.object({
   id: z.string().regex(/^[A-Za-z0-9_-]+$/),
   n: z.number().int().min(1).max(9),
-  name: text, pos: xy, parcelPx: xy,
+  name: text, short: text, pos: xy, parcelPx: xy,
   desc: text, form: text, say: text,
   pros: z.array(text), cons: z.array(text), verdict: text,
   score: z.object({ loc: score, reg: score, acc: score, grow: score }),
@@ -27,7 +29,7 @@ export const siteSchema = z.object({
     flags: z.array(z.tuple([z.enum(['ok', 'warn', 'risk']), text])),
   }),
   astro: z.object({ front: z.enum(DIR_NAMES), good: z.boolean(), text, fix: text }),
-  massing: z.enum(['tower-podium', 'riverside-hall', 'pavilion-campus', 'low-courtyard']),
+  massing: z.enum(ARCHETYPE_NAMES),
   routes: z.object({ walk: route, horse: route, ele: route, boat: route }),
   transportNote: text,
 })
@@ -41,8 +43,14 @@ const line = z.object({ speaker: z.enum(['khun', 'mor']), text })
 
 export const studySchema = z.object({
   meta: z.object({
-    title: text, eraDate: text, ageLevel: z.number().min(0).max(3),
+    title: text, era: z.object({ label: text, year: z.number().int().positive() }), ageLevel: z.number().min(0).max(3),
     bedDivisor: z.number().positive(), planUnit_m: z.number().positive(), minPerBaht: z.number().positive(),
+    /** regulation constants that prose and zones cite, in SI units */
+    regs: z.object({
+      palaceHeightCap_m: z.number().positive(), palaceRadiusSen: z.number().positive(),
+      canalWidthLimit_m: z.number().positive(), canalSetbackSmall_m: z.number().positive(), canalSetback_m: z.number().positive(), riverSetback_m: z.number().positive(),
+      minRoad_m: z.number().positive(), roadSetback_m: z.number().positive(),
+    }),
   }),
   cast: z.object({ khun: person, mor: person, phon: person }),
   story: z.array(line).min(1).max(2),
@@ -61,6 +69,7 @@ export const studySchema = z.object({
   dup(d.sites.map(s => s.id), 'sites')
   dup(d.sites.map(s => s.n), 'sites')
   dup(d.zones.map(z => z.id), 'zones')
+  checkProse(d).forEach(i => ctx.addIssue({ code: 'custom', path: i.path, message: i.message }))
 })
 
 export type Study = z.infer<typeof studySchema>

@@ -19,7 +19,11 @@ export const DIR_GOOD: readonly DirName[] = [DIR.east, DIR.south]
 export const DIR_BAD: DirName = DIR.west
 
 export const DIGITS = '๐๑๒๓๔๕๖๗๘๙'
-export const NUM_WORDS = ['', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า']
+/** Thai number words, used by thaiWord() in format.ts. */
+export const NUM = {
+  digits: ['ศูนย์', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า'],
+  ten: 'สิบ', twenty: 'ยี่สิบ', hundred: 'ร้อย', one: 'เอ็ด',
+}
 
 export const UNIT = {
   wa: 'วา', waAndHalf: 'วาครึ่ง', halfWa: 'ครึ่งวา', rai: 'ไร่', ngan: 'งาน', sqWa: 'ตารางวา',
@@ -144,6 +148,8 @@ export const S = {
     title: 'ใบลานชำรุด อ่านข้อมูลมิได้',
     lead: 'ไฟล์ข้อมูล study.json ผิดแบบ กรุณาแก้ตามรายการนี้แล้วเปิดใหม่',
     duplicate: 'ซ้ำกัน',
+    unknownToken: (path: string) => `ไม่พบตัวแปร {${path}} ในข้อมูล`,
+    badFormat: (body: string) => `รูปแบบตัวแปร {${body}} ใช้มิได้`,
     fetchFail: 'เปิดไฟล์ข้อมูลมิได้',
     notJson: 'ไฟล์ข้อมูลมิใช่ JSON ที่ถูกต้อง',
   },

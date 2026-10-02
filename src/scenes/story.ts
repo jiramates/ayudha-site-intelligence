@@ -6,7 +6,7 @@ import { cloud, rocks, dabs, tufts, tree, palm, bird } from '../render/primitive
 import { hallE, roofE } from '../render/primitives/buildings'
 import { figure, portrait, FIG } from '../render/primitives/figures'
 import { VEH } from '../render/primitives/vehicles'
-import { PEOPLE, STORY } from '../data/content'
+import { PEOPLE, STORY, E, P } from '../data/content'
 import type { SpeakerId } from '../data/schema'
 
 export function drawScene(){
@@ -27,7 +27,7 @@ export function drawScene(){
   const live=()=>{let L='';([['khun',440,412,false],['mor',690,412,true]] as [SpeakerId,number,number,boolean][]).forEach(([k,x,y,flip])=>{L+=`<g transform="translate(${x} ${y}) scale(${flip?-1:1} 1)"><g class="fig" id="f-${k}"><g class="halo" transform="translate(0 -196)"><circle r="24" fill="#f3e4b0" opacity=".55"/><circle class="r" r="31" fill="none" stroke="#c09246" stroke-width="2" stroke-dasharray="3 5"/></g><g class="body" filter="url(#lite)">${figure(FIG[k])}</g></g></g>`});
     L+=`<path class="steam" d="M276 390 q-4 -6 0 -12 q4 -6 0 -12" stroke="#b8a888" fill="none" stroke-width="1.6"/><g class="bird">${bird(80,58)}${bird(102,70)}${bird(120,52)}</g>`;return L};
   bake(900,480,s,agePost(900,480,8),2,(url:string|null)=>{G.innerHTML=(url?`<image class="paintfade" href="${url}" width="900" height="480" preserveAspectRatio="none"/>`:`<g>${s}</g>`)+live();setSpeaker(curSpk)});
-  (document.getElementById('lines') as HTMLElement).innerHTML=STORY.map(({speaker:k,text:t},i)=>`<div class="leaf line" data-k="${k}" data-i="${i}"><div class="pt">${portrait(k)}</div><div><div class="who">${PEOPLE[k].name} <small>· ${PEOPLE[k].role}</small></div><p>${t}</p></div></div>`).join('');
+  (document.getElementById('lines') as HTMLElement).innerHTML=STORY.map(({speaker:k,text:t},i)=>`<div class="leaf line" data-k="${k}" data-i="${i}"><div class="pt">${portrait(k)}</div><div><div class="who">${E(PEOPLE[k].name)} <small>· ${E(PEOPLE[k].role)}</small></div><p>${P(t)}</p></div></div>`).join('');
   document.querySelectorAll<HTMLElement>('.line').forEach(l=>l.addEventListener('click',()=>{curSpk=+(l.dataset.i??0);setSpeaker(curSpk)}));
 }
 export let curSpk=0;

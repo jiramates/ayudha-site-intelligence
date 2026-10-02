@@ -1,5 +1,6 @@
 
 
+const stainGradient=(op:number)=>`<radialGradient id="stainG"><stop offset="0" stop-color="#6b4a24" stop-opacity="${op}"/><stop offset="1" stop-color="#6b4a24" stop-opacity="0"/></radialGradient>`
 export const DEFS=`
 <pattern id="tileP" width="7" height="5" patternUnits="userSpaceOnUse"><path d="M0 5 Q3.5 0 7 5" fill="none" stroke="#5a2618" stroke-width=".8" opacity=".6"/></pattern>
 <pattern id="thatch" width="4" height="9" patternUnits="userSpaceOnUse"><path d="M1 0 L2 9 M3 0 L3.6 9" stroke="#7a5a30" stroke-width=".6" opacity=".7"/></pattern>
@@ -15,10 +16,13 @@ export const DEFS=`
 <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c7b892"/><stop offset=".45" stop-color="#ddd1b0"/><stop offset="1" stop-color="#e6dcc3"/></linearGradient>
 <linearGradient id="prangG" x1="0" x2="1"><stop offset="0" stop-color="#dba57a"/><stop offset=".5" stop-color="#c98b5f"/><stop offset=".52" stop-color="#a86b45"/><stop offset="1" stop-color="#8f5838"/></linearGradient>
 <linearGradient id="chediG" x1="0" x2="1"><stop offset="0" stop-color="#f4ecd8"/><stop offset=".5" stop-color="#e6dcc3"/><stop offset=".52" stop-color="#c9bc9e"/><stop offset="1" stop-color="#b3a585"/></linearGradient>
-<radialGradient id="stainG"><stop offset="0" stop-color="#6b4a24" stop-opacity=".22"/><stop offset="1" stop-color="#6b4a24" stop-opacity="0"/></radialGradient>
+${stainGradient(.22)}
 <radialGradient id="hazeG"><stop offset="0" stop-color="#f6eedb" stop-opacity=".55"/><stop offset="1" stop-color="#f6eedb" stop-opacity="0"/></radialGradient>
 <radialGradient id="vigG" cx="50%" cy="50%" r="72%"><stop offset="62%" stop-color="#4a2e12" stop-opacity="0"/><stop offset="100%" stop-color="#4a2e12" stop-opacity=".42"/></radialGradient>
 <linearGradient id="dampG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3e1e" stop-opacity="0"/><stop offset="1" stop-color="#5a3e1e" stop-opacity=".28"/></linearGradient>`;
 export const LITE=`<filter id="lite" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="4" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d"/><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" seed="2" result="g"/><feColorMatrix in="g" values="0.3 0.3 0.3 0 0.58  0.3 0.3 0.3 0 0.58  0.3 0.3 0.3 0 0.56  0 0 0 0 1" result="gg"/><feBlend in="d" in2="gg" mode="multiply" result="p"/><feComposite in="p" in2="SourceGraphic" operator="in"/></filter>`;
+
+/** DEFS with the stain strength set from AGE_LEVEL (used only by the bake). */
+export const bakeDefs=(stainOpacity:number)=>DEFS.replace(stainGradient(.22),stainGradient(stainOpacity))
 
 export function installDefs(){document.getElementById('gdefs')!.innerHTML=DEFS+LITE}

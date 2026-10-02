@@ -1,10 +1,6 @@
 import { S } from '../data/strings.th'
-import { STUDY } from '../data/content'
+import { STUDY, E, P } from '../data/content'
 import { th, numWord } from '../data/units'
-
-/** Minimal markup for data text: **bold** only; everything else is escaped. */
-export const md = (s: string): string =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
 
 const lookup = (path: string): string => {
   const v = path.split('.').reduce<unknown>((o, k) => (o as Record<string, unknown>)[k], S)
@@ -29,12 +25,12 @@ export function fillStudy() {
   el('heroSvg').setAttribute('aria-label', S.hero.aria)
   el('map').setAttribute('aria-label', S.map.aria(count))
   el('cmpTitle').textContent = S.cmp.title(count)
-  el('resolution').innerHTML = STUDY.resolution.map(p => `<p>${md(p)}</p>`).join('')
-  el('comingSoon').innerHTML = STUDY.comingSoon.map(t => `<li>${md(t)}</li>`).join('')
-  el('colophon').textContent = S.end.colophon(STUDY.meta.eraDate)
+  el('resolution').innerHTML = STUDY.resolution.map(p => `<p>${P(p)}</p>`).join('')
+  el('comingSoon').innerHTML = STUDY.comingSoon.map(t => `<li>${P(t)}</li>`).join('')
+  el('colophon').textContent = S.end.colophon(`${STUDY.meta.era.label} ${th(STUDY.meta.era.year)}`)
 }
 
 export function showLoadError(issues: string[]) {
   const wrap = document.querySelector('.wrap') as HTMLElement
-  wrap.innerHTML = `<div class="leaf" role="alert"><h3>${S.error.title}</h3><p>${S.error.lead}</p><ul>${issues.map(i => `<li>${md(i)}</li>`).join('')}</ul></div>`
+  wrap.innerHTML = `<div class="leaf" role="alert"><h3>${S.error.title}</h3><p>${S.error.lead}</p><ul>${issues.map(i => `<li>${E(i)}</li>`).join('')}</ul></div>`
 }
