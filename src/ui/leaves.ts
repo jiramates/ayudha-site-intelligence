@@ -57,6 +57,6 @@ export function panelTr(){const s=curSite();const H=S.tr.head;
     <h4>${S.tr.courierTitle}</h4><p>“${P(s.transportNote,s)}”</p></div>
    <div class="leaf"><h3>${S.tr.timeTitle}</h3><div class="scroll"><table class="tbl" style="min-width:330px"><tr><th>${H.mode}</th><th>${H.dest}</th><th class="n">${H.dist}</th><th class="n">${H.time}</th></tr>${rows}</table></div><p class="dim" style="margin-top:6px">${S.tr.speeds(speeds)}</p></div>`}
 export function renderPanel(){panel.innerHTML=st.mode==='site'?panelSite():st.mode==='reg'?panelReg():panelTr();
-  panel.querySelectorAll<HTMLElement>('[data-pick]').forEach(b=>b.addEventListener('click',()=>{st.site=b.dataset.pick??null;render('site');document.getElementById('mapbox')?.scrollIntoView({behavior:RM?'auto':'smooth',block:'center'})}));
+  panel.querySelectorAll<HTMLElement>('[data-pick]').forEach(b=>b.addEventListener('click',()=>{st.site=b.dataset.pick??null;render('site')}));
   const zx=document.getElementById('zx');if(zx)zx.onclick=()=>{st.zone=null;render('zoneclose')};
   panel.querySelectorAll<HTMLElement>('.mode').forEach(b=>b.addEventListener('click',()=>{const m=b.dataset.m as string;st.tm[m]=!st.tm[m];drawDynamic();renderPanel()}))}

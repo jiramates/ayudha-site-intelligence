@@ -13,6 +13,7 @@ const el = (id: string) => document.getElementById(id) as HTMLElement
 export function fillStatic() {
   document.querySelectorAll<HTMLElement>('[data-t]').forEach(e => { e.textContent = lookup(e.dataset.t as string) })
   document.querySelectorAll<HTMLElement>('[data-aria]').forEach(e => e.setAttribute('aria-label', lookup(e.dataset.aria as string)))
+  document.querySelectorAll<HTMLElement>('.dot').forEach(e => e.setAttribute('aria-label', S.pages.dot(th(Number(e.dataset.page) + 1))))
   document.querySelectorAll<HTMLElement>('[data-num]').forEach(e => { e.textContent = th(e.dataset.num as string) })
   document.querySelectorAll<HTMLElement>('[data-chapter]').forEach(e => { e.textContent = S.chapter(Number(e.dataset.chapter)).replace(/\d+/, d => th(d)) })
 }

@@ -6,6 +6,8 @@ import { renderPanel } from '../ui/leaves'
 import { renderCap } from '../ui/caption'
 import { renderCompare } from '../scenes/summary'
 import { speak } from '../ui/narrator'
+import { sheetFor } from '../ui/sheet'
+import { RM } from '../render/util'
 import { S } from '../data/strings.th'
 import type { Mode } from './store'
 import { parseHash, formatHash } from './url'
@@ -21,7 +23,8 @@ function applyUrl(initial:boolean){
   const v=parseHash(location.hash,Object.keys(SITES))??{mode:'site' as Mode,site:null};
   if(initial?v.site===null:(v.mode===st.mode&&v.site===st.site))return;
   fromUrl=true;
-  try{st.mode=v.mode;st.site=v.site;st.zone=null;render(initial?'restore':v.mode!=='site'?'tab':v.site?'site':'out')}
+  try{st.mode=v.mode;st.site=v.site;st.zone=null;render(initial?'restore':v.mode!=='site'?'tab':v.site?'site':'out')
+    if(v.site)document.getElementById('mapsec')?.scrollIntoView({behavior:initial||RM?'instant':'smooth',block:'start'})}
   finally{fromUrl=false}
 }
 export function startUrlSync(){
@@ -40,6 +43,7 @@ setRenderer((ev?:string)=>{
   const zoomed=st.mode==='site'&&!!st.site;zoomBtn.hidden=!zoomed;
   if(ev)zoomTo(zoomed?siteBox(st.site as string):[0,0,1000,700],ev==='zone'||ev==='zoneclose'||ev==='restore'?0:1000);
   if(ev&&!fromUrl&&ev!=='restore')syncUrl();
+  if(ev)sheetFor(ev,!!st.site);
   hint.textContent=st.mode==='site'?(st.site?S.map.hint.siteOn:S.map.hint.siteNone):S.map.hint[st.mode];
   if(!ev||ev==='zoneclose')return;
   if(st.mode==='site')speak('khun',st.site?PT(curSite().say,curSite()):S.narrator.siteNone);

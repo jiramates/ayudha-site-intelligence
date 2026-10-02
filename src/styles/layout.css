@@ -1,0 +1,169 @@
+/* ===== One screen per section =====
+   Every section is exactly one screen tall (svh, so phone browser bars are handled) and snaps into place
+   (proximity: the reader is never trapped). Text sizes follow the smaller screen side with clamp(). */
+
+:root{
+  --pad:clamp(8px,1.5vmin,20px);
+  --gap:clamp(6px,1.2vmin,14px);
+  --topH:clamp(38px,7.2svh,66px);          /* chapter title + tabs row */
+  --pt:clamp(36px,6vmin,58px);              /* round portraits */
+  --sideMin:clamp(250px,26vw,340px);
+}
+html{scroll-snap-type:y proximity;scroll-behavior:smooth;overflow-x:clip}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;overflow-x:clip}
+.wrap{margin:0;padding:0;max-width:none}
+.screen{box-sizing:border-box;height:100vh;height:100svh;padding:var(--pad);display:flex;flex-direction:column;gap:var(--gap);scroll-snap-align:start;scroll-snap-stop:normal;position:relative}
+.screen{background-image:radial-gradient(ellipse 46vw 38vh at 14% 18%,rgba(140,100,52,.10),transparent 70%),radial-gradient(ellipse 40vw 34vh at 82% 72%,rgba(140,100,52,.09),transparent 70%),radial-gradient(ellipse 30vw 26vh at 60% 10%,rgba(255,246,222,.35),transparent 70%)}
+.screen:nth-child(even){background-image:radial-gradient(ellipse 44vw 36vh at 84% 22%,rgba(140,100,52,.10),transparent 70%),radial-gradient(ellipse 42vw 36vh at 18% 80%,rgba(140,100,52,.09),transparent 70%),radial-gradient(ellipse 32vw 26vh at 40% 50%,rgba(255,246,222,.3),transparent 70%)}
+.top{flex:none;display:flex;align-items:center;justify-content:space-between;gap:var(--gap);min-height:var(--topH)}
+.frame{box-sizing:border-box}
+
+/* leaves scale with the screen */
+.leaf{font-size:clamp(13.5px,1.95vmin,18.5px);line-height:1.55;padding:clamp(8px,1.5vmin,16px) clamp(30px,4.6vmin,56px)}
+.leaf::before{left:clamp(9px,2vmin,24px)}.leaf::after{right:clamp(9px,2vmin,24px)}
+.leaf h3{font-size:clamp(16px,2.6vmin,24px)}
+.leaf h4{font-size:clamp(14px,2.1vmin,19px)}
+.leaf .dim{font-size:clamp(12.5px,1.8vmin,16px)}
+.stat .v{font-size:clamp(15px,2.4vmin,22px)}
+.stat .l{font-size:clamp(12px,1.7vmin,15px)}
+.who{font-size:clamp(14px,2vmin,17px)}.who small{font-size:clamp(12px,1.7vmin,14.5px)}
+.pt{width:var(--pt);height:var(--pt);flex:none}
+.narr,.line,.narr2{grid-template-columns:var(--pt) minmax(0,1fr)}
+.narr2{display:grid;gap:12px;align-items:center}
+.tbl{font-size:clamp(12.5px,2.4vmin,26px)}
+.tbl td,.tbl th{padding:clamp(4px,1.4vmin,20px) clamp(5px,1vmin,12px)}
+.tag{font-size:clamp(11.5px,1.7vmin,18px)}
+.bar{grid-template-columns:clamp(84px,14vmin,120px) minmax(0,1fr) 40px;font-size:clamp(13px,1.85vmin,16px)}
+.mode b{font-size:clamp(14px,2vmin,17px)}.mode small{font-size:clamp(12px,1.7vmin,14px)}
+.sitepick button{font-size:clamp(14px,2vmin,17px)}
+
+/* chapter heading */
+.chap{margin:0;flex-wrap:nowrap;gap:clamp(8px,1.4vmin,14px);min-width:0}
+.chap .no{font-size:clamp(14px,2.4vmin,20px);padding:2px clamp(8px,1.6vmin,16px) 3px;white-space:nowrap}
+.chap h2{font-size:clamp(18px,3.6vmin,36px);line-height:1.15}
+.chap p{flex-basis:auto;font-size:clamp(13px,2vmin,18px);display:none}
+
+/* ---------- hero ---------- */
+.hero .frame{flex:1;min-height:0;position:relative}
+.hero #heroSvg{position:absolute;inset:0;width:100%;height:100%}
+.hero-t{position:absolute;left:4%;top:7%;max-width:min(580px,56%)}
+.hero-t .eyebrow{font-size:clamp(13px,2.2vmin,19px)}
+h1{font-size:clamp(24px,min(5.2vw,9vh),64px);margin:2px 0 clamp(4px,1.2vh,10px)}
+.hero-t p{font-size:clamp(13px,2.5vh,22px)}
+.scrollhint{font-size:clamp(13px,2.1vh,17px);margin-top:clamp(6px,1.6vh,14px)}
+
+/* ---------- chapter 1: the scene is sized by height, the two lines sit beside it ---------- */
+.s1{--sceneH:calc(100svh - 2*var(--pad) - var(--topH) - var(--gap));--sceneW:calc((var(--sceneH) - 8px)*900/480 + 8px)}
+.story{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,var(--sceneW)) minmax(var(--sideMin),1fr);gap:var(--gap);align-items:center}
+.stagecell{min-width:0}
+.stagecell .frame svg{display:block;width:100%;height:auto}
+.duo{display:flex;flex-direction:column;gap:var(--gap);margin:0;justify-content:center;min-width:0}
+.line{display:grid;gap:clamp(8px,1.4vmin,12px)}
+
+/* ---------- chapter 2: tabs on top, the map sized by height, a side panel beside it ---------- */
+.tabs{display:flex;gap:clamp(4px,1vmin,8px);margin:0;flex:none}
+.tab{padding:clamp(4px,.9vmin,8px) clamp(8px,1.6vmin,14px);gap:clamp(6px,1.2vmin,12px)}
+.tab .k{font-size:clamp(16px,3vmin,26px)}
+.tab b{font-size:clamp(13px,2.1vmin,19px)}
+.tab small{font-size:clamp(11px,1.7vmin,14.5px)}
+.tab .ti{display:none;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+.s2{--mapH:calc(100svh - 2*var(--pad) - var(--topH) - var(--gap));--mapW:calc((var(--mapH) - 8px)*10/7 + 8px)}
+.mapgrid{flex:1;min-height:0;display:grid;gap:var(--gap);grid-template-columns:minmax(0,var(--mapW)) minmax(var(--sideMin),1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"map narr" "map side"}
+.mapcell{grid-area:map;min-width:0;min-height:0;align-self:start}
+.mapframe{width:100%;overflow:hidden}
+#map{display:block;width:100%;height:auto}
+#narr{grid-area:narr;align-self:start}
+.side{grid-area:side;min-height:0;display:flex;flex-direction:column}
+.sheet-handle{display:none}
+.sheet-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:2px 4px 2px 2px}
+#panel{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--gap)}
+#panel .wide{grid-column:auto}
+.say{min-height:1.55em}
+.maphint{font-size:clamp(12px,1.9vmin,16px);max-width:52%}
+.mapbtn{font-size:clamp(12px,1.9vmin,16px)}
+.cap{left:clamp(6px,1.4vmin,12px);bottom:clamp(6px,1.4vmin,12px);max-width:min(430px,62%);font-size:clamp(12.5px,1.9vmin,16.5px);padding:clamp(6px,1.2vmin,12px) clamp(28px,4.4vmin,46px)}
+.cap h3{font-size:clamp(15px,2.4vmin,21px)}
+
+/* ---------- chapter 3: pages inside one screen ---------- */
+.pagetabs{display:flex;gap:clamp(4px,1vmin,8px);flex-wrap:nowrap}
+.ptab{font-family:var(--f-leaf);font-size:clamp(13px,2.1vmin,18px);padding:clamp(3px,.8vmin,7px) clamp(10px,1.8vmin,18px);background-color:#e2d3ad;background-image:var(--tx-plaster);border:2px solid #8a5a3c;box-shadow:inset 0 0 0 2px rgba(255,246,222,.35),0 2px 0 #9b7a52;white-space:nowrap}
+.ptab[aria-selected="true"]{background-color:var(--red);border-color:#5f2c1e;color:#f4e6c8}
+.pager{flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--gap)}
+.pages{position:relative;flex:1;min-height:0;display:flex;gap:var(--gap);overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.pages::-webkit-scrollbar{display:none}
+.page{flex:0 0 100%;min-width:0;min-height:0;overflow-y:auto;scroll-snap-align:center;display:flex;flex-direction:column;justify-content:center;gap:var(--gap);padding:3px}
+.page>.leaf{flex:none}
+.page .duo{flex-direction:row;align-items:stretch}
+.page .duo>.leaf{flex:1 1 0}
+.cmp{min-width:max(100%,640px)}
+.cmp td:first-child,.cmp th:first-child{min-width:clamp(120px,18vmin,170px)}
+.colophon{max-width:min(720px,100%)}
+.note{font-size:clamp(11.5px,1.7vmin,13.5px);margin-top:0}
+.dots{display:none;justify-content:center;gap:12px}
+.dot{width:12px;height:12px;border-radius:50%;padding:0;border:2px solid var(--red);background:transparent}
+.dot[aria-selected="true"]{background:var(--red)}
+.soon{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+/* ---------- landscape phones / short screens ---------- */
+@media (max-height:520px){
+  :root{--topH:36px}
+  .tab small,.chap p{display:none}
+  .tab{padding:3px 10px}
+  .leaf{padding:6px 30px}
+  .cap{font-size:11.5px;line-height:1.3;max-width:54%;padding:5px 26px;bottom:6px;left:6px}
+  .cap h3{font-size:14px;margin:0}
+  .cap p{margin:0 0 2px}
+  .cap .linkbtn{font-size:12px;padding:0 9px}
+}
+
+/* ---------- portrait (phones, tablets held upright) ---------- */
+@media (orientation:portrait){
+  :root{--topH:auto}
+  .top{min-height:0}
+  .hero .frame{display:flex;flex-direction:column;justify-content:flex-start}
+  .hero #heroSvg{position:relative;inset:auto;width:100%;height:auto;aspect-ratio:1000/520;flex:none}
+  .hero-t{position:relative;left:0;top:0;max-width:none;padding:clamp(10px,3vw,24px);margin:auto 0;display:flex;flex-direction:column;align-items:flex-start}
+  h1{font-size:clamp(26px,8.4vw,52px)}
+  .hero-t p{font-size:clamp(14px,4vw,20px)}
+  .scrollhint{font-size:clamp(13px,3.6vw,16px)}
+
+  .s1 .top,.s2 .top,.s3 .top{flex-direction:column;align-items:stretch}
+  .chap h2{font-size:clamp(18px,5.4vw,30px)}
+  .story{grid-template-columns:minmax(0,1fr);align-content:center;align-items:start}
+  .duo{justify-content:flex-start}
+  .page .duo{flex-direction:column}
+
+  /* tabs: icons + short labels */
+  .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tab{flex-direction:column;gap:2px;padding:6px 4px;text-align:center;justify-content:center}
+  .tab .k,.tab small{display:none}
+  .tab .ti{display:block}
+  .tab b{font-size:clamp(12.5px,3.5vw,15px)}
+
+  /* map: whole map, full width; narrator under it; details in a bottom sheet */
+  .mapgrid{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;grid-template-areas:"map" "narr";align-content:start}
+  .mapcell{align-self:auto}
+  #narr{align-self:auto}
+  #narr .pt{--pt:clamp(30px,8vw,40px)}
+  #narr{min-height:calc(2 * 1.35 * clamp(13px,3.6vw,16px) + 22px)}
+  #narr .say{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:clamp(13px,3.6vw,16px);line-height:1.35;min-height:0}
+  .maphint{max-width:56%}
+  .cap{position:relative;left:0;bottom:0;max-width:none;margin:0 0 var(--gap)}
+
+  .side{position:fixed;left:0;right:0;bottom:0;z-index:30;height:calc(100vh - 56px);height:calc(100dvh - 56px);
+    transform:translateY(var(--sheet-y,calc(100% - 52px)));transition:transform .3s cubic-bezier(.2,.8,.2,1);
+    background-color:var(--plaster);background-image:var(--tx-plaster);border-top:3px solid #7e3d2a;border-radius:18px 18px 0 0;
+    box-shadow:0 -10px 28px rgba(60,38,16,.38),inset 0 2px 0 rgba(255,246,222,.5);visibility:hidden}
+  .side.live{visibility:visible}
+  .side.dragging{transition:none}
+  .sheet-handle{display:flex;flex:none;height:52px;align-items:center;justify-content:center;background:none;border:0;touch-action:none;cursor:grab}
+  .sheet-handle .grip{width:48px;height:5px;border-radius:3px;background:var(--red-dk);opacity:.7}
+  .sheet-body{padding:0 var(--pad) calc(var(--pad) + env(safe-area-inset-bottom))}
+
+  .pagetabs{display:none}
+  .dots{display:flex}
+  .soon{grid-template-columns:minmax(0,1fr)}
+}
+

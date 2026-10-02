@@ -16,68 +16,88 @@
   <path id="rvS" d="M 650 640 C 640 690, 620 730, 600 760"/>
 </svg>
 
-<div class="wrap">
-  <header class="frame">
-    <svg id="heroSvg" viewBox="0 0 1000 380" role="img" data-aria="hero.aria"></svg>
-    <div class="hero-t">
-      <div class="eyebrow" data-t="hero.eyebrow"></div>
-      <h1 id="heroTitle"></h1>
-      <p id="heroLead"></p>
-      <span class="scrollhint"><span data-t="hero.scroll"></span> <i>▾</i></span>
-    </div>
-  </header>
-
-  <div class="band" aria-hidden="true"></div>
-
-  <section aria-labelledby="c1">
-    <div class="chap"><span class="no" data-chapter="1"></span><h2 id="c1" data-t="ch1.title"></h2><p data-t="ch1.sub"></p></div>
-    <div class="frame"><svg id="scene" viewBox="0 0 900 480" role="img" data-aria="ch1.aria"></svg></div>
-    <div class="duo" id="lines"></div>
-  </section>
-
-  <div class="band" aria-hidden="true"></div>
-
-  <section aria-labelledby="c2" id="mapsec">
-    <div class="chap"><span class="no" data-chapter="2"></span><h2 id="c2" data-t="ch2.title"></h2><p data-t="ch2.sub"></p></div>
-    <div class="tabs" role="tablist">
-      <button class="tab" role="tab" data-mode="site" aria-selected="true"><span class="k" data-num="1"></span><span><b data-t="tabs.site.name"></b><small data-t="tabs.site.sub"></small></span></button>
-      <button class="tab" role="tab" id="t-reg" data-mode="reg" aria-selected="false"><span class="k" data-num="2"></span><span><b data-t="tabs.reg.name"></b><small data-t="tabs.reg.sub"></small></span></button>
-      <button class="tab" role="tab" id="t-tr" data-mode="tr" aria-selected="false"><span class="k" data-num="3"></span><span><b data-t="tabs.tr.name"></b><small data-t="tabs.tr.sub"></small></span></button>
-    </div>
-    <div class="frame mapframe" id="mapbox">
-      <svg id="map" viewBox="0 0 1000 700" role="img"></svg>
-      <div class="loading" id="loading" data-t="map.loading"></div>
-      <div class="maphint" id="hint"></div>
-      <button class="mapbtn" id="zoomOut" data-t="map.zoomOut" hidden></button>
-      <button class="mapbtn save" id="saveMap" type="button" data-t="map.save"></button>
-      <span class="sr-only" id="mapStatus" role="status" aria-live="polite"></span>
-      <div class="leaf cap" id="cap" hidden></div>
-    </div>
-    <div class="pgrid">
-      <div class="leaf narr wide"><div class="pt" id="nPt"></div><div><div class="who" id="nWho"></div><div class="say" id="say"></div></div></div>
-      <div id="panel" style="display:contents"></div>
-    </div>
-  </section>
-
-  <div class="band" aria-hidden="true"></div>
-
-  <section aria-labelledby="c3">
-    <div class="chap"><span class="no" data-chapter="3"></span><h2 id="c3" data-t="ch3.title"></h2><p data-t="ch3.sub"></p></div>
-    <div class="ending">
-      <div class="leaf rv"><h3 id="cmpTitle"></h3><p class="dim" data-t="cmp.hint"></p><div class="scroll"><table class="tbl cmp" id="cmp"></table></div></div>
-      <div class="duo" id="opin" style="margin-top:0"></div>
-      <div class="leaf rv"><h3 data-t="end.resolution"></h3>
-        <div id="resolution"></div>
-        <h4 data-t="end.full"></h4>
-        <ul class="soon" id="comingSoon"></ul>
+<main class="wrap">
+  <section class="screen hero" id="top">
+    <header class="frame">
+      <svg id="heroSvg" viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid slice" role="img" data-aria="hero.aria"></svg>
+      <div class="hero-t">
+        <div class="eyebrow" data-t="hero.eyebrow"></div>
+        <h1 id="heroTitle"></h1>
+        <p id="heroLead"></p>
+        <span class="scrollhint"><span data-t="hero.scroll"></span> <i>▾</i></span>
       </div>
-      <div class="leaf rv colophon"><div class="seal" data-t="end.seal"></div>
-        <p id="colophon"></p>
+    </header>
+  </section>
+
+  <section class="screen s1" aria-labelledby="c1">
+    <div class="top"><div class="chap"><span class="no" data-chapter="1"></span><h2 id="c1" data-t="ch1.title"></h2><p data-t="ch1.sub"></p></div></div>
+    <div class="story">
+      <div class="stagecell"><div class="frame"><svg id="scene" viewBox="0 0 900 480" role="img" data-aria="ch1.aria"></svg></div></div>
+      <div class="duo" id="lines"></div>
+    </div>
+  </section>
+
+  <section class="screen s2" id="mapsec" aria-labelledby="c2">
+    <div class="top">
+      <div class="chap"><span class="no" data-chapter="2"></span><h2 id="c2" data-t="ch2.title"></h2><p data-t="ch2.sub"></p></div>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" data-mode="site" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V3M6 4h11l-3.5 4L17 12H6"/></svg><span class="k" data-num="1"></span><span><b data-t="tabs.site.name"></b><small data-t="tabs.site.sub"></small></span></button>
+        <button class="tab" role="tab" id="t-reg" data-mode="reg" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 4.5l2.6 7.5L12 19.5 9.4 12z"/></svg><span class="k" data-num="2"></span><span><b data-t="tabs.reg.name"></b><small data-t="tabs.reg.sub"></small></span></button>
+        <button class="tab" role="tab" id="t-tr" data-mode="tr" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19c4.5 0 3-7 8-7s3.5-7 8-7" stroke-dasharray="2 2.6"/><circle cx="4" cy="19" r="1.7"/><circle cx="20" cy="5" r="1.7"/></svg><span class="k" data-num="3"></span><span><b data-t="tabs.tr.name"></b><small data-t="tabs.tr.sub"></small></span></button>
       </div>
     </div>
-    <p class="note" data-t="end.note"></p>
+    <div class="mapgrid">
+      <div class="mapcell">
+        <div class="frame mapframe" id="mapbox">
+          <svg id="map" viewBox="0 0 1000 700" role="img"></svg>
+          <div class="loading" id="loading" data-t="map.loading"></div>
+          <div class="maphint" id="hint"></div>
+          <button class="mapbtn" id="zoomOut" data-t="map.zoomOut" hidden></button>
+          <button class="mapbtn save" id="saveMap" type="button" data-t="map.save"></button>
+          <span class="sr-only" id="mapStatus" role="status" aria-live="polite"></span>
+          <div class="leaf cap" id="cap" hidden></div>
+        </div>
+      </div>
+      <div class="leaf narr" id="narr"><div class="pt" id="nPt"></div><div><div class="who" id="nWho"></div><div class="say" id="say"></div></div></div>
+      <aside class="side" id="side">
+        <button class="sheet-handle" id="sheetHandle" type="button" aria-expanded="false" aria-controls="sheetBody"><span class="grip" aria-hidden="true"></span><span class="sr-only" data-t="sheet.toggle"></span></button>
+        <div class="sheet-body" id="sheetBody"><div id="panel"></div></div>
+      </aside>
+    </div>
   </section>
-</div>
+
+  <section class="screen s3" aria-labelledby="c3">
+    <div class="top">
+      <div class="chap"><span class="no" data-chapter="3"></span><h2 id="c3" data-t="ch3.title"></h2><p data-t="ch3.sub"></p></div>
+      <div class="pagetabs" role="tablist">
+        <button class="ptab" role="tab" data-page="0" aria-selected="true" data-t="pages.cmp"></button>
+        <button class="ptab" role="tab" data-page="1" aria-selected="false" data-t="pages.opin"></button>
+        <button class="ptab" role="tab" data-page="2" aria-selected="false" data-t="pages.end"></button>
+        <button class="ptab" role="tab" data-page="3" aria-selected="false" data-t="pages.colophon"></button>
+      </div>
+    </div>
+    <div class="pager">
+      <div class="pages" id="pages">
+        <div class="page" data-page="0"><div class="leaf"><h3 id="cmpTitle"></h3><p class="dim" data-t="cmp.hint"></p><div class="scroll"><table class="tbl cmp" id="cmp"></table></div></div></div>
+        <div class="page" data-page="1"><div class="duo" id="opin"></div></div>
+        <div class="page" data-page="2"><div class="leaf"><h3 data-t="end.resolution"></h3>
+          <div id="resolution"></div>
+          <h4 data-t="end.full"></h4>
+          <ul class="soon" id="comingSoon"></ul>
+        </div></div>
+        <div class="page" data-page="3"><div class="leaf colophon"><div class="seal" data-t="end.seal"></div>
+          <p id="colophon"></p>
+        </div><p class="note" data-t="end.note"></p></div>
+      </div>
+      <div class="dots" id="dots" role="tablist">
+        <button class="dot" role="tab" data-page="0" aria-selected="true"></button>
+        <button class="dot" role="tab" data-page="1" aria-selected="false"></button>
+        <button class="dot" role="tab" data-page="2" aria-selected="false"></button>
+        <button class="dot" role="tab" data-page="3" aria-selected="false"></button>
+      </div>
+    </div>
+  </section>
+</main>
 <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

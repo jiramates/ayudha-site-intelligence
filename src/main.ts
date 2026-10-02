@@ -1,5 +1,6 @@
 import './styles/fonts.css'
 import './styles/mural.css'
+import './styles/layout.css'
 import { installTextures } from './styles/textures'
 import { installDefs } from './render/defs'
 import { RM } from './render/util'
@@ -17,7 +18,8 @@ import { renderOpinions } from './scenes/summary'
 import { installRenderer, startUrlSync } from './state/render'
 import { render } from './state/store'
 import { speak } from './ui/narrator'
-import { initReveal } from './ui/reveal'
+import { initPager } from './ui/pager'
+import { initSheet } from './ui/sheet'
 import { initExport } from './ui/export'
 
 async function boot() {
@@ -35,10 +37,11 @@ async function boot() {
   // draw order matters: the shared seeded RNG must be consumed hero → scene → map, as in v3
   drawHero(); drawScene(); drawMap(); render()
   speak('khun', S.narrator.intro(numWord(Object.keys(SITES).length)))
-  startUrlSync()
   setSpeaker(0); if (!RM) setInterval(nextSpeaker, 5000)
   requestAnimationFrame(tick)
-  initReveal()
+  initPager()
+  initSheet()
+  startUrlSync() // after the sheet exists: a deep link opens it
   initExport()
 }
 boot()

@@ -15,4 +15,4 @@ export function renderCompare(){
   t.querySelectorAll<HTMLElement>('tr[data-site]').forEach(tr=>tr.addEventListener('click',()=>{st.site=tr.dataset.site??null;st.mode='site';render('site');document.getElementById('mapsec')?.scrollIntoView({behavior:RM?'auto':'smooth'})}))}
 
 export function renderOpinions(){
-  (document.getElementById('opin') as HTMLElement).innerHTML=STUDY.opinions.map(({speaker:k,text:t})=>`<div class="leaf rv"><div class="narr"><div class="pt">${portrait(k)}</div><div><div class="who">${E(PEOPLE[k].name)}</div><div class="dim">${E(PEOPLE[k].role)}</div></div></div><p style="margin-top:8px">“${P(t)}”</p></div>`).join('')}
+  (document.getElementById('opin') as HTMLElement).innerHTML=STUDY.opinions.map(({speaker:k,text:t})=>`<div class="leaf"><div class="narr2"><div class="pt">${portrait(k)}</div><div><div class="who">${E(PEOPLE[k].name)}</div><div class="dim">${E(PEOPLE[k].role)}</div></div></div><p style="margin-top:8px">“${P(t)}”</p></div>`).join('')}

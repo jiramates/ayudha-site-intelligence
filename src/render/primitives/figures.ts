@@ -21,4 +21,5 @@ export function figure(o:FigOpts){const sk='#f0dfc0',ol='#6e3f26';let s='';
   else{s+=arm('M15 -164 Q26 -136 10 -128',tc)+`<rect x="-14" y="-136" width="34" height="8" rx="2" fill="#dcc48c" stroke="${ol}" stroke-width=".8"/><rect x="-16" y="-137" width="4" height="10" fill="#94452f"/><rect x="18" y="-137" width="4" height="10" fill="#94452f"/><circle cx="8" cy="-128" r="4" fill="${sk}" stroke="${ol}" stroke-width=".7"/>`}
   return s}
 export const FIG:Record<SpeakerId,FigOpts>={khun:{hat:true,top:'#9e4a32',cloth:'clothDot',pose:'point'},mor:{top:'#efe8d6',cloth:'clothBr',pose:'pot'},phon:{cloth:'clothBr',pose:'leaf'}};
-export function portrait(k:SpeakerId){const v=FIG[k].hat?[-40,-272,80,104]:[-30,-226,60,60];return `<svg viewBox="${v.join(' ')}"><rect x="${v[0]}" y="${v[1]}" width="${v[2]}" height="${v[3]}" fill="#e2d3ae"/>${figure(FIG[k])}</svg>`}
+/** Face and shoulders for everyone: the official's tall hat is cut off so the face shows in the circle. */
+export function portrait(k:SpeakerId){const v=[-30,-224,60,60];return `<svg viewBox="${v.join(' ')}"><rect x="${v[0]}" y="${v[1]}" width="${v[2]}" height="${v[3]}" fill="#e2d3ae"/>${figure(FIG[k])}</svg>`}
