@@ -27,5 +27,5 @@ Planned design for a later private deploy (not built yet, decision D2):
 ## Editing study.json
 - **Numbers in sentences are placeholders, never typed.** Write `สูงได้ {maxHeight_m:wa}`, not a hand-typed number. Names are looked up on the current site, its `rules`, derived values (`sitesCount`, `farActual`, `roofTiers`, `wings`), `meta.regs`, then `meta`; `{@B.n:word}` addresses another site. Formats: `th` (default), `word`, `ceilWord`, `wa`, `waWord`, `area`, `raiWord`, `sok`, `sokWord`, `sen`. A wrong name or format is reported at load with its path; `npm test` fails on any Thai digit typed in a string.
 - **All text is HTML-escaped.** Only `**bold**` is allowed.
-- **`meta.ageLevel` (0–3)** sets how weathered the baked mural looks: 0 fresh, 1.5 the v3 look, 3 heavy.
+- **`meta.ageLevel` (0–2, default 1.5)** sets how weathered the baked mural looks: 0 fresh, 1.5 the v3 look, 2 heavy. **1–2 is recommended**; the schema rejects values above 2. It changes only the baked paint, never the 3D models.
 - **Massing archetypes:** a new one = one entry in `src/data/archetypes.ts` (the name, plus facts prose may cite) and one drawing function in `src/scenes/massing.ts`; the compiler enforces both and the schema accepts the new name automatically.
