@@ -3,6 +3,7 @@ import './styles/mural.css'
 import { installTextures } from './styles/textures'
 import { installDefs } from './render/defs'
 import { RM } from './render/util'
+import { setAgeLevel } from './render/age'
 import { loadStudy } from './data/loader'
 import { installStudy, SITES } from './data/content'
 import { numWord } from './data/units'
@@ -25,6 +26,7 @@ async function boot() {
   const res = await loadStudy()
   if (!res.ok) { showLoadError(res.issues); return }
   installStudy(res.study)
+  setAgeLevel(res.study.meta.ageLevel)
   fillStudy()
   installRenderer()
   renderOpinions()

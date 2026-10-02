@@ -1,9 +1,10 @@
 import { f1, RM } from '../render/util'
 import { pj, pathP, scaleAround, circleP, bb } from '../render/projection'
 import { map, ISL, boatsAmb, boatG } from './map'
-import { MASS } from './massing'
+import { ARCHETYPE_DRAW } from './massing'
+import { archetypeMeta, DEFAULT_MASS_SCALE } from '../data/archetypes'
 import { st, render } from '../state/store'
-import { SITES, ZONES, MODES, DEST } from '../data/content'
+import { SITES, ZONES, MODES, DEST, E } from '../data/content'
 import { DIRS, DIR, S } from '../data/strings.th'
 import type { XY, Side, ModeId } from '../data/schema'
 import { th } from '../data/units'
@@ -34,7 +35,7 @@ export function drawDynamic(){
   if(st.mode==='reg'){
     gs+=`<g class="fade"><path d="${pathP(circleP(300,250,168,168),true)}" fill="rgba(160,74,51,.08)" stroke="#a04a33" stroke-width="1.8" stroke-dasharray="8 5"/><path d="${pathP(circleP(230,110,210,62),true)}" fill="url(#hatchB)" stroke="#46717f" stroke-dasharray="4 3"/><path d="${pathP(scaleAround(ISL,510,410,.915),true)}" fill="none" stroke="#a04a33" stroke-width="1.6" stroke-dasharray="2 4"/></g>`;
     const cx=905,cy=640;DIRS.forEach(([n,a])=>{const r=a*Math.PI/180;const e:[number,number]=[cx+Math.sin(r)*60,cy-Math.cos(r)*42];gs+=`<path d="${pathP([[cx,cy],e])}" stroke="${n===DIR.west?'#a1412a':'#6a553d'}" stroke-width="${a%90?1:2}"/>`;const q=pj(...e);gs+=`<text x="${f1(q[0])}" y="${f1(q[1]+4)}" text-anchor="middle" style="font-size:11px;fill:${n===DIR.west?'#a1412a':'#3a2819'};paint-order:stroke;stroke:rgba(225,215,185,.9);stroke-width:3px">${n}</text>`});
-    Object.entries(ZONES).forEach(([k,z])=>items.push({x:z.pos[0],y:z.pos[1],top:true,k:1.15,h:`<g class="zic${st.zone===k?' on':''}" data-zone="${k}" tabindex="0" role="button" aria-label="${z.title}"><line x1="0" y1="0" x2="0" y2="-18" stroke="#5e3420" stroke-width="2"/><circle class="s" cy="-36" r="19" fill="#e9dcbc" stroke="#a04a33" stroke-width="2.4"/><circle cy="-36" r="14.5" fill="none" stroke="#a04a33" stroke-width=".8" stroke-dasharray="2 2"/><text y="-30" text-anchor="middle" style="font-size:15px;font-weight:600;fill:#743524">${z.seal}</text></g>`}));
+    Object.entries(ZONES).forEach(([k,z])=>items.push({x:z.pos[0],y:z.pos[1],top:true,k:1.15,h:`<g class="zic${st.zone===k?' on':''}" data-zone="${k}" tabindex="0" role="button" aria-label="${E(z.title)}"><circle cy="-36" r="30" fill="transparent"/><line x1="0" y1="0" x2="0" y2="-18" stroke="#5e3420" stroke-width="2"/><circle class="s" cy="-36" r="19" fill="#e9dcbc" stroke="#a04a33" stroke-width="2.4"/><circle cy="-36" r="14.5" fill="none" stroke="#a04a33" stroke-width=".8" stroke-dasharray="2 2"/><text y="-30" text-anchor="middle" style="font-size:15px;font-weight:600;fill:#743524">${E(z.seal)}</text></g>`}));
   }
   tokens=[];
   if(st.mode==='tr'&&st.site){(Object.entries(SITES[st.site].routes) as [ModeId,XY[]][]).forEach(([k,p])=>{if(!st.tm[k])return;const m=MODES[k];const d=pathP(p);
@@ -44,9 +45,9 @@ export function drawDynamic(){
     const segs:Token['segs']=[];let L=0;for(let i=1;i<p.length;i++){const l=Math.hypot(p[i][0]-p[i-1][0],p[i][1]-p[i-1][1]);segs.push([p[i-1],p[i],L,l]);L+=l}tokens.push({k,segs,L,v:m.senPerBaht*VEHICLE_SPEED})})}
   ground.innerHTML=gs;routes.innerHTML=rs;
   Object.entries(SITES).forEach(([k,s])=>{const on=k===st.site;if(st.mode==='site'&&on)return;
-    items.push({x:s.pos[0],y:s.pos[1],top:true,k:1.15,h:`<g class="site" data-site="${k}" tabindex="0" role="button" aria-label="${S.map.siteAria(s.name)}"><ellipse rx="12" ry="4" fill="#3a2819" opacity=".22"/><line x1="0" y1="0" x2="0" y2="-62" stroke="#4a2c1b" stroke-width="2.6"/><path class="flag" d="M1 -62 L40 -52 L1 -42Z" fill="${on?'#743524':'#a04a33'}" stroke="#5f2c1e"/><circle cy="-70" r="15" fill="${on?'#743524':'#a04a33'}" stroke="#c09246" stroke-width="2.2"/><circle cy="-70" r="11" fill="none" stroke="#e9d3a0" stroke-width=".7" stroke-dasharray="2 2"/><text y="-63" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:19px;fill:#f4e6c8">${th(s.n)}</text></g>`})});
-  if(st.mode==='site'&&st.site){const s=SITES[st.site];const parts=MASS[s.massing](s);
-    items.push({x:s.pos[0],y:s.pos[1]+2,k:s.massing==='pavilion-campus'?1.05:1.08,h:`<ellipse class="dust" rx="120" ry="16" fill="#c9b78c" opacity=".6"/><ellipse rx="110" ry="12" fill="#3a2819" opacity=".16"/><g filter="url(#lite)">`+parts.map((p:{h:string;drop?:number},i:number)=>`<g class="${p.drop?'drop':'pop'}" style="--i:${i}">${p.h}</g>`).join('')+`</g><g data-site="${st.site}" class="site" tabindex="0" role="button" aria-label="${S.map.hideModel}" transform="translate(-130 -30)"><circle r="13" fill="#743524" stroke="#c09246" stroke-width="2"/><text y="6" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:17px;fill:#f4e6c8">${th(s.n)}</text></g>`})}
+    items.push({x:s.pos[0],y:s.pos[1],top:true,k:1.15,h:`<g class="site" data-site="${k}" tabindex="0" role="button" aria-label="${S.map.siteAria(E(s.name))}"><circle cy="-48" r="34" fill="transparent"/><ellipse rx="12" ry="4" fill="#3a2819" opacity=".22"/><line x1="0" y1="0" x2="0" y2="-62" stroke="#4a2c1b" stroke-width="2.6"/><path class="flag" d="M1 -62 L40 -52 L1 -42Z" fill="${on?'#743524':'#a04a33'}" stroke="#5f2c1e"/><circle cy="-70" r="15" fill="${on?'#743524':'#a04a33'}" stroke="#c09246" stroke-width="2.2"/><circle cy="-70" r="11" fill="none" stroke="#e9d3a0" stroke-width=".7" stroke-dasharray="2 2"/><text y="-63" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:19px;fill:#f4e6c8">${th(s.n)}</text></g>`})});
+  if(st.mode==='site'&&st.site){const s=SITES[st.site];const parts=ARCHETYPE_DRAW[s.massing](s);
+    items.push({x:s.pos[0],y:s.pos[1]+2,k:archetypeMeta(s.massing).scale??DEFAULT_MASS_SCALE,h:`<ellipse class="dust" rx="120" ry="16" fill="#c9b78c" opacity=".6"/><ellipse rx="110" ry="12" fill="#3a2819" opacity=".16"/><g filter="url(#lite)">`+parts.map((p:{h:string;drop?:number},i:number)=>`<g class="${p.drop?'drop':'pop'}" style="--i:${i}">${p.h}</g>`).join('')+`</g><g data-site="${st.site}" class="site" tabindex="0" role="button" aria-label="${S.map.hideModel}" transform="translate(-130 -30)"><circle r="13" fill="#743524" stroke="#c09246" stroke-width="2"/><text y="6" text-anchor="middle" style="font-family:var(--f-display);font-weight:700;font-size:17px;fill:#f4e6c8">${th(s.n)}</text></g>`})}
   items.sort((a,b)=>(a.top?1:0)-(b.top?1:0)||a.y-b.y);
   (document.getElementById('bbs') as HTMLElement).innerHTML=items.map(it=>bb(it.x,it.y,it.h,it.k||1)).join('');
   (document.getElementById('tokens') as HTMLElement).innerHTML=tokens.map(t=>`<g id="tk-${t.k}"><g filter="url(#lite)">${VEH[t.k]}</g></g>`).join('');
