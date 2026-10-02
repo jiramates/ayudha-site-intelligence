@@ -1,7 +1,13 @@
+import './styles/fonts.css'
 import './styles/mural.css'
 import { installTextures } from './styles/textures'
 import { installDefs } from './render/defs'
 import { RM } from './render/util'
+import { loadStudy } from './data/loader'
+import { installStudy, SITES } from './data/content'
+import { numWord } from './data/units'
+import { S } from './data/strings.th'
+import { fillStatic, fillStudy, showLoadError } from './ui/chrome'
 import { drawHero } from './scenes/hero'
 import { drawScene, setSpeaker, nextSpeaker } from './scenes/story'
 import { drawMap } from './scenes/map'
@@ -11,16 +17,23 @@ import { installRenderer } from './state/render'
 import { render } from './state/store'
 import { speak } from './ui/narrator'
 import { initReveal } from './ui/reveal'
-import { SAY } from './data/strings.th'
 
-installTextures()
-installDefs()
-installRenderer()
-renderOpinions()
-bindMap()
-// draw order matters: the shared seeded RNG must be consumed hero → scene → map, as in v3
-drawHero();drawScene();drawMap();render();
-speak('khun',SAY.intro);
-setSpeaker(0);if(!RM)setInterval(nextSpeaker,5000);
-requestAnimationFrame(tick);
-initReveal()
+async function boot() {
+  fillStatic()
+  installTextures()
+  installDefs()
+  const res = await loadStudy()
+  if (!res.ok) { showLoadError(res.issues); return }
+  installStudy(res.study)
+  fillStudy()
+  installRenderer()
+  renderOpinions()
+  bindMap()
+  // draw order matters: the shared seeded RNG must be consumed hero → scene → map, as in v3
+  drawHero(); drawScene(); drawMap(); render()
+  speak('khun', S.narrator.intro(numWord(Object.keys(SITES).length)))
+  setSpeaker(0); if (!RM) setInterval(nextSpeaker, 5000)
+  requestAnimationFrame(tick)
+  initReveal()
+}
+boot()

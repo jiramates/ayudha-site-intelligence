@@ -1,7 +1,7 @@
 import { rnd } from './rng'
 import { f1 } from './util'
 
-export function paintFilter(w,h){return `<filter id="op" filterUnits="userSpaceOnUse" x="0" y="0" width="${w}" height="${h}" color-interpolation-filters="sRGB">
+export function paintFilter(w:number,h:number){return `<filter id="op" filterUnits="userSpaceOnUse" x="0" y="0" width="${w}" height="${h}" color-interpolation-filters="sRGB">
  <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="4" result="w"/>
  <feDisplacementMap in="SourceGraphic" in2="w" scale="3" xChannelSelector="R" yChannelSelector="G" result="d"/>
  <feTurbulence type="fractalNoise" baseFrequency=".009 .015" numOctaves="3" seed="8" result="m"/>
@@ -15,7 +15,7 @@ export function paintFilter(w,h){return `<filter id="op" filterUnits="userSpaceO
  <feTurbulence type="fractalNoise" baseFrequency=".2" numOctaves="2" seed="31" result="f2"/>
  <feColorMatrix in="f2" values="0 0 0 0 .95  0 0 0 0 .92  0 0 0 0 .84  26 0 0 0 -18.8" result="fl2"/>
  <feMerge><feMergeNode in="p2"/><feMergeNode in="fl"/><feMergeNode in="fl2"/></feMerge></filter>`}
-export function agePost(w,h,n=8){let s='';
+export function agePost(w:number,h:number,n=8){let s='';
   for(let i=0;i<5;i++)s+=`<ellipse cx="${f1(rnd()*w)}" cy="${f1(rnd()*h)}" rx="${f1(60+rnd()*140)}" ry="${f1(40+rnd()*90)}" fill="url(#stainG)"/>`;
   for(let i=0;i<4;i++)s+=`<ellipse cx="${f1(rnd()*w)}" cy="${f1(rnd()*h)}" rx="${f1(80+rnd()*120)}" ry="${f1(50+rnd()*60)}" fill="url(#hazeG)"/>`;
   for(let c=0;c<n;c++){let x=rnd()*w,y=rnd()*h,a=rnd()*6.28;let d=`M${f1(x)} ${f1(y)}`;const steps=10+rnd()*22;for(let i=0;i<steps;i++){a+=(rnd()-.5)*1.1;x+=Math.cos(a)*(4+rnd()*8);y+=Math.sin(a)*(4+rnd()*8);d+=` L${f1(x)} ${f1(y)}`}

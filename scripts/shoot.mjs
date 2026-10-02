@@ -21,6 +21,11 @@ for (const [tag, url] of targets) {
   const errors = []
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()) })
   page.on('pageerror', e => errors.push('pageerror: ' + e.message))
+  if (tag === 'ref') {
+    // reference-v3.html loads Google Fonts; serve the same font files from public/fonts so both sides render with real fonts
+    const css = readFileSync('src/styles/fonts.css', 'utf-8').replace(/url\("\/fonts\/([^"]+)"\)/g, (_, f) => `url(data:font/woff2;base64,${readFileSync('public/fonts/' + f).toString('base64')})`)
+    await page.route(/fonts\.googleapis\.com/, r => r.fulfill({ status: 200, contentType: 'text/css', body: css }))
+  }
   await page.goto(url, { waitUntil: 'networkidle' })
   await page.waitForFunction(() => document.getElementById('loading')?.hidden === true, null, { timeout: 30000 })
   await page.waitForTimeout(1500)

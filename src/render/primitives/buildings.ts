@@ -27,7 +27,7 @@ export function hallE(w:number,h:number,o:{d?:number,fl?:number}={}){const d=o.d
   const mx=-w/2+(Math.floor(cols/2)+.5)*w/cols;s+=`<path d="M${f1(mx-5.5)} ${-base} V${f1(-base-fh*.62)} Q${f1(mx)} ${f1(-base-fh*.84)} ${f1(mx+5.5)} ${f1(-base-fh*.62)} V${-base}Z" fill="#3e2416" stroke="#c09246" stroke-width=".8"/>`;
   if(d)for(let k=0;k<fl;k++){const y=-base-h+k*fh+fh*.3;s+=`<line x1="${w/2+3}" y1="${f1(y-1.5)}" x2="${w/2+d-3}" y2="${f1(y-d*.5+1.5)}" stroke="#6e4b2c" stroke-width="2" stroke-dasharray="3 3"/>`}
   return s}
-export function roofE(w,h,tiers,d=0){let s='';for(let t=0;t<tiers;t++){const k=1-t*.2,ww=w*k,yb=-t*h*.42,yt=yb-h*.42;
+export function roofE(w:number,h:number,tiers:number,d=0){let s='';for(let t=0;t<tiers;t++){const k=1-t*.2,ww=w*k,yb=-t*h*.42,yt=yb-h*.42;
   const sk=`${f1(-ww/2-10)},${f1(yb)} ${f1(ww/2+10)},${f1(yb)} ${f1(ww*.3)},${f1(yt)} ${f1(-ww*.3)},${f1(yt)}`;
   if(d)s+=`<polygon points="${f1(ww/2+10)},${f1(yb)} ${f1(ww/2+10+d)},${f1(yb-d*.5)} ${f1(ww*.3+d)},${f1(yt-d*.5)} ${f1(ww*.3)},${f1(yt)}" fill="#7d3c27" stroke="${OL}" stroke-width=".8"/><polygon points="${f1(ww/2+10)},${f1(yb)} ${f1(ww/2+10+d)},${f1(yb-d*.5)} ${f1(ww*.3+d)},${f1(yt-d*.5)} ${f1(ww*.3)},${f1(yt)}" fill="url(#tileP)"/>`;
   s+=`<polygon points="${sk}" fill="#a3553a" stroke="${OL}" stroke-width=".9"/><polygon points="${sk}" fill="url(#tileP)"/><polygon points="${f1(-ww*.3)},${f1(yt)} ${f1(ww*.3)},${f1(yt)} ${f1(ww*.36)},${f1(yt+h*.08)} ${f1(-ww*.36)},${f1(yt+h*.08)}" fill="#f0dfb4" opacity=".22"/>`;
