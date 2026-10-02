@@ -35,6 +35,18 @@ await page.waitForFunction(() => document.getElementById('loading')?.hidden === 
 await page.locator('.site[data-site]').first().dispatchEvent('click')
 await page.waitForSelector('#cap:not([hidden])')
 const fonts = await page.evaluate(async () => { await document.fonts.ready; return [...document.fonts].filter(f => f.status === 'loaded').length })
+// deep links must work from file:// too
+const links = []
+for (const [h, mode] of [['#site-C', 'site'], ['#lens-reg-B', 'reg'], ['#lens-tr-D', 'tr']]) {
+  const p = await browser.newPage({ viewport: { width: 1280, height: 900 } })
+  p.on('pageerror', e => errors.push(e.message))
+  await p.goto('file://' + out + h)
+  await p.waitForFunction(() => document.getElementById('loading')?.hidden === true, null, { timeout: 30000 })
+  const got = await p.evaluate(() => document.querySelector('.tab[aria-selected="true"]').dataset.mode + ' ' + location.hash)
+  if (got !== `${mode} ${h}`) errors.push(`deep link ${h} restored "${got}"`)
+  links.push(h)
+  await p.close()
+}
 await browser.close()
 if (errors.length || !fonts) { console.error('VERIFY FAILED', { errors, fontsLoaded: fonts }); process.exit(1) }
-console.log(`review file ok: ${out} (${(statSync(out).size / 1024).toFixed(0)} kB, ${fonts} font faces loaded, no console errors)`)
+console.log(`review file ok: ${out} (${(statSync(out).size / 1024).toFixed(0)} kB, ${fonts} font faces loaded, no console errors, deep links ${links.join(' ')} restore)`)

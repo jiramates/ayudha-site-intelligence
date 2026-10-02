@@ -92,6 +92,12 @@ h1{font-family:var(--f-display);font-weight:700;color:var(--red-dk);font-size:cl
 .tab[aria-selected="true"] .k,.tab[aria-selected="true"] small{color:#f4e6c8}
 #map{display:block;width:100%;height:auto}
 .mapbtn{position:absolute;right:10px;top:10px;font-family:var(--f-leaf);font-size:16px;padding:3px 14px;background:rgba(232,220,192,.94);border:1.5px solid var(--red);border-radius:99px;color:var(--red-dk)}
+.mapbtn.save{top:auto;bottom:10px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.cap-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0 0}
+.linkbtn{font-family:var(--f-leaf);font-size:15px;padding:1px 12px;background:rgba(255,244,214,.55);border:1.5px solid var(--red);border-radius:99px;color:var(--red-dk)}
+.copied{font-size:14px;color:var(--ok)}
+.linkfld{width:100%;margin-top:6px;font:inherit;font-size:13px;padding:3px 6px;border:1px solid var(--red);border-radius:6px;background:rgba(255,250,235,.85);color:var(--leaf-ink)}
 .maphint{position:absolute;left:10px;top:10px;font-family:var(--f-leaf);font-size:16px;background:rgba(232,220,192,.88);padding:2px 12px;pointer-events:none;max-width:60%}
 [hidden]{display:none!important}
 .loading{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-leaf);font-size:20px;color:var(--ink-soft);pointer-events:none}
